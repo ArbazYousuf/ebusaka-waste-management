@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {StyleSheet, TouchableOpacity} from 'react-native';
+import {Image, StyleSheet, TouchableOpacity} from 'react-native';
 import {View, Text, Icon, Row} from 'native-base';
 import {RFValue} from 'react-native-responsive-fontsize';
 import SafeAreaView from 'react-native-safe-area-view';
@@ -34,13 +34,23 @@ export default function Login({navigation}) {
           <View
             style={{
               borderColor: Theme.primaryColor,
-              borderWidth: 2,
+              // borderWidth: 2,
               borderRadius: 50,
-              width: 100,
-              height: 100,
+              width: RFValue(120),
+              height: RFValue(120),
               justifyContent: 'center',
             }}>
-            <Text style={{textAlign: 'center', alignSelf: 'center'}}>LOGO</Text>
+            <Image
+              source={require('../../assets/appLogo.png')}
+              resizeMode="contain"
+              style={{
+                flex: 1,
+                width: undefined,
+                height: undefined,
+              }}
+            />
+
+            {/* <Text style={{textAlign: 'center', alignSelf: 'center'}}>LOGO</Text> */}
           </View>
         </View>
         <View>
@@ -92,7 +102,8 @@ export default function Login({navigation}) {
                 />
               </Item>
             </View>
-            <View
+            <TouchableOpacity
+              onPress={() => navigation.navigate('ForgetPassword')}
               style={{
                 justifyContent: 'flex-end',
                 flexDirection: 'row-reverse',
@@ -102,7 +113,7 @@ export default function Login({navigation}) {
               <Text style={{fontWeight: 'bold', color: 'grey'}}>
                 Forgot Password?
               </Text>
-            </View>
+            </TouchableOpacity>
             <View style={{justifyContent: 'center', alignItems: 'center'}}>
               <CustomButton color={Theme.primaryColor}>Login</CustomButton>
             </View>

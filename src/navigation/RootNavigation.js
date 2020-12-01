@@ -4,6 +4,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import Intro from '../screen/AuthScreens/Intro';
 import Login from '../screen/AuthScreens/login';
 import Registration from '../screen/AuthScreens/register';
+import ForgetPassword from '../screen/AuthScreens/forgetPassword';
 
 // import {} from '../screen';
 // import {connect} from 'react-redux';
@@ -40,6 +41,7 @@ function Navigation(props) {
 
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Registration" component={Registration} />
+        <Stack.Screen name="ForgetPassword" component={ForgetPassword} />
         {/*  <Stack.Screen name="SplashScreen" component={SplashScreen} />
           <Stack.Screen name="SightWords" component={SightWords} />
           <Stack.Screen name="CheckEmail" component={CheckEmail} />

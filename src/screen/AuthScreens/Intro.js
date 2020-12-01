@@ -1,10 +1,11 @@
 import React from 'react';
-import {StyleSheet} from 'react-native';
-import {View, Text} from 'native-base';
+import {StyleSheet, Image} from 'react-native';
+import {View, Text, Icon} from 'native-base';
 import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
 import Theme from '../../Theme';
 import SafeAreaView from 'react-native-safe-area-view';
 import CustomButton from '../../components/button';
+// import ICONS from '../../resources/icon';
 export default function Intro({navigation}) {
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -20,15 +21,24 @@ export default function Intro({navigation}) {
             <View
               style={{
                 borderColor: Theme.primaryColor,
-                borderWidth: 2,
+                // borderWidth: 2,
                 borderRadius: 50,
-                width: 100,
-                height: 100,
+                width: RFValue(150),
+                height: RFValue(150),
                 justifyContent: 'center',
               }}>
-              <Text style={{textAlign: 'center', alignSelf: 'center'}}>
+              {/* <Text style={{textAlign: 'center', alignSelf: 'center'}}>
                 LOGO
-              </Text>
+              </Text> */}
+              <Image
+                source={require('../../assets/appLogo.png')}
+                resizeMode="contain"
+                style={{
+                  flex: 1,
+                  width: undefined,
+                  height: undefined,
+                }}
+              />
             </View>
           </View>
         </View>
@@ -75,13 +85,13 @@ export default function Intro({navigation}) {
                 <CustomButton
                   onPress={() => navigation.navigate('Registration')}
                   size="sm"
-                  color="#20b2aa"
+                  color={Theme.primaryColor}
                   invisisble={true}>
                   REGISTER
                 </CustomButton>
                 <CustomButton
                   size="sm"
-                  color="#20b2aa"
+                  color={Theme.primaryColor}
                   invisisble={true}
                   onPress={() => navigation.navigate('Login')}>
                   SIGN IN
