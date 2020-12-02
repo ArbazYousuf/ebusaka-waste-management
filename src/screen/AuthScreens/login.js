@@ -1,19 +1,16 @@
 import React, {useState} from 'react';
-import {Image, StyleSheet, TouchableOpacity} from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+} from 'react-native';
 import {View, Text, Icon, Row} from 'native-base';
 import {RFValue} from 'react-native-responsive-fontsize';
 import SafeAreaView from 'react-native-safe-area-view';
 import CustomButton from '../../components/button';
 
-import {
-  Container,
-  Header,
-  Content,
-  Form,
-  Item,
-  Input,
-  Label,
-} from 'native-base';
+import {Form, Item, Input, Label} from 'native-base';
 import Theme from '../../Theme';
 export default function Login({navigation}) {
   const [isVisible, setIsVisible] = useState(true);
@@ -24,7 +21,7 @@ export default function Login({navigation}) {
 
   return (
     <SafeAreaView style={{flex: 1}}>
-      <View style={styles.container}>
+      <KeyboardAvoidingView style={styles.container} keyboardVerticalOffset={0}>
         <View
           style={{
             flex: 0.5,
@@ -54,7 +51,7 @@ export default function Login({navigation}) {
           </View>
         </View>
         <View>
-          <Form>
+          <Form style={{paddingTop: RFValue(20)}}>
             <View
               style={{
                 justifyContent: 'center',
@@ -133,7 +130,7 @@ export default function Login({navigation}) {
             </Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }

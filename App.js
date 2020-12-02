@@ -26,7 +26,7 @@ const App = () => {
         <View>
           <Text>helllo</Text>
         </View> */}
-
+      {/* <Navigation /> */}
       {renderApp()}
       {/* </StatusBar> */}
     </SafeAreaProvider>

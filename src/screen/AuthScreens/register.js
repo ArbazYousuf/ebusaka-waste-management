@@ -1,20 +1,14 @@
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import {StyleSheet, TouchableOpacity} from 'react-native';
 import {View, Text, Icon, Row} from 'native-base';
 import {RFValue} from 'react-native-responsive-fontsize';
 import SafeAreaView from 'react-native-safe-area-view';
 import CustomButton from '../../components/button';
-
-import {
-  Container,
-  Header,
-  Content,
-  Form,
-  Item,
-  Input,
-  Label,
-} from 'native-base';
+import PhoneInput from 'react-native-phone-number-input';
+import {Form, Item, Input, Label} from 'native-base';
 import Theme from '../../Theme';
+import Loader from '../../components/loader';
+import {ScrollView} from 'react-native-gesture-handler';
 
 export default function Registration({navigation}) {
   const [isVisible, setIsVisible] = useState(true);
@@ -25,9 +19,17 @@ export default function Registration({navigation}) {
   const [passColor, setpassColor] = useState('grey');
   const [emailColor, setemailColor] = useState('grey');
   const [phoneColor, setphoneColor] = useState('grey');
+  const [value, setValue] = useState('');
+  const [formattedValue, setFormattedValue] = useState('');
+  const [valid, setValid] = useState(false);
+  const [showMessage, setShowMessage] = useState(false);
+  //   const phoneInput = useRef < PhoneInput > null;
+  const [isShowModal, setisShowModal] = useState(false);
+  const phoneInput = useRef(null);
+
   return (
     <SafeAreaView style={{flex: 1}}>
-      <View style={styles.container}>
+      <ScrollView contentContainerStyle={styles.container}>
         <View
           style={{flex: 0.5, justifyContent: 'center', alignItems: 'center'}}>
           {/* <Text style={styles.text}>LOGO</Text> */}
@@ -61,7 +63,7 @@ export default function Registration({navigation}) {
                 />
               </Item>
               <Text></Text>
-
+              {/* 
               <Item
                 floatingLabel
                 style={{paddingBottom: RFValue(8), borderColor: 'grey'}}>
@@ -70,7 +72,31 @@ export default function Registration({navigation}) {
                   onFocus={() => setphoneColor(Theme.primaryColor)}
                   onBlur={() => setphoneColor('grey')}
                 />
-              </Item>
+              </Item> */}
+
+              <PhoneInput
+                ref={phoneInput}
+                defaultValue={value}
+                defaultCode="DM"
+                onChangeText={(text) => {
+                  setValue(text);
+                }}
+                onChangeFormattedText={(text) => {
+                  setFormattedValue(text);
+                }}
+                // withDarkTheme
+                withShadow
+                // autoFocus
+              />
+              {/* <TouchableOpacity
+                style={styles.button}
+                onPress={() => {
+                  const checkValid = phoneInput.current?.isValidNumber(value);
+                  setShowMessage(true);
+                  setValid(checkValid ? checkValid : false);
+                }}>
+                <Text>Check</Text>
+              </TouchableOpacity> */}
               <Text></Text>
 
               <Item
@@ -115,7 +141,16 @@ export default function Registration({navigation}) {
               </Text>
             </View> */}
             <View style={{justifyContent: 'center', alignItems: 'center'}}>
-              <CustomButton color={Theme.primaryColor}>Register</CustomButton>
+              <CustomButton
+                color={Theme.primaryColor}
+                onPress={() => {
+                  setisShowModal(true);
+                  setTimeout(() => {
+                    setisShowModal(false);
+                  }, 3000);
+                }}>
+                Register
+              </CustomButton>
             </View>
           </Form>
           <TouchableOpacity
@@ -135,7 +170,8 @@ export default function Registration({navigation}) {
             </Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </ScrollView>
+      <Loader modalVisible={isShowModal} />
     </SafeAreaView>
   );
 }

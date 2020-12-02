@@ -5,6 +5,7 @@ import Intro from '../screen/AuthScreens/Intro';
 import Login from '../screen/AuthScreens/login';
 import Registration from '../screen/AuthScreens/register';
 import ForgetPassword from '../screen/AuthScreens/forgetPassword';
+import Country from '../screen/testCountry';
 
 // import {} from '../screen';
 // import {connect} from 'react-redux';
@@ -36,12 +37,31 @@ function Navigation(props) {
   // } else
   return (
     <NavigationContainer>
-      <Stack.Navigator headerMode={'none'} initialRouteName={''}>
-        <Stack.Screen name="Intro" component={Intro} />
+      <Stack.Navigator initialRouteName={''}>
+        {/* <Stack.Screen name="Country" component={Country} /> */}
 
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Registration" component={Registration} />
-        <Stack.Screen name="ForgetPassword" component={ForgetPassword} />
+        <Stack.Screen
+          name="Intro"
+          component={Intro}
+          options={{headerShown: false}}
+        />
+
+        <Stack.Screen
+          name="Login"
+          component={Login}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Registration"
+          component={Registration}
+          options={{headerShown: true}}
+        />
+
+        <Stack.Screen
+          name="ForgetPassword"
+          component={ForgetPassword}
+          options={{headerShown: false}}
+        />
         {/*  <Stack.Screen name="SplashScreen" component={SplashScreen} />
           <Stack.Screen name="SightWords" component={SightWords} />
           <Stack.Screen name="CheckEmail" component={CheckEmail} />
