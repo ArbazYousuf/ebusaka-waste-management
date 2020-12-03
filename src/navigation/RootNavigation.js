@@ -6,6 +6,8 @@ import Login from '../screen/AuthScreens/login';
 import Registration from '../screen/AuthScreens/register';
 import ForgetPassword from '../screen/AuthScreens/forgetPassword';
 import Country from '../screen/testCountry';
+import Home from '../screen/home';
+import Map from '../screen/map';
 
 // import {} from '../screen';
 // import {connect} from 'react-redux';
@@ -43,6 +45,18 @@ function Navigation(props) {
         <Stack.Screen
           name="Intro"
           component={Intro}
+          options={{headerShown: false}}
+        />
+
+        <Stack.Screen
+          name="Map"
+          component={Map}
+          options={{headerShown: false}}
+        />
+
+        <Stack.Screen
+          name="Home"
+          component={Home}
           options={{headerShown: false}}
         />
 

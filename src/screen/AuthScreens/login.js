@@ -112,7 +112,11 @@ export default function Login({navigation}) {
               </Text>
             </TouchableOpacity>
             <View style={{justifyContent: 'center', alignItems: 'center'}}>
-              <CustomButton color={Theme.primaryColor}>Login</CustomButton>
+              <CustomButton
+                color={Theme.primaryColor}
+                onPress={() => navigation.navigate('Home')}>
+                Login
+              </CustomButton>
             </View>
           </Form>
           <TouchableOpacity
