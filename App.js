@@ -1,42 +1,20 @@
-import React, {useState, useEffect} from 'react';
-import {StyleSheet, ScrollView, View, Text, StatusBar} from 'react-native';
-import Navigation from './src/navigation/RootNavigation';
+import React from 'react';
+import SplashScreen from 'react-native-splash-screen';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
-import Splash from './src/screen/splash';
+import {images} from './src/constants';
+import RootNavigation from './src/navigation/RootNavigation';
+import {AppProvider} from './src/Context/AppProvider';
 
-const App = () => {
-  const [ready, setready] = useState(false);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setready(true);
-    }, 2000);
+function App() {
+  React.useEffect(() => {
+    SplashScreen.hide();
   }, []);
-
-  function renderApp() {
-    if (!ready) {
-      return <Splash />;
-    } else {
-      return <Navigation />;
-    }
-  }
   return (
     <SafeAreaProvider>
-      {/* <StatusBar backgroundColor="green" style={styles.container}>
-        <View>
-          <Text>helllo</Text>
-        </View> */}
-      {/* <Navigation /> */}
-      {renderApp()}
-      {/* </StatusBar> */}
+      <AppProvider>
+        <RootNavigation />
+      </AppProvider>
     </SafeAreaProvider>
   );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
-
+}
 export default App;

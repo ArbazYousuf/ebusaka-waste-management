@@ -1,30 +1,31 @@
-import React, {Component} from 'react';
+import React, {useState, useRef, useEffect, useContext} from 'react';
 import {
   View,
   Text,
   Image,
-  TouchableOpacity,
   PermissionsAndroid,
   Platform,
   Dimensions,
   StyleSheet,
   ActivityIndicator,
   TextInput,
+  TouchableOpacity,
+  Modal,
+  TouchableHighlight,
 } from 'react-native';
-// import ShowToast from './Toast/toast';
-import {Icon} from 'native-base';
+import {Icon, Radio} from 'native-base';
 import MapView from 'react-native-maps';
-import st from './styles';
 import Geolocation from '@react-native-community/geolocation';
 import BottomSheet from 'reanimated-bottom-sheet';
-import CustomButton from '../components/button';
+import CustomButton from '../components/CustomButton';
 // import geolocation from '@react-native-community/geolocation';
 import MapViewDirections from 'react-native-maps-directions';
-import {RFValue} from 'react-native-responsive-fontsize';
-import Theme from '../Theme';
-// import Constant from './constants';
-
-// let ip = Constant.IP;
+import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
+import {Container, Item, Input, Button} from 'native-base';
+import {FONTS, icons, theme} from '../constants';
+import Header from '../components/header';
+import CustomRadioButton from '../components/CustomRadioButton';
+import {AppContext} from '../Context/AppProvider';
 
 const origin = {latitude: 24.928182, longitude: 67.1126082};
 const GOOGLE_MAPS_APIKEY = 'AIzaSyDDz6y1LLiSO-IWZUhTZkOjoc9hGBDkH_s';
@@ -38,28 +39,10 @@ const LONGITUDE = 0;
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
-export default class Map extends Component {
-  //   static navigationOptions = ({navigation, screenProps}) => ({
-  //     headerStyle: {
-  //       elevation: 0,
-  //       shadowOpacity: 0,
-  //       backgroundColor: '#0c233c',
-  //     },
-  //     title: 'Track Customer Location',
-  //     headerTitleStyle: {color: 'white', fontWeight: '600'},
+function Map({navigation}) {
+  const {isOnline, setisOnline} = useContext(AppContext);
 
-  //     headerLeft: () => (
-  //       <Icon
-  //         name="chevron-left"
-  //         type="Entypo"
-  //         onPress={() => navigation.goBack(null)}
-  //         size={32}
-  //         style={{paddingLeft: 7, color: 'white'}}
-  //       />
-  //     ),
-  //   });
-
-  getPermission = async () => {
+  const getPermission = async () => {
     // this.CheckLocation();
 
     if (Platform.OS === 'android') {
@@ -73,7 +56,7 @@ export default class Map extends Component {
           },
         );
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-          this.CheckLocation();
+          CheckLocation();
         } else {
           return;
         }
@@ -83,175 +66,349 @@ export default class Map extends Component {
     }
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      region: {
-        latitude: LATITUDE,
-        longitude: LONGITUDE,
-        // latitude: 24.8607,
-        // longitude: 67.0011,
-        latitudeDelta: LATITUDE_DELTA,
-        longitudeDelta: LONGITUDE_DELTA,
-      },
-      animating: true,
-      isLoading: false,
-    };
-  }
+  const [region, setregion] = useState({
+    latitude: LATITUDE,
+    longitude: LONGITUDE,
+    latitudeDelta: LATITUDE_DELTA,
+    longitudeDelta: LONGITUDE_DELTA,
+  });
 
-  componentWillMount() {
-    setTimeout(
-      () =>
-        this.setState({
-          animating: false,
-        }),
-      1000,
-    );
-  }
+  const bs = React.useRef();
 
-  CheckLocation() {
-    // alert('hello');
+  const [animating, setanimating] = useState(true);
+
+  const [isLoading, setisLoading] = useState(false);
+
+  const [isCollect, setisCollect] = useState(false);
+
+  const [isChecked, setisChecked] = useState(false);
+
+  const [isModalOpen, setisModalOpen] = useState(false);
+
+  const CheckLocation = () => {
     Geolocation.getCurrentPosition(
       (position) => {
-        // console.warn('position', position);
-        // alert(position.coords.latitude);
-        this.setState({
-          region: {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-            latitudeDelta: LATITUDE_DELTA,
-            longitudeDelta: LONGITUDE_DELTA,
-          },
+        setregion({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          latitudeDelta: LATITUDE_DELTA,
+          longitudeDelta: LONGITUDE_DELTA,
         });
       },
       (error) => console.warn(error.message),
-      // {enableHighAccuracy: true, timeout: 1000, sdspeed: -1},
+      {enableHighAccuracy: true, timeout: 1000, sdspeed: -1},
     );
     Geolocation.watchPosition(
       (position) => {
-        this.setState({
-          region: {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-            latitudeDelta: LATITUDE_DELTA,
-            longitudeDelta: LONGITUDE_DELTA,
-          },
+        setregion({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          latitudeDelta: LATITUDE_DELTA,
+          longitudeDelta: LONGITUDE_DELTA,
         });
       },
       (error) => console.warn(error.message),
     );
-  }
-  componentDidMount() {
-    this.getPermission();
-  }
-  componentWillUnmount() {
-    Geolocation.clearWatch(this.watchID);
-  }
-
-  onDropped = () => {
-    this.setState({
-      isLoading: true,
-    });
-    // fetch(`${ip}orders/dropped`, {
-    //   method: 'put',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     Authorization: `Bearer ${this.props.navigation.state.params.token}`,
-    //   },
-    //   body: JSON.stringify({
-    //     order: this.props.navigation.state.params.id,
-    //   }),
-    // })
-    //   .then(response => response.json())
-    //   .then(res => {
-    //     this.setState({
-    //       isLoading: false,
-    //     });
-    //     ShowToast('Dropped Success');
-    //     this.props.navigation.navigate('Dashborad');
-    //   })
-    //   .catch(error => {
-    //     this.setState({
-    //       isLoading: false,
-    //     });
-    //     ShowToast(error.message);
-    //   });
   };
 
-  renderInner = () => (
-    <View style={styles.panel}>
-      <Text
+  useEffect(() => {
+    getPermission();
+
+    return () => {
+      Geolocation.clearWatch();
+    };
+  }, []);
+
+  const onDropped = () => {
+    // this.setState({
+    //   isLoading: true,
+    // });
+
+    setisLoading(true);
+  };
+
+  const renderInnerCollected = () => {
+    return (
+      <View
         style={{
-          fontSize: RFValue(20),
-          fontWeight: 'bold',
-          textAlign: 'center',
+          flex: 1,
+          alignSelf: 'center',
+          height: RFValue(300),
+          width: RFValue(320),
+          backgroundColor: theme.COLORS.white,
         }}>
-        Where will the collection be made ?
-      </Text>
-      <TextInput
-        style={styles.search}
-        onFocus={() => {
-          this.bs.current.snapTo(1);
+        <View
+          style={{
+            flexDirection: 'row',
+            backgroundColor: '#F7F7F7',
+          }}>
+          <View
+            style={{
+              width: RFValue(40),
+              height: RFValue(40),
+              borderRadius: RFValue(20),
+              backgroundColor: theme.COLORS.primary,
+              margin: RFValue(20),
+            }}></View>
+          <View
+            style={{
+              marginTop: RFValue(20),
+            }}>
+            <Text>Gregory Smith</Text>
+            <View style={{flexDirection: 'row'}}>
+              <Icon
+                name="trash"
+                type="EvilIcons"
+                style={{color: theme.COLORS.primary}}
+              />
+              <Text
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                50Kg
+              </Text>
+            </View>
+          </View>
+          <View
+            style={{
+              margin: RFValue(20),
+              flexDirection: 'row',
+              justifyContent: 'space-around',
+            }}>
+            <TouchableOpacity>
+              <Image
+                source={icons.call}
+                style={{width: RFValue(40), height: RFValue(40), margin: 5}}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('Chat')}>
+              <Image
+                source={icons.message}
+                style={{width: RFValue(40), height: RFValue(40), margin: 5}}
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View style={{height: 100, padding: RFValue(5)}}>
+          <TouchableOpacity
+            style={{flexDirection: 'row', alignItems: 'center', padding: 10}}
+            // onPress={() => this.setState({isChecked: !isChecked})}>
+            onPress={() => setisChecked((prevState) => !prevState)}>
+            <CustomRadioButton isChecked={isChecked} />
+            <Text style={[FONTS.p, {marginLeft: RFValue(10)}]}>
+              7958 Swift Village
+            </Text>
+          </TouchableOpacity>
+
+          <View
+            style={{borderColor: '#F2F2F2', borderBottomWidth: RFValue(1)}}
+          />
+          <View style={{justifyContent: 'center', alignItems: 'center'}}>
+            <CustomButton
+              cWidth={250}
+              color={theme.COLORS.primary}
+              // onPress={() => this.setState({isModalOpen: true})}>
+              onPress={() => setisModalOpen(true)}>
+              Collected
+            </CustomButton>
+          </View>
+        </View>
+      </View>
+    );
+  };
+
+  const renderInner = () => (
+    <View style={styles.panel}>
+      <View style={{flexDirection: 'row'}}>
+        <View
+          style={{
+            backgroundColor: theme.COLORS.primary,
+            borderRadius: 20,
+            width: RFValue(40),
+            height: RFValue(40),
+            alignItems: 'center',
+            justifyContent: 'center',
+            // flexDirection: 'row',
+          }}>
+          <Text style={[FONTS.h4, {color: theme.COLORS.white}]}>A</Text>
+        </View>
+        <View style={{paddingHorizontal: RFValue(20)}}>
+          <Text style={[FONTS.p, {color: theme.COLORS.gray}]}>Collect at</Text>
+          <Text style={[FONTS.h4, {color: theme.COLORS.gray}]}>
+            7958 Swift Village
+          </Text>
+        </View>
+      </View>
+      <View
+        style={{
+          borderBottomColor: '#F2F2F2',
+          borderBottomWidth: RFValue(1),
+          paddingTop: RFValue(15),
         }}
-        placeholder="search"
       />
-      <CustomButton
-        color={Theme.primaryColor}
-        onPress={() => navigation.navigate('Home')}>
-        Next
-      </CustomButton>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-around',
+          paddingTop: RFValue(20),
+        }}>
+        <View style={{justifyContent: 'center', alignItems: 'center'}}>
+          <Text style={[FONTS.p, {color: theme.COLORS.gray}]}>EST</Text>
+          <Text>0 min</Text>
+        </View>
+        <View style={{justifyContent: 'center', alignItems: 'center'}}>
+          <Text style={[FONTS.p, {color: theme.COLORS.gray}]}>Distance</Text>
+          <Text>0 min</Text>
+        </View>
+        <View style={{justifyContent: 'center', alignItems: 'center'}}>
+          <Text style={[FONTS.p, {color: theme.COLORS.gray}]}>Garbage</Text>
+          <Text>0 min</Text>
+        </View>
+      </View>
+      <View style={{paddingTop: RFValue(20)}}>
+        <CustomButton
+          color={theme.COLORS.primary}
+          size="lg"
+          // onPress={() => this.setState({isCollect: !this.state.isCollect})}>
+          onPress={() => setisCollect((prevState) => !prevState)}>
+          Collect Now
+        </CustomButton>
+      </View>
     </View>
   );
 
-  renderHeader = () => (
+  const renderHeader = () => (
     <View style={styles.header}>
+      <View
+        style={{
+          zIndex: 1,
+          position: 'absolute',
+          width: RFValue(50),
+          height: RFValue(50),
+          backgroundColor: theme.COLORS.primary,
+          alignSelf: 'flex-end',
+          bottom: RFValue(20),
+          right: RFValue(10),
+          borderRadius: RFValue(50),
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <Icon name="location" type="EvilIcons" style={{color: 'white'}} />
+      </View>
       <View style={styles.panelHeader}>
         <View style={styles.panelHandle} />
       </View>
     </View>
   );
-  bs = React.createRef();
-  render() {
-    // console.log('Map', this.props.navigation.state.params);
-    destination = {
-      latitude: 37.3318456,
-      longitude: -122.0296002,
-    };
-    console.log(destination, this.state.region);
-    return (
-      <View style={styles.container}>
-        {this.state.animating ? (
-          <ActivityIndicator
-            animating={this.state.animating}
-            color="#bc2b78"
-            size="large"
-            style={{height: '100%', width: '100%'}}
-          />
-        ) : (
-          <View>
-            <MapView
-              style={{width: '100%', height: '100%'}}
-              zoomEnabled={true}
-              showsUserLocation={true}
-              showsMyLocationButton={true}
-              region={this.state.region}
-              zoomEnabled={true}>
-              <MapView.Marker coordinate={this.state.region}>
-                <Image
-                  source={require('../assets/appLogo.png')}
-                  style={{height: 35, width: 35}}
-                />
-              </MapView.Marker>
 
-              {/* <MapViewDirections
+  destination = {
+    latitude: 37.3318456,
+    longitude: -122.0296002,
+  };
+
+  return (
+    <View style={styles.container}>
+      <Header
+        navigation={navigation}
+        isOnline={isOnline}
+        setisOnline={setisOnline}
+        name={isCollect ? 'Collected' : 'Pickup'}
+      />
+      {isModalOpen && (
+        <Modal
+          animationType="fade"
+          transparent={isModalOpen}
+          visible={true}
+          onRequestClose={() => {
+            // Alert.alert('Modal has been closed.');
+          }}>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <View style={{marginBottom: RFValue(5)}}>
+                <Image source={icons.camera} style={{width: 70, height: 70}} />
+              </View>
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Text
+                  style={[
+                    FONTS.h3,
+                    {
+                      marginBottom: RFValue(5),
+                    },
+                  ]}>
+                  Upload Photo
+                </Text>
+                <Text
+                  style={[
+                    FONTS.p,
+                    {textAlign: 'center', marginBottom: RFValue(20)},
+                  ]}>
+                  Please upload picture or take picture for confirmation.
+                </Text>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    marginBottom: RFValue(5),
+                  }}>
+                  <CustomButton
+                    cWidth={120}
+                    invisisble={true}
+                    color={theme.COLORS.primary}>
+                    Upload Picture
+                  </CustomButton>
+                  <CustomButton
+                    cWidth={120}
+                    invisisble={true}
+                    color={theme.COLORS.primary}>
+                    Take Picture
+                  </CustomButton>
+                </View>
+                <CustomButton
+                  cWidth={250}
+                  color={theme.COLORS.primary}
+                  onPress={() => setisModalOpen(false)}>
+                  Confirm
+                </CustomButton>
+              </View>
+            </View>
+          </View>
+        </Modal>
+      )}
+
+      {!animating ? (
+        <ActivityIndicator
+          animating={animating}
+          color="#bc2b78"
+          size="large"
+          style={{height: '100%', width: '100%'}}
+        />
+      ) : (
+        <View>
+          <MapView
+            style={{width: '100%', height: '100%'}}
+            // ref={this.handleRef}
+            zoomEnabled={true}
+            showsUserLocation={true}
+            showsMyLocationButton={true}
+            region={region}
+            zoomEnabled={true}>
+            <MapView.Marker coordinate={region}>
+              <Image source={icons.mapMarker} style={{height: 35, width: 35}} />
+            </MapView.Marker>
+            {/* 
+              <MapViewDirections
                 origin={this.state.region}
                 destination={destination}
                 waypoints={[destination]}
                 apikey={GOOGLE_MAPS_APIKEY}
                 strokeWidth={3}
                 strokeColor="red"
-              /> */}
-              {/* <MapView.Marker coordinate={destination}>
+              />
+              <MapView.Marker coordinate={destination}>
                 <Icon
                   name="location"
                   type="Entypo"
@@ -263,20 +420,42 @@ export default class Map extends Component {
                   }}
                 />
               </MapView.Marker> */}
-            </MapView>
-
+          </MapView>
+          {/* <View
+              style={{
+                width: RFValue(300),
+                height: RFValue(500),
+                backgroundColor: 'red',
+              }}>
+              <Text>hbjfjfewjfbewj</Text>
+            </View> */}
+          {!isCollect && (
             <BottomSheet
-              ref={this.bs}
-              snapPoints={[500, 250, 0]}
-              renderContent={this.renderInner}
-              renderHeader={this.renderHeader}
+              ref={bs}
+              snapPoints={['30%', '80%', '85%']}
+              renderContent={renderInner}
+              renderHeader={renderHeader}
               initialSnap={1}
+              enabledBottomInitialAnimation={true}
+              enabledInnerScrolling={false}
             />
-          </View>
-        )}
-      </View>
-    );
-  }
+          )}
+
+          {isCollect && (
+            <BottomSheet
+              ref={bs}
+              snapPoints={['40%', '40%']}
+              renderContent={renderInnerCollected}
+              initialSnap={1}
+              borderRadius={50}
+              enabledBottomInitialAnimation={true}
+              enabledInnerScrolling={false}
+            />
+          )}
+        </View>
+      )}
+    </View>
+  );
 }
 const IMAGE_SIZE = 200;
 
@@ -309,12 +488,12 @@ const styles = StyleSheet.create({
     right: 0,
   },
   panel: {
-    height: 600,
+    height: RFValue(500),
     padding: 20,
-    backgroundColor: '#f7f5eee8',
+    backgroundColor: theme.COLORS.white,
   },
   header: {
-    backgroundColor: '#f7f5eee8',
+    backgroundColor: theme.COLORS.white,
     shadowColor: '#000000',
     paddingTop: 20,
     borderTopLeftRadius: 20,
@@ -361,4 +540,31 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
   },
+
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  modalView: {
+    // margin: 20,
+    width: RFValue(280),
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
 });
+export default Map;

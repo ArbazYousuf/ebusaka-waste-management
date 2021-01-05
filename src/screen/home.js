@@ -1,218 +1,261 @@
-import React, {useState} from 'react';
-import {StyleSheet, Image, TouchableOpacity, FlatList} from 'react-native';
+import React, {useState, useContext} from 'react';
+import {
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  FlatList,
+  StatusBar,
+  ScrollView,
+} from 'react-native';
 import {View, Text, Icon} from 'native-base';
 import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
-import Theme from '../Theme';
+import {theme, images, icons} from '../constants';
 import SafeAreaView from 'react-native-safe-area-view';
-
+import CollectionCard from '../components/CollectionCard';
+import Switch from '../components/switch';
+import {AppContext} from '../Context/AppProvider';
+const data = [
+  {id: 0, name: "Today's Collection", obj: [1, 2, 3, 4, 5]},
+  {id: 1, name: 'Next Collection', obj: [1, 2, 3, 4, 5]},
+  {id: 2, name: 'Pending Collection', obj: [1, 2, 3, 4, 5], length: 34},
+];
 export default function Home({navigation}) {
-  const [menuData, setmenuData] = useState([
-    {
-      name: 'Subcription',
-      iconName: 'truck',
-      iconFamily: 'FontAwesome5',
-    },
-    {
-      name: 'OnDemand Pickup',
-      iconName: 'arrow-circle-down',
-      iconFamily: 'FontAwesome',
-    },
-    {
-      name: 'Special Pickup',
-      iconName: 'car',
-      iconFamily: 'FontAwesome',
-    },
-    {
-      name: 'Requests',
-      iconName: 'watch-later',
-      iconFamily: 'MaterialIcons',
-    },
-    {
-      name: 'Payments',
-      iconName: 'credit-card',
-      iconFamily: 'FontAwesome',
-    },
+  const {isOnline, setisOnline} = useContext(AppContext);
+  const Offline = () => (
+    <View
+      style={{
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}>
+      <Image source={images.dustbin} />
+      <View style={{marginTop: RFValue(20)}}>
+        <Text
+          style={{
+            fontFamily: 'Metropolis-Medium',
+            fontSize: RFValue(20),
+            color: '#7A869A',
+          }}>
+          You have no Requests.
+        </Text>
+        <Text
+          style={{
+            fontFamily: 'Metropolis-Medium',
+            fontSize: RFValue(20),
+            color: '#7A869A',
+          }}>
+          Go online for Request
+        </Text>
+      </View>
+    </View>
+  );
 
-    {
-      name: 'Account',
-      iconName: 'user',
-      iconFamily: 'FontAwesome',
-    },
-  ]);
+  const Online = () => (
+    <View
+      style={{
+        flex: 1,
+        paddingTop: RFValue(25),
+        paddingLeft: RFValue(25),
+        marginTop: RFValue(5),
+      }}>
+      <FlatList
+        data={data}
+        keyExtractor={(item) => item.id}
+        style={{paddingBottom: RFValue(30)}}
+        renderItem={({item}) => {
+          return (
+            <View>
+              <Text style={[theme.FONTS.p, {fontSize: RFValue(18)}]}>
+                {item.name} {item.length ? `(${item.length})` : ''}
+              </Text>
+              <FlatList
+                data={item.obj}
+                renderItem={() => (
+                  <CollectionCard
+                    ContainerStyle={{
+                      width: RFValue(310),
+                      backgroundColor: 'white',
+                      borderRadius: RFValue(10),
+                      marginVertical: RFValue(20),
+                      marginRight: RFValue(20),
+                    }}
+                  />
+                )}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                keyExtractor={(data) => data}
+              />
+            </View>
+          );
+        }}
+      />
+    </View>
+  );
 
-  // function handleIcon() {}
+  const DashboardCard = (img, unit, text) => (
+    <View
+      style={{
+        flex: 1,
+        alignItems: 'center',
+        // justifyContent: 'center',
+        // margin: RFValue(20),
+      }}>
+      <View
+        style={{
+          width: '100%',
+          marginVertical: RFValue(20),
+        }}>
+        <Image
+          style={{
+            resizeMode: 'center',
+            height: RFValue(30),
+            alignSelf: 'center',
+          }}
+          source={img}
+        />
+      </View>
+      <Text
+        style={[
+          theme.FONTS.p,
+          {
+            fontSize: RFValue(18),
+            textAlign: 'center',
+            marginBottom: RFValue(8),
+            color: theme.COLORS.primary,
+            lineHeight: RFValue(18),
+          },
+        ]}>
+        {unit}
+      </Text>
+      <Text
+        style={[
+          theme.FONTS.p,
+          {
+            fontSize: RFValue(11),
+            textAlign: 'center',
+            lineHeight: RFValue(13),
+            color: theme.COLORS.primary,
+            opacity: 0.4,
+            marginHorizontal: RFValue(10),
+          },
+        ]}>
+        {text}
+      </Text>
+    </View>
+  );
 
   return (
     <SafeAreaView style={{flex: 1}}>
+      <StatusBar backgroundColor={theme.COLORS.primary} />
       <View style={styles.Container}>
         <View
           style={{
-            backgroundColor: Theme.primaryColor,
-            flex: 0.3,
-            marginBottom: RFValue(10),
-            justifyContent: 'center',
-            alignItems: 'center',
+            height: RFValue(190),
+            width: '100%',
+            backgroundColor: theme.COLORS.primary,
+            padding: RFValue(25),
           }}>
-          <Text
-            style={{
-              textAlign: 'center',
-              fontSize: RFValue(18),
-              fontWeight: 'bold',
-              color: 'white',
-            }}>
-            HELLO,
-          </Text>
-          <Text
-            style={{
-              textAlign: 'center',
-              fontSize: RFValue(12),
-              fontWeight: 'bold',
-              color: 'white',
-            }}>
-            What can we do for you ?
-          </Text>
-        </View>
-
-        <View
-          style={{
-            backgroundColor: 'white',
-            borderRadius: RFValue(70),
-            position: 'absolute',
-            zIndex: 2,
-            top: RFValue(130),
-            left: RFValue(120),
-            height: RFValue(140),
-            width: RFValue(140),
-            alignItems: 'center',
-            padding: RFValue(10),
-            // overflow: 'hidden',
-
-            shadowColor: 'rgba(0,0,0,0.4)',
-            shadowOffset: {
-              width: 1,
-              height: 5,
-            },
-            shadowOpacity: 0.34,
-            shadowRadius: 6.27,
-            elevation: 10,
-          }}>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <Text
+              style={[
+                theme.FONTS.p,
+                {
+                  color: 'white',
+                  fontSize: RFValue(20),
+                  flex: 1,
+                  paddingTop: RFValue(2),
+                },
+              ]}>
+              Hi, Welcome Back
+            </Text>
+            <View style={{flex: 1, alignItems: 'flex-end'}}>
+              <Image
+                style={{tintColor: 'white', width: 30, height: 30}}
+                source={icons.bellNotification}
+              />
+            </View>
+          </View>
           <View
             style={{
-              borderRadius: RFValue(60),
-              height: RFValue(120),
-              width: RFValue(120),
-              borderColor: Theme.primaryColor,
-              borderWidth: 10,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              marginTop: RFValue(5),
             }}>
-            <Image
-              source={require('../assets/appLogo.png')}
-              resizeMode="contain"
-              style={{
-                alignSelf: 'center',
-                width: RFValue(90),
-                height: RFValue(90),
-              }}
-            />
-          </View>
-        </View>
-
-        <View
-          style={{
-            // backgroundColor: '#D3D3D3',
-            overflow: 'hidden',
-            backgroundColor: '#fcfcfc',
-
-            shadowColor: 'rgba(0,0,0,0.4)',
-            shadowOffset: {
-              width: 1,
-              height: 5,
-            },
-            shadowOpacity: 0.34,
-            shadowRadius: 6.27,
-            elevation: 5,
-            flex: 0.5,
-            margin: RFValue(15),
-            borderRadius: RFValue(10),
-          }}>
-          <View
-            style={{
-              flex: 0.1,
-              margin: RFValue(4),
-              justifyContent: 'center',
-              alignItems: 'center',
-              paddingTop: RFValue(50),
-            }}>
-            <Text style={{fontWeight: 'bold'}}>Hammad</Text>
-          </View>
-
-          <View style={{flex: 0.9}}>
-            <FlatList
-              data={menuData}
-              renderItem={({item, index}) => {
-                return (
+            <View style={{flexDirection: 'row', flex: 1}}>
+              <View
+                style={{
+                  width: RFValue(50),
+                  height: RFValue(50),
+                  backgroundColor: theme.COLORS.secondary,
+                  borderRadius: RFValue(50),
+                }}></View>
+              <View
+                style={{
+                  marginLeft: RFValue(10),
+                  flex: 1,
+                }}>
+                <Text
+                  style={{
+                    color: 'white',
+                    fontSize: RFValue(19),
+                    fontFamily: 'Ubuntu-Regular',
+                  }}>
+                  William Sam
+                </Text>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    marginVertical: RFValue(5),
+                    flex: 1,
+                  }}>
                   <View
                     style={{
+                      flexDirection: 'row',
                       flex: 1,
-                      padding: RFValue(10),
-                      justifyContent: 'center',
                       alignItems: 'center',
-                      height: RFValue(120),
                     }}>
-                    <TouchableOpacity
-                      onPress={() => navigation.navigate('Map')}
+                    <Image
                       style={{
-                        //   flexDirection: 'row',
-                        // flex: 1,
-
-                        shadowColor: 'rgba(0,0,0,0.4)',
-                        shadowOffset: {
-                          width: 1,
-                          height: 5,
-                        },
-                        shadowOpacity: 0.34,
-                        shadowRadius: 6.27,
-                        elevation: 10,
-
-                        width: RFValue(60),
-                        height: RFValue(60),
-                        borderRadius: RFValue(50),
-                        // backgroundColor: '#D3D3D3',
-                        backgroundColor: 'white',
-
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                      }}>
-                      <Icon
-                        name={item.iconName}
-                        type={item.iconFamily}
-                        style={{
-                          color: Theme.primaryColor,
-                          // color: 'black',
-                          fontSize: RFValue(30),
-                        }}
-                      />
-                    </TouchableOpacity>
+                        width: RFValue(15),
+                        height: RFValue(15),
+                        tintColor: '#FF9800',
+                      }}
+                      source={icons.star}
+                    />
                     <Text
-                      ellipsizeMode="head"
                       style={{
-                        textAlign: 'center',
-                        height: RFValue(40),
-                        paddingTop: RFValue(5),
-                        fontSize: RFValue(12),
-                        fontWeight: 'bold',
+                        color: 'white',
+                        marginHorizontal: RFValue(5),
+                        fontSize: RFValue(18),
+                        fontFamily: 'Ubuntu-Regular',
                       }}>
-                      {item.name}
+                      5.0
                     </Text>
                   </View>
-                );
-              }}
-              numColumns={3}
-              columnWrapperStyle={{flexWrap: 'wrap', flex: 1}}
-
-              // key={numColumns.toString()} // if you want to use dynamic numColumns then you have to use key props
-            />
+                  <View style={{flex: 1, alignItems: 'flex-end'}}>
+                    <Switch isOnline={isOnline} setisOnline={setisOnline} />
+                  </View>
+                </View>
+              </View>
+            </View>
           </View>
         </View>
+        <View
+          style={{
+            height: RFValue(140),
+            width: '90%',
+            backgroundColor: 'white',
+            alignSelf: 'center',
+            marginTop: RFValue(-60),
+            borderRadius: RFValue(10),
+            flexDirection: 'row',
+            paddingHorizontal: RFValue(15),
+          }}>
+          {DashboardCard(icons.dustbin, '0', 'TRASH BAGS COLLECTED')}
+          {DashboardCard(icons.meter, '0 KM', 'DISTANCE COVERED')}
+          {DashboardCard(icons.outline, '0', 'HOUSEHOLDS SERVICED')}
+        </View>
+        {!isOnline ? Offline() : Online()}
       </View>
     </SafeAreaView>
   );
@@ -221,13 +264,5 @@ export default function Home({navigation}) {
 const styles = StyleSheet.create({
   Container: {
     flex: 1,
-  },
-  logoContainer: {
-    flex: 4,
-  },
-  bottomTextContainer: {
-    flex: 2,
-    backgroundColor: Theme.primaryColor,
-    height: RFValue(200),
   },
 });
