@@ -17,6 +17,9 @@ export default function CustomTextInput({
   password,
   onChangeText,
   cWidth,
+  inputType,
+  icon,
+  iconType,
 }) {
   const [isVisible, setIsVisible] = useState(true);
   const [passwordIcon, setpasswordIcon] = useState('eye');
@@ -25,16 +28,18 @@ export default function CustomTextInput({
   return (
     <View
       style={{
-        borderBottomColor: '#F5FCFF',
         backgroundColor: '#FFFFFF',
         borderRadius: RFValue(10),
-        borderBottomWidth: 1,
+        borderWidth: 1,
         width: cWidth ? RFValue(cWidth) : RFValue(320),
-        height: RFValue(40),
+        height: RFValue(50),
         marginBottom: 20,
         flexDirection: 'row',
         alignItems: 'center',
+        borderColor: theme.COLORS.lightGray,
+        paddingLeft: RFValue(2),
       }}>
+      {icon && <Icon name={icon} type={iconType} />}
       <TextInput
         style={{
           height: 45,
@@ -43,10 +48,11 @@ export default function CustomTextInput({
           flex: 1,
         }}
         placeholder={placeholder}
-        placeholderTextColor={theme.COLORS.black}
+        placeholderTextColor={theme.COLORS.lightGray}
         secureTextEntry={password ? true : false}
         underlineColorAndroid="transparent"
         onChangeText={onChangeText}
+        keyboardType={inputType}
       />
       {password && (
         <Icon

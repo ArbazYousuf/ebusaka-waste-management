@@ -40,8 +40,6 @@ export default function Login({navigation}) {
   };
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: theme.COLORS.backColor}}>
-      {/* <KeyboardAvoidingView style={styles.container} keyboardVerticalOffset={1}> */}
-
       <View
         style={{
           flex: 0.2,
@@ -49,6 +47,7 @@ export default function Login({navigation}) {
           justifyContent: 'center',
           alignItems: 'center',
           // backgroundColor: 'yellow',
+          marginBottom: RFValue(20),
         }}>
         <Image
           source={images.login_header}
@@ -63,29 +62,107 @@ export default function Login({navigation}) {
           }}
         />
       </View>
+
       <View style={{flex: 0.8}}>
-        <View
-          style={{justifyContent: 'center', alignItems: 'center', flex: 0.2}}>
-          <Text style={[FONTS.h1, {}]}>Welcome Back</Text>
-          <Text style={[FONTS.p]}>Please Login to Continue</Text>
-        </View>
-        <View
-          style={{flex: 0.2, justifyContent: 'center', alignItems: 'center'}}>
-          <CustomSignIn
-            invisisble={true}
-            icon={icons.google}
-            color={theme.COLORS.black}>
-            Login with Google
-          </CustomSignIn>
-          <CustomSignIn
-            icon={icons.fb}
-            invisisble={true}
-            color={theme.COLORS.black}>
-            Login with Facebook
-          </CustomSignIn>
-        </View>
-        <View></View>
-        {/* {showText ? (
+        <KeyboardAvoidingView
+          style={{flex: 1}}
+          behavior="padding"
+          keyboardVerticalOffset={10}>
+          <View
+            style={{justifyContent: 'center', alignItems: 'center', flex: 0.2}}>
+            <Text style={[FONTS.h1, {}]}>Welcome Back</Text>
+            <Text style={[FONTS.p]}>Please Login to Continue</Text>
+          </View>
+          <View
+            style={{flex: 0.2, justifyContent: 'center', alignItems: 'center'}}>
+            <CustomSignIn
+              invisisble={true}
+              icon={icons.google}
+              color={theme.COLORS.black}>
+              Login with Google
+            </CustomSignIn>
+            <CustomSignIn
+              icon={icons.fb}
+              invisisble={true}
+              color={theme.COLORS.black}>
+              Login with Facebook
+            </CustomSignIn>
+          </View>
+
+          <View
+            style={{
+              flex: 0.2,
+              // justifyContent: 'space-around',
+              flexDirection: 'row',
+              justifyContent: 'space-around',
+              paddingTop: RFValue(20),
+              alignItems: 'center',
+              paddingBottom: RFValue(10),
+            }}>
+            <View
+              style={{
+                borderColor: theme.COLORS.lightGray,
+                borderWidth: 1,
+                height: 0,
+                width: RFValue(80),
+                // height: 40,
+                // backgroundColor: 'red',
+              }}></View>
+            <Text style={[FONTS.p, {color: theme.COLORS.lightGray}]}>
+              Or With Mobile Number
+            </Text>
+
+            <View
+              style={{
+                borderColor: theme.COLORS.lightGray,
+                borderWidth: 1,
+                height: 0,
+                width: RFValue(80),
+                // height: 40,
+                // backgroundColor: 'red',
+              }}
+            />
+          </View>
+
+          <View
+            style={{
+              flex: 0.1,
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginBottom: RFValue(5),
+            }}>
+            <View>
+              <Text
+                style={[
+                  FONTS.h4,
+                  {color: theme.COLORS.gray, paddingBottom: RFValue(10)},
+                ]}>
+                Phone Number
+              </Text>
+              <CustomTextInput
+                placeholder="Phone Number"
+                inputType="numeric"
+                icon="phone"
+                iconType="Entypo"
+              />
+            </View>
+          </View>
+
+          <View
+            style={{justifyContent: 'center', alignItems: 'center', flex: 0.3}}>
+            <CustomButton color={theme.COLORS.primary}>Log In</CustomButton>
+          </View>
+          <View
+            style={{justifyContent: 'center', alignItems: 'center', flex: 0.1}}>
+            <Text>
+              Don't Have an Account?
+              <Text style={[FONTS.p, {color: theme.COLORS.primary}]}>
+                {' '}
+                Signup
+              </Text>
+            </Text>
+          </View>
+          {/* {showText ? (
               <View style={{flex: 0.1}}>
                 <TouchableOpacity
                   onPress={() => navigation.navigate('Registration')}
@@ -102,9 +179,8 @@ export default function Login({navigation}) {
                 </TouchableOpacity>
               </View>
             ) : null} */}
+        </KeyboardAvoidingView>
       </View>
-
-      {/* </KeyboardAvoidingView> */}
     </SafeAreaView>
   );
 }

@@ -11,9 +11,9 @@ export const COLORS = {
   // colors
   black: '#1E1F20',
   white: '#FFFFFF',
-  lightGray: '#eff2f5',
+  lightGray: '#DEDEDE',
   backColor: '#FFFFFF',
-  gray: '#8b9097',
+  gray: '#707070',
   darkYellow: '#FF9800',
 };
 export const SIZES = {
