@@ -152,7 +152,7 @@ function Navigation(props) {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={'Login'}>
+      <Stack.Navigator initialRouteName={'Home'}>
         <Stack.Screen
           name="ForgetPassword"
           component={ForgetPassword}
