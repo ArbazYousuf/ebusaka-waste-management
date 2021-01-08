@@ -154,7 +154,7 @@ function Navigation(props) {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={'Home'}>
+      <Stack.Navigator initialRouteName={'Registration'}>
         <Stack.Screen
           name="ForgetPassword"
           component={ForgetPassword}
@@ -261,17 +261,18 @@ function Navigation(props) {
         <Stack.Screen
           name="Registration"
           component={Registration}
-          options={{
-            title: 'Sign Up',
-            headerStyle: {
-              backgroundColor: theme.COLORS.primary,
-            },
-            headerTitleAlign: 'center',
-            headerTintColor: '#fff',
-            headerTitleStyle: FONTS.p,
-            headerLeft: ({onPress}) => <Left onPress={onPress} />,
-            headerRight: ({onPress}) => <Right onPress={onPress} />,
-          }}
+          options={{headerShown: false}}
+          // options={{
+          //   title: 'Sign Up',
+          //   headerStyle: {
+          //     backgroundColor: theme.COLORS.primary,
+          //   },
+          //   headerTitleAlign: 'center',
+          //   headerTintColor: '#fff',
+          //   headerTitleStyle: FONTS.p,
+          //   headerLeft: ({onPress}) => <Left onPress={onPress} />,
+          //   headerRight: ({onPress}) => <Right onPress={onPress} />,
+          // }}
         />
       </Stack.Navigator>
     </NavigationContainer>
