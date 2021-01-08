@@ -20,15 +20,32 @@ export default function Home({navigation}) {
       <View style={styles.Container}>
         <View style={{margin: RFValue(20), flexDirection: 'row'}}>
           <View>
-            <Text style={{fontSize: RFValue(13)}}>Hi, Riley Cooper</Text>
             <Text
               style={{
-                marginTop: RFValue(10),
-                fontSize: RFValue(18),
-                fontWeight: 'bold',
+                fontSize: RFValue(16),
+                fontFamily: 'Roboto-Regular',
+                color: '#2D2D2D',
               }}>
-              Don't forget to smile today
+              Hi, Riley Cooper
             </Text>
+            <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
+              <Text
+                style={{
+                  marginTop: RFValue(10),
+                  fontSize: RFValue(17),
+                  fontFamily: 'Roboto-Bold',
+                }}>
+                Don't forget to smile today
+              </Text>
+              <Image
+                style={{
+                  width: RFValue(19),
+                  height: RFValue(19),
+                  marginLeft: RFValue(10),
+                }}
+                source={icons.face}
+              />
+            </View>
           </View>
           <View style={{alignItems: 'flex-end', flex: 1}}>
             <View
@@ -76,10 +93,16 @@ export default function Home({navigation}) {
             style={{
               width: RFValue(50),
               height: RFValue(50),
-              backgroundColor: theme.COLORS.primary,
+              backgroundColor: '#2AC17C',
               borderRadius: RFValue(10),
-            }}
-          />
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <Image
+              source={icons.page}
+              style={{width: RFValue(25), height: RFValue(25)}}
+            />
+          </View>
         </View>
         <View style={{margin: RFValue(20)}}>
           <Text style={{fontSize: RFValue(15), fontWeight: 'bold'}}>

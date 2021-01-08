@@ -26,6 +26,9 @@ export const send = require('../assets/icons/send.png');
 export const fb = require('../assets/icons/fb.png');
 export const google = require('../assets/icons/google.png');
 
+export const face = require('../assets/icons/face.png');
+export const page = require('../assets/icons/page.png');
+
 export default {
   bellNotification,
   star,
@@ -53,4 +56,6 @@ export default {
   send,
   fb,
   google,
+  face,
+  page,
 };

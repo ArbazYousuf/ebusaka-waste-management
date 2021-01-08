@@ -26,6 +26,8 @@ import Vehicle from '../screen/vehicle';
 import AddVehicle from '../screen/addVehicle';
 import Document from '../screen/document';
 import EditDocument from '../screen/editDocument';
+import Feed from '../screen/feed';
+
 import Splash from '../screen/splash';
 
 const Stack = createStackNavigator();
@@ -61,7 +63,7 @@ function FooterTab() {
       />
       <Tab.Screen
         options={{
-          tabBarLabel: 'Jobs',
+          tabBarLabel: 'Feed',
           tabBarIcon: ({color}) => (
             <Image
               resizeMode="center"
@@ -74,8 +76,8 @@ function FooterTab() {
             />
           ),
         }}
-        name="jobs"
-        component={Jobs}
+        name="Feed"
+        component={Feed}
       />
       <Tab.Screen
         options={{

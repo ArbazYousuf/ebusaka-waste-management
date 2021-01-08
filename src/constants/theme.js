@@ -8,6 +8,13 @@ export const COLORS = {
   secondary: '#F5F6FA',
   lightPrimary: '#70A12F',
 
+  one: '#2AC17C',
+  two: '#5755DC',
+  three: '#FEA46F',
+  four: '#299983',
+  five: '#FF6F5C',
+  six: '#0097FD',
+
   // colors
   black: '#1E1F20',
   white: '#FFFFFF',
