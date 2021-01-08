@@ -152,7 +152,8 @@ export default function Login({navigation}) {
             style={{justifyContent: 'center', alignItems: 'center', flex: 0.3}}>
             <CustomButton color={theme.COLORS.primary}>Log In</CustomButton>
           </View>
-          <View
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Registration')}
             style={{justifyContent: 'center', alignItems: 'center', flex: 0.1}}>
             <Text>
               Don't Have an Account?
@@ -161,7 +162,7 @@ export default function Login({navigation}) {
                 Signup
               </Text>
             </Text>
-          </View>
+          </TouchableOpacity>
           {/* {showText ? (
               <View style={{flex: 0.1}}>
                 <TouchableOpacity

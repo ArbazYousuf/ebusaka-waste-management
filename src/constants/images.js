@@ -11,6 +11,7 @@ export const demoMap = require('../assets/images/demoMap.png');
 // export const name = require('../assets/images/test.png');
 export const login_header = require('../assets/images/login.png');
 export const register_header = require('../assets/images/register_header.png');
+export const sms = require('../assets/images/sms.png');
 
 export default {
   intro_1,
@@ -23,4 +24,5 @@ export default {
   demoMap,
   login_header,
   register_header,
+  sms,
 };

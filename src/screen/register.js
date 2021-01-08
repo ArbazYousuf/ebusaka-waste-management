@@ -57,7 +57,7 @@ export default function Registration() {
   // };
 
   return (
-    <ScrollView>
+    <ScrollView showsVerticalScrollIndicator={false}>
       <SafeAreaView style={{flex: 1, backgroundColor: theme.COLORS.backColor}}>
         <KeyboardAvoidingView style={{flex: 1}} behavior="padding">
           <View

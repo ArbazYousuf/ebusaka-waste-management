@@ -17,6 +17,7 @@ import Home from '../screen/home';
 import User from '../screen/user';
 import Profile from '../screen/profile';
 import Map from '../screen/map';
+import VerifyCode from '../screen/confirmationCode';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -142,7 +143,7 @@ function Navigation(props) {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={'Registration'}>
+      <Stack.Navigator initialRouteName={'VerifiyCode'}>
         <Stack.Screen
           name="ForgetPassword"
           component={ForgetPassword}
@@ -200,11 +201,11 @@ function Navigation(props) {
           options={{headerShown: false}}
         /> */}
 
-        {/* <Stack.Screen
-          name="Splash"
-          component={Splash}
+        <Stack.Screen
+          name="VerifiyCode"
+          component={VerifyCode}
           options={{headerShown: false}}
-        /> */}
+        />
 
         <Stack.Screen
           name="Registration"
