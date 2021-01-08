@@ -2,33 +2,21 @@ import * as React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import WalkThrough from '../screen/walkThrough';
 import TestComponent from '../screen/TestComponent';
-import Intro from '../screen/intro';
 import Login from '../screen/login';
 import Registration from '../screen/register';
 import ForgetPassword from '../screen/forgetPassword';
 import {theme, FONTS, icons} from '../constants';
 import {Icon} from 'native-base';
-import JobDetails from '../screen/jobDetails';
 import Chat from '../screen/chat';
 
 import {TouchableHighlight, Text, Image} from 'react-native';
 import {RFValue} from 'react-native-responsive-fontsize';
 
 import Home from '../screen/home';
-import Jobs from '../screen/jobs';
 import User from '../screen/user';
 import Profile from '../screen/profile';
-import Calender from '../screen/calender';
 import Map from '../screen/map';
-import Vehicle from '../screen/vehicle';
-import AddVehicle from '../screen/addVehicle';
-import Document from '../screen/document';
-import EditDocument from '../screen/editDocument';
-import Feed from '../screen/feed';
-
-import Splash from '../screen/splash';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -178,43 +166,8 @@ function Navigation(props) {
         />
 
         <Stack.Screen
-          name="WalkThrough"
-          component={WalkThrough}
-          options={{headerShown: false}}
-        />
-
-        <Stack.Screen
-          name="Intro"
-          component={Intro}
-          options={{headerShown: false}}
-        />
-
-        <Stack.Screen
-          name="JobDetails"
-          component={JobDetails}
-          options={{headerShown: false}}
-        />
-
-        <Stack.Screen
           name="Test"
           component={TestComponent}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="Document"
-          component={Document}
-          options={{headerShown: false}}
-        />
-
-        <Stack.Screen
-          name="EditDocument"
-          component={EditDocument}
-          options={{headerShown: false}}
-        />
-
-        <Stack.Screen
-          name="AddVehicle"
-          component={AddVehicle}
           options={{headerShown: false}}
         />
 
@@ -230,11 +183,6 @@ function Navigation(props) {
           options={{headerShown: false}}
         />
 
-        <Stack.Screen
-          name="Vehicle"
-          component={Vehicle}
-          options={{headerShown: false}}
-        />
         <Stack.Screen
           name="Home"
           component={FooterTab}

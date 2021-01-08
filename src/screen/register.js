@@ -17,11 +17,10 @@ import {Form, Item, Input, Label, CheckBox} from 'native-base';
 import {FONTS, icons, images, theme} from '../constants';
 import CustomTextInput from '../components/CustomTextInput';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import CustomCheckBox from '../components/CustomCheckBox';
 import CustomSignIn from '../components/customSignIn';
 
 export default function Registration() {
-  const [activeColor, setactiveColor] = useState(theme.COLORS.lightGray);
+  const [nonActiveColor, setactiveColor] = useState(theme.COLORS.lightGray);
   const [value, setValue] = useState('');
   const [formattedValue, setFormattedValue] = useState('');
   const [valid, setValid] = useState(false);
@@ -92,9 +91,11 @@ export default function Registration() {
                   style={[
                     FONTS.h4,
                     {
-                      color: onActive.name ? theme.COLORS.primary : activeColor,
+                      color: onActive.name
+                        ? theme.COLORS.primary
+                        : nonActiveColor,
 
-                      activeColor,
+                      nonActiveColor,
                       paddingBottom: RFValue(5),
                     },
                   ]}>
@@ -128,7 +129,7 @@ export default function Registration() {
                     {
                       color: onActive.email
                         ? theme.COLORS.primary
-                        : activeColor,
+                        : nonActiveColor,
                       paddingBottom: RFValue(5),
                     },
                   ]}>
@@ -163,7 +164,7 @@ export default function Registration() {
                     {
                       color: onActive.phone
                         ? theme.COLORS.primary
-                        : activeColor,
+                        : nonActiveColor,
                       paddingBottom: RFValue(5),
                     },
                   ]}>
@@ -221,27 +222,20 @@ export default function Registration() {
                   style={[
                     FONTS.h4,
                     {
-                      color: show ? theme.COLORS.primary : activeColor,
+                      color: show ? theme.COLORS.primary : nonActiveColor,
                       paddingBottom: RFValue(5),
                     },
                   ]}>
                   Date of Birth
                 </Text>
                 <TouchableOpacity
-                  // onFocus={() => {
-                  //   setOnActive((prev) => {
-                  //     return {...prev, dob: true};
-                  //   });
-                  // }}
                   onPress={() => setShow(true)}
                   style={{
                     borderColor: show
                       ? theme.COLORS.primary
                       : theme.COLORS.lightGray,
-                    // borderBottomColor: '#F5FCFF',
                     backgroundColor: '#FFFFFF',
                     borderRadius: RFValue(10),
-                    // borderBottomWidth: 1,
                     borderWidth: 1,
                     width: RFValue(320),
                     height: RFValue(50),
@@ -250,9 +244,22 @@ export default function Registration() {
                     alignItems: 'center',
                     padding: RFValue(10),
                   }}>
-                  <Icon name="calendar" type="AntDesign" style={{}} />
+                  <Icon
+                    name="calendar"
+                    type="AntDesign"
+                    style={{
+                      color: show ? theme.COLORS.primary : nonActiveColor,
+                    }}
+                  />
 
-                  <Text style={{fontSize: RFValue(11)}}>Date of Birth</Text>
+                  <Text
+                    style={{
+                      fontSize: RFValue(11),
+                      color: show ? theme.COLORS.primary : nonActiveColor,
+                      paddingLeft: RFValue(10),
+                    }}>
+                    Date of Birth
+                  </Text>
                 </TouchableOpacity>
               </View>
               <View>
@@ -282,8 +289,6 @@ export default function Registration() {
         <View style={{flex: 0.2}}>
           <View
             style={{
-              // flex: 0.2,
-              // justifyContent: 'space-around',
               flexDirection: 'row',
               justifyContent: 'space-around',
               paddingTop: RFValue(20),
@@ -296,8 +301,6 @@ export default function Registration() {
                 borderWidth: 1,
                 height: 0,
                 width: RFValue(80),
-                // height: 40,
-                // backgroundColor: 'red',
               }}></View>
             <Text style={[FONTS.p, {color: theme.COLORS.lightGray}]}>
               Or With Social Account
@@ -309,8 +312,6 @@ export default function Registration() {
                 borderWidth: 1,
                 height: 0,
                 width: RFValue(80),
-                // height: 40,
-                // backgroundColor: 'red',
               }}
             />
           </View>
