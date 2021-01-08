@@ -37,7 +37,7 @@ function FooterTab() {
   return (
     <Tab.Navigator
       tabBarOptions={{
-        showLabel: false,
+        showLabel: true,
         activeTintColor: theme.COLORS.primary,
         inactiveTintColor: 'black',
       }}>

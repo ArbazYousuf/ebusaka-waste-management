@@ -77,15 +77,21 @@ export default function Home({navigation}) {
             }}>
             <Icon
               style={{
-                marginHorizontal: 20,
+                marginHorizontal: 15,
                 color: 'gray',
                 alignSelf: 'center',
+                fontSize: RFValue(13),
               }}
               type="FontAwesome"
               name="search"
             />
             <TextInput
-              style={{width: '85%', fontSize: RFValue(13)}}
+              style={{
+                width: '85%',
+                fontSize: RFValue(12),
+                fontFamily: 'Roboto-Regular',
+                marginRight: RFValue(10),
+              }}
               placeholder="Search Service, Subscription, Marketplace"
             />
           </View>
@@ -105,7 +111,7 @@ export default function Home({navigation}) {
           </View>
         </View>
         <View style={{margin: RFValue(20)}}>
-          <Text style={{fontSize: RFValue(15), fontWeight: 'bold'}}>
+          <Text style={{fontSize: RFValue(16), fontFamily: 'Roboto-Bold'}}>
             Our Services
           </Text>
           <View style={{marginTop: RFValue(20)}}>
@@ -119,7 +125,7 @@ export default function Home({navigation}) {
           </View>
         </View>
         <View style={{margin: RFValue(20)}}>
-          <Text style={{fontSize: RFValue(15), fontWeight: 'bold'}}>
+          <Text style={{fontSize: RFValue(16), fontFamily: 'Roboto-Bold'}}>
             Active Subscription
           </Text>
           <View style={{marginTop: RFValue(20)}}>
@@ -144,7 +150,8 @@ export default function Home({navigation}) {
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                   }}>
-                  <Text style={{fontSize: RFValue(13), fontWeight: 'bold'}}>
+                  <Text
+                    style={{fontSize: RFValue(13), fontFamily: 'Roboto-Bold'}}>
                     Company Name
                   </Text>
                   <Text
@@ -152,6 +159,8 @@ export default function Home({navigation}) {
                       fontSize: RFValue(13),
                       fontWeight: 'bold',
                       marginRight: RFValue(20),
+                      color: '#70A12F',
+                      fontFamily: 'Roboto-Bold',
                     }}>
                     $40.00
                   </Text>
@@ -161,21 +170,34 @@ export default function Home({navigation}) {
                     flexDirection: 'row',
                     marginTop: RFValue(10),
                     marginLeft: RFValue(-5),
+                    alignItems: 'center',
                   }}>
                   <Icon
-                    style={{fontSize: RFValue(15)}}
+                    style={{fontSize: RFValue(15), color: '#707070'}}
                     type="EvilIcons"
                     name="location"
                   />
-                  <Text style={{fontSize: RFValue(11)}}>
+                  <Text
+                    style={{
+                      fontSize: RFValue(11),
+                      fontFamily: 'Roboto-Regular',
+                      color: '#707070',
+                    }}>
                     Address of the company
                   </Text>
                   <Icon
-                    style={{fontSize: RFValue(15)}}
+                    style={{fontSize: RFValue(15), color: '#707070'}}
                     type="EvilIcons"
                     name="location"
                   />
-                  <Text style={{fontSize: RFValue(11)}}>Visa Card</Text>
+                  <Text
+                    style={{
+                      fontSize: RFValue(11),
+                      fontFamily: 'Roboto-Regular',
+                      color: '#707070',
+                    }}>
+                    Visa Card
+                  </Text>
                 </View>
                 <View
                   style={{
@@ -184,11 +206,18 @@ export default function Home({navigation}) {
                     marginLeft: RFValue(-5),
                   }}>
                   <Icon
-                    style={{fontSize: RFValue(15)}}
+                    style={{fontSize: RFValue(15), color: '#707070'}}
                     type="EvilIcons"
                     name="location"
                   />
-                  <Text style={{fontSize: RFValue(11)}}>120 Bags</Text>
+                  <Text
+                    style={{
+                      fontSize: RFValue(11),
+                      fontFamily: 'Roboto-Regular',
+                      color: '#707070',
+                    }}>
+                    120 Bags
+                  </Text>
                 </View>
               </View>
             </View>
