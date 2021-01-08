@@ -133,23 +133,39 @@ export default function Home({navigation}) {
                     $40.00
                   </Text>
                 </View>
-                <View style={{flexDirection: 'row'}}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    marginTop: RFValue(10),
+                    marginLeft: RFValue(-5),
+                  }}>
                   <Icon
-                    style={{fontSize: RFValue(20)}}
+                    style={{fontSize: RFValue(15)}}
                     type="EvilIcons"
                     name="location"
                   />
-                  <Text style={{fontSize: RFValue(12)}}>
+                  <Text style={{fontSize: RFValue(11)}}>
                     Address of the company
                   </Text>
-                </View>
-                <View style={{flexDirection: 'row'}}>
                   <Icon
-                    style={{fontSize: RFValue(20)}}
+                    style={{fontSize: RFValue(15)}}
                     type="EvilIcons"
                     name="location"
                   />
-                  <Text style={{fontSize: RFValue(12)}}>120 Bags</Text>
+                  <Text style={{fontSize: RFValue(11)}}>Visa Card</Text>
+                </View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    marginTop: RFValue(5),
+                    marginLeft: RFValue(-5),
+                  }}>
+                  <Icon
+                    style={{fontSize: RFValue(15)}}
+                    type="EvilIcons"
+                    name="location"
+                  />
+                  <Text style={{fontSize: RFValue(11)}}>120 Bags</Text>
                 </View>
               </View>
             </View>
