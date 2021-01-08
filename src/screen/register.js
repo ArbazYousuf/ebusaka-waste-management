@@ -5,203 +5,347 @@ import {
   ScrollView,
   Platform,
   StatusBar,
+  Image,
+  KeyboardAvoidingView,
 } from 'react-native';
 import {View, Text, Icon, Row, ListItem, Body} from 'native-base';
-import {RFValue} from 'react-native-responsive-fontsize';
+import {RFValue, RFPercentage} from 'react-native-responsive-fontsize';
 import SafeAreaView from 'react-native-safe-area-view';
 import CustomButton from '../components/CustomButton';
 import PhoneInput from 'react-native-phone-number-input';
 import {Form, Item, Input, Label, CheckBox} from 'native-base';
-import {FONTS, theme} from '../constants';
+import {FONTS, icons, images, theme} from '../constants';
 import CustomTextInput from '../components/CustomTextInput';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import CustomCheckBox from '../components/CustomCheckBox';
-export default function Registration({navigation}) {
-  const [isVisible, setIsVisible] = useState(true);
-  const [passwordIcon, setpasswordIcon] = useState('eye');
-  const [isShow, setisShow] = useState(true);
-  const [fNameColor, setfNameColor] = useState('grey');
-  const [lNameColor, setlNameColor] = useState('grey');
-  const [passColor, setpassColor] = useState('grey');
-  const [emailColor, setemailColor] = useState('grey');
-  const [phoneColor, setphoneColor] = useState('grey');
+import CustomSignIn from '../components/customSignIn';
+
+export default function Registration() {
+  const [nonActiveColor, setactiveColor] = useState(theme.COLORS.lightGray);
   const [value, setValue] = useState('');
   const [formattedValue, setFormattedValue] = useState('');
   const [valid, setValid] = useState(false);
   const [showMessage, setShowMessage] = useState(false);
-  //   const phoneInput = useRef < PhoneInput > null;
+  const [onActive, setOnActive] = useState({
+    name: false,
+    email: false,
+    phone: false,
+    dob: false,
+  });
   const [isShowModal, setisShowModal] = useState(false);
   const phoneInput = useRef(null);
   const [date, setDate] = useState(new Date(1598051730000));
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
-  const [isChecked, setisChecked] = useState(false);
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setShow(Platform.OS === 'ios');
     setDate(currentDate);
   };
-  const showMode = (currentMode) => {
-    setShow(true);
-    setMode(currentMode);
-  };
 
-  const showDatepicker = () => {
-    showMode('date');
+  const onFocus = () => {
+    setOnActive((prev) => {
+      return {...prev, phone: true};
+    });
+    // alert('hello');
   };
-
-  const showTimepicker = () => {
-    showMode('time');
-  };
-  console.warn('value', value);
+  // phoneInput.current.onFocus = () => {
+  //   // setOnActive((prev) => {
+  //   //   return {...prev, phone: true};
+  //   // });
+  //   alert('hello');
+  // };
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: theme.COLORS.backColor}}>
-      <StatusBar backgroundColor={theme.COLORS.primary} />
-      <ScrollView contentContainerStyle={styles.container}>
-        <View
-          style={{flex: 0.1, justifyContent: 'center', alignItems: 'center'}}>
-          <Text style={FONTS.h2}>Create New Account</Text>
-          <Text style={FONTS.p}>Create an account to continue!</Text>
-        </View>
-        <View style={{flex: 0.9}}>
-          <Form>
-            <View
-              style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                padding: RFValue(20),
-              }}>
-              <CustomTextInput placeholder="First Name" />
-              <CustomTextInput placeholder="Last Name" />
-              <PhoneInput
-                ref={phoneInput}
-                defaultValue={value}
-                value={value}
-                defaultCode="ZM"
-                onChangeText={(text) => {
-                  setValue(text);
-                }}
-                onChangeFormattedText={(text) => {
-                  setFormattedValue(text);
-                }}
-                containerStyle={styles.containerStyle}
-                textContainerStyle={styles.textContainerStyle}
-              />
-
-              <CustomTextInput placeholder="Email Address" />
-
-              {/* <TouchableOpacity
-                style={styles.button}
-                onPress={() => {
-                  const checkValid = phoneInput.current?.isValidNumber(value);
-                  setShowMessage(true);
-                  setValid(checkValid ? checkValid : false);
-                }}>
-                <Text>Check</Text>
-              </TouchableOpacity> */}
-
-              <CustomTextInput placeholder="Password" password={isShow} />
-
-              <TouchableOpacity
-                onPress={() => setShow(true)}
-                style={{
-                  borderBottomColor: '#F5FCFF',
-                  backgroundColor: '#FFFFFF',
-                  borderRadius: RFValue(10),
-                  borderBottomWidth: 1,
-                  width: RFValue(320),
-                  height: RFValue(40),
-                  marginBottom: 20,
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: RFValue(10),
-                }}>
-                <Text style={{fontSize: RFValue(11)}}>Date of Birth</Text>
-                <Icon name="calendar" type="AntDesign" />
-              </TouchableOpacity>
-            </View>
-
-            <View style={{justifyContent: 'center', alignItems: 'center'}}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-around',
-                  alignItems: 'center',
-                }}>
-                {/* <ListItem>
-                  <CheckBox checked={true} />
-                  <Body>
-                    <Text>Daily Stand Up</Text>
-                  </Body>
-                </ListItem> */}
-                <TouchableOpacity
-                  onPress={() => setisChecked(!isChecked)}
-                  style={{paddingLeft: RFValue(10)}}
-                  // style={{marginBottom: RFValue(10)}}
-                >
-                  {/* <CheckBox
-                    checked={isChecked}
-                    style={
-                      {
-                        // backgroundColor: theme.COLORS.primary,
-                      }
-                    }
-                    color={theme.COLORS.primary}
-                  /> */}
-                  <CustomCheckBox isChecked={true} />
-                </TouchableOpacity>
-                <Text style={[FONTS.p, {textAlign: 'center'}]}>
-                  By creating an account, you agree to our Term and Conditions
-                </Text>
-              </View>
-              <CustomButton
-                color={theme.COLORS.primary}
-                onPress={() => {
-                  setisShowModal(true);
-                  setTimeout(() => {
-                    setisShowModal(false);
-                  }, 3000);
-                }}>
-                Create account
-              </CustomButton>
-            </View>
-          </Form>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('Login')}
+    <ScrollView>
+      <SafeAreaView style={{flex: 1, backgroundColor: theme.COLORS.backColor}}>
+        <KeyboardAvoidingView style={{flex: 1}} behavior="padding">
+          <View
             style={{
-              padding: RFValue(15),
-              paddingHorizontal: RFValue(30),
+              flex: 0.4,
               justifyContent: 'center',
               alignItems: 'center',
+              // backgroundColor: 'yellow',
             }}>
-            <Text style={[FONTS.p]}>
-              Already have an account ?{' '}
+            <Image
+              resizeMode="cover"
+              source={images.register_header}
+              style={{width: RFPercentage(60), height: RFValue(200)}}
+            />
+            <View style={{justifyContent: 'center', alignItems: 'center'}}>
+              <Text style={[FONTS.h2]}>Getting Started</Text>
+              <Text style={[FONTS.p]}>Create an Account to Continue</Text>
+            </View>
+          </View>
+          <View
+            style={{
+              flex: 0.8,
+              justifyContent: 'flex-start',
+              alignItems: 'center',
+              // backgroundColor: 'red',
+              marginTop: RFPercentage(5),
+            }}>
+            <Form>
+              <View>
+                <Text
+                  style={[
+                    FONTS.h4,
+                    {
+                      color: onActive.name
+                        ? theme.COLORS.primary
+                        : nonActiveColor,
+
+                      nonActiveColor,
+                      paddingBottom: RFValue(5),
+                    },
+                  ]}>
+                  Full Name
+                </Text>
+
+                <CustomTextInput
+                  placeholder="Full Name"
+                  inputType="default"
+                  icon="user"
+                  iconType="Entypo"
+                  iconColor={theme.COLORS.lightGray}
+                  onFocus={() =>
+                    setOnActive((prev) => {
+                      return {...prev, name: true};
+                    })
+                  }
+                  onBlur={() =>
+                    setOnActive((prev) => {
+                      return {...prev, name: false};
+                    })
+                  }
+                  activeColor={onActive.name ? theme.COLORS.primary : null}
+                />
+              </View>
+              {/* ----------- */}
+              <View>
+                <Text
+                  style={[
+                    FONTS.h4,
+                    {
+                      color: onActive.email
+                        ? theme.COLORS.primary
+                        : nonActiveColor,
+                      paddingBottom: RFValue(5),
+                    },
+                  ]}>
+                  Email
+                </Text>
+
+                <CustomTextInput
+                  placeholder="Please Write Here"
+                  inputType="default"
+                  icon="email"
+                  iconType="MaterialIcons"
+                  iconColor={theme.COLORS.lightGray}
+                  onFocus={() =>
+                    setOnActive((prev) => {
+                      return {...prev, email: true};
+                    })
+                  }
+                  onBlur={() =>
+                    setOnActive((prev) => {
+                      return {...prev, email: false};
+                    })
+                  }
+                  activeColor={onActive.email ? theme.COLORS.primary : null}
+                />
+              </View>
+
+              {/* ----------- */}
+              <View>
+                <Text
+                  style={[
+                    FONTS.h4,
+                    {
+                      color: onActive.phone
+                        ? theme.COLORS.primary
+                        : nonActiveColor,
+                      paddingBottom: RFValue(5),
+                    },
+                  ]}>
+                  Phone Number
+                </Text>
+                <PhoneInput
+                  ref={phoneInput}
+                  defaultValue={value}
+                  value={value}
+                  defaultCode="ZM"
+                  textInputProps={{
+                    onFocus: () => {
+                      setOnActive((prev) => {
+                        return {...prev, phone: true};
+                      });
+                    },
+                    onBlur: () => {
+                      setOnActive((prev) => {
+                        return {...prev, phone: false};
+                      });
+                    },
+                  }}
+                  onChangeText={(text) => {
+                    setValue(text);
+                  }}
+                  textInputStyle={{
+                    fontSize: 16,
+                    color: '#000000',
+                    flex: 1,
+                    height: 40,
+                  }}
+                  onChangeFormattedText={(text) => {
+                    setFormattedValue(text);
+                  }}
+                  containerStyle={{
+                    backgroundColor: '#FFFFFF',
+                    borderRadius: RFValue(10),
+                    borderWidth: 1,
+                    borderColor: onActive.phone
+                      ? theme.COLORS.primary
+                      : theme.COLORS.lightGray,
+                    width: RFValue(320),
+                    height: RFValue(50),
+                    marginBottom: 20,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                  }}
+                  textContainerStyle={styles.textContainerStyle}
+                />
+              </View>
+
+              {/* ----------- */}
+              <View>
+                <Text
+                  style={[
+                    FONTS.h4,
+                    {
+                      color: show ? theme.COLORS.primary : nonActiveColor,
+                      paddingBottom: RFValue(5),
+                    },
+                  ]}>
+                  Date of Birth
+                </Text>
+                <TouchableOpacity
+                  onPress={() => setShow(true)}
+                  style={{
+                    borderColor: show
+                      ? theme.COLORS.primary
+                      : theme.COLORS.lightGray,
+                    backgroundColor: '#FFFFFF',
+                    borderRadius: RFValue(10),
+                    borderWidth: 1,
+                    width: RFValue(320),
+                    height: RFValue(50),
+                    marginBottom: 20,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    padding: RFValue(10),
+                  }}>
+                  <Icon
+                    name="calendar"
+                    type="AntDesign"
+                    style={{
+                      color: show ? theme.COLORS.primary : nonActiveColor,
+                    }}
+                  />
+
+                  <Text
+                    style={{
+                      fontSize: RFValue(11),
+                      color: show ? theme.COLORS.primary : nonActiveColor,
+                      paddingLeft: RFValue(10),
+                    }}>
+                    Date of Birth
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              <View>
+                <CustomButton color={theme.COLORS.primary}>
+                  Get Started
+                </CustomButton>
+              </View>
+            </Form>
+            {/* -----------Form Tag End----------- */}
+
+            {show && (
+              <DateTimePicker
+                style={{
+                  backgroundColor: theme.COLORS.primary,
+                  color: theme.COLORS.primary,
+                }}
+                testID="dateTimePicker"
+                value={date}
+                mode={mode}
+                is24Hour={true}
+                display="default"
+                onChange={onChange}
+              />
+            )}
+          </View>
+        </KeyboardAvoidingView>
+        <View style={{flex: 0.2}}>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-around',
+              paddingTop: RFValue(20),
+              alignItems: 'center',
+              paddingBottom: RFValue(10),
+            }}>
+            <View
+              style={{
+                borderColor: theme.COLORS.lightGray,
+                borderWidth: 1,
+                height: 0,
+                width: RFValue(80),
+              }}></View>
+            <Text style={[FONTS.p, {color: theme.COLORS.lightGray}]}>
+              Or With Social Account
+            </Text>
+
+            <View
+              style={{
+                borderColor: theme.COLORS.lightGray,
+                borderWidth: 1,
+                height: 0,
+                width: RFValue(80),
+              }}
+            />
+          </View>
+          <View style={{justifyContent: 'center', alignItems: 'center'}}>
+            <CustomSignIn
+              invisisble={true}
+              icon={icons.google}
+              color={theme.COLORS.black}>
+              Login with Google
+            </CustomSignIn>
+            <CustomSignIn
+              icon={icons.fb}
+              invisisble={true}
+              color={theme.COLORS.black}>
+              Login with Facebook
+            </CustomSignIn>
+          </View>
+          <View
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: RFValue(100),
+            }}>
+            <Text>
+              Have an Account?
               <Text style={[FONTS.p, {color: theme.COLORS.primary}]}>
-                Sign in
+                {' '}
+                Login
               </Text>
             </Text>
-          </TouchableOpacity>
+          </View>
         </View>
-        {show && (
-          <DateTimePicker
-            style={{
-              backgroundColor: theme.COLORS.primary,
-              color: theme.COLORS.primary,
-            }}
-            testID="dateTimePicker"
-            value={date}
-            mode={mode}
-            is24Hour={true}
-            display="default"
-            onChange={onChange}
-          />
-        )}
-      </ScrollView>
-      {/* <Loader modalVisible={isShowModal} /> */}
-    </SafeAreaView>
+      </SafeAreaView>
+    </ScrollView>
   );
 }
 
@@ -210,25 +354,16 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   textContainerStyle: {
-    borderBottomColor: '#F5FCFF',
-    backgroundColor: '#FFFFFF',
-    borderRadius: RFValue(10),
-    borderBottomWidth: 1,
-    // width: RFValue(300),
-    height: RFValue(70),
-    // flex: 1,
-    // flexDirection: 'row',
-    // alignItems: 'center',
-    // backgroundColor: 'yellow',
-    // alignSelf: 'center',
+    height: 40,
+    backgroundColor: theme.COLORS.white,
   },
   containerStyle: {
-    borderBottomColor: '#F5FCFF',
     backgroundColor: '#FFFFFF',
     borderRadius: RFValue(10),
-    borderBottomWidth: 1,
+    borderWidth: 1,
+    borderColor: theme.COLORS.lightGray,
     width: RFValue(320),
-    height: RFValue(70),
+    height: RFValue(50),
     marginBottom: 20,
     flexDirection: 'row',
     alignItems: 'center',
