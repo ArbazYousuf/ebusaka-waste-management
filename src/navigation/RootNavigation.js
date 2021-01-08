@@ -27,7 +27,7 @@ import AddVehicle from '../screen/addVehicle';
 import Document from '../screen/document';
 import EditDocument from '../screen/editDocument';
 import Feed from '../screen/feed';
-
+import Notification from '../screen/notification';
 import Splash from '../screen/splash';
 
 const Stack = createStackNavigator();
@@ -81,7 +81,7 @@ function FooterTab() {
       />
       <Tab.Screen
         options={{
-          tabBarLabel: 'Calendar',
+          tabBarLabel: 'Notification',
           tabBarIcon: ({color}) => (
             <Image
               resizeMode="center"
@@ -94,8 +94,8 @@ function FooterTab() {
             />
           ),
         }}
-        name="calendar"
-        component={Calender}
+        name="Notification"
+        component={Notification}
       />
       <Tab.Screen
         options={{
