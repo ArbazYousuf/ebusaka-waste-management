@@ -19,7 +19,7 @@ import CustomTextInput from '../components/CustomTextInput';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import CustomSignIn from '../components/customSignIn';
 
-export default function Registration() {
+export default function Registration({navigation}) {
   const [nonActiveColor, setactiveColor] = useState(theme.COLORS.lightGray);
   const [value, setValue] = useState('');
   const [formattedValue, setFormattedValue] = useState('');
@@ -263,7 +263,9 @@ export default function Registration() {
                 </TouchableOpacity>
               </View>
               <View>
-                <CustomButton color={theme.COLORS.primary}>
+                <CustomButton
+                  color={theme.COLORS.primary}
+                  onPress={() => navigation.navigate('VerifyCode')}>
                   Get Started
                 </CustomButton>
               </View>
@@ -329,7 +331,8 @@ export default function Registration() {
               Login with Facebook
             </CustomSignIn>
           </View>
-          <View
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Login')}
             style={{
               justifyContent: 'center',
               alignItems: 'center',
@@ -342,7 +345,7 @@ export default function Registration() {
                 Login
               </Text>
             </Text>
-          </View>
+          </TouchableOpacity>
         </View>
       </SafeAreaView>
     </ScrollView>

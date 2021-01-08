@@ -18,6 +18,8 @@ import User from '../screen/user';
 import Profile from '../screen/profile';
 import Map from '../screen/map';
 import VerifyCode from '../screen/confirmationCode';
+import Feed from '../screen/feed';
+import Notification from '../screen/notification';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -70,7 +72,7 @@ function FooterTab() {
       />
       <Tab.Screen
         options={{
-          tabBarLabel: 'Calendar',
+          tabBarLabel: 'Notification',
           tabBarIcon: ({color}) => (
             <Image
               resizeMode="center"
@@ -83,8 +85,8 @@ function FooterTab() {
             />
           ),
         }}
-        name="calendar"
-        component={Calender}
+        name="Notification"
+        component={Notification}
       />
       <Tab.Screen
         options={{
@@ -143,7 +145,7 @@ function Navigation(props) {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={'VerifiyCode'}>
+      <Stack.Navigator initialRouteName={'Login'}>
         <Stack.Screen
           name="ForgetPassword"
           component={ForgetPassword}
@@ -202,7 +204,7 @@ function Navigation(props) {
         /> */}
 
         <Stack.Screen
-          name="VerifiyCode"
+          name="VerifyCode"
           component={VerifyCode}
           options={{headerShown: false}}
         />

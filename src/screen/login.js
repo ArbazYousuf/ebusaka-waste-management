@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Keyboard,
+  StatusBar,
 } from 'react-native';
 import {View, Text, Icon, Row} from 'native-base';
 import {RFValue} from 'react-native-responsive-fontsize';
@@ -40,6 +41,7 @@ export default function Login({navigation}) {
   };
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: theme.COLORS.backColor}}>
+      <StatusBar backgroundColor={theme.COLORS.primary} />
       <View
         style={{
           flex: 0.2,
@@ -150,7 +152,11 @@ export default function Login({navigation}) {
 
           <View
             style={{justifyContent: 'center', alignItems: 'center', flex: 0.3}}>
-            <CustomButton color={theme.COLORS.primary}>Log In</CustomButton>
+            <CustomButton
+              onPress={() => navigation.navigate('Home')}
+              color={theme.COLORS.primary}>
+              Log In
+            </CustomButton>
           </View>
           <TouchableOpacity
             onPress={() => navigation.navigate('Registration')}
