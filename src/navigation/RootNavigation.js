@@ -95,7 +95,7 @@ function FooterTab() {
             <Image
               resizeMode="center"
               style={{
-                width: RFValue(30),
+                width: RFValue(40),
                 height: RFValue(30),
                 tintColor: color,
               }}
@@ -145,7 +145,7 @@ function Navigation(props) {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={'Login'}>
+      <Stack.Navigator initialRouteName={'Profile'}>
         <Stack.Screen
           name="ForgetPassword"
           component={ForgetPassword}
