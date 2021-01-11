@@ -16,6 +16,7 @@ import {Form, Item, Input, Label} from 'native-base';
 import {FONTS, icons, images, theme} from '../constants';
 import CustomTextInput from '../components/CustomTextInput';
 import CustomSignIn from '../components/customSignIn';
+import LinearGradient from 'react-native-linear-gradient';
 export default function Login({navigation}) {
   const [isVisible, setIsVisible] = useState(true);
   const [passwordIcon, setpasswordIcon] = useState('eye');
@@ -41,7 +42,8 @@ export default function Login({navigation}) {
   };
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: theme.COLORS.backColor}}>
-      <StatusBar backgroundColor={theme.COLORS.primary} />
+      <StatusBar translucent={true} backgroundColor={'transparent'} />
+      {/* <StatusBar backgroundColor={theme.COLORS.primary} /> */}
       <View
         style={{
           flex: 0.2,
