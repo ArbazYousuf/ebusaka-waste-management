@@ -25,6 +25,7 @@ export const privacy = require('../assets/icons/lock.png');
 export const terms = require('../assets/icons/document.png');
 export const faq = require('../assets/icons/faq.png');
 export const refer = require('../assets/icons/message.png');
+export const chat = require('../assets/icons/chat.png');
 //profile page icons
 export default {
   bellNotification,
@@ -52,4 +53,5 @@ export default {
   terms,
   faq,
   refer,
+  chat,
 };

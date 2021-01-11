@@ -20,6 +20,7 @@ import Map from '../screen/map';
 import VerifyCode from '../screen/confirmationCode';
 import Feed from '../screen/feed';
 import Notification from '../screen/notification';
+import EditProfile from '../screen/editProfile';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -90,7 +91,7 @@ function FooterTab() {
       />
       <Tab.Screen
         options={{
-          tabBarLabel: 'User',
+          tabBarLabel: 'Profile',
           tabBarIcon: ({color}) => (
             <Image
               resizeMode="center"
@@ -103,8 +104,8 @@ function FooterTab() {
             />
           ),
         }}
-        name="user"
-        component={User}
+        name="Profile"
+        component={Profile}
       />
     </Tab.Navigator>
   );
@@ -118,9 +119,11 @@ const Left = ({onPress}) => {
         name="left"
         type="AntDesign"
         style={{
-          color: theme.COLORS.white,
-          padding: RFValue(10),
+          color: theme.COLORS.black,
+          // padding: RFValue(10),
+          paddingLeft: RFValue(10),
           fontSize: RFValue(20),
+          fontWeight: 'bold',
         }}
       />
     </TouchableHighlight>
@@ -145,7 +148,7 @@ function Navigation(props) {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={'Profile'}>
+      <Stack.Navigator initialRouteName={'Login'}>
         <Stack.Screen
           name="ForgetPassword"
           component={ForgetPassword}
@@ -195,6 +198,30 @@ function Navigation(props) {
           name="Profile"
           component={Profile}
           options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="EditProfile"
+          component={EditProfile}
+          // options={{headerShown: false}}
+          options={{
+            title: 'Edit Profile',
+            headerStyle: {
+              backgroundColor: theme.COLORS.white,
+              height: RFValue(80),
+            },
+            // headerTitleAlign: 'center',
+            headerTintColor: 'black',
+            headerTitleStyle: {
+              color: theme.COLORS.black,
+              fontSize: RFValue(24),
+              fontWeight: 'bold',
+              lineHeight: 30,
+              marginLeft: RFValue(-20),
+              fontFamily: 'Roboto-Bold',
+            },
+            headerLeft: ({onPress}) => <Left onPress={onPress} />,
+            headerRight: ({onPress}) => <Right onPress={onPress} />,
+          }}
         />
         {/* 
         <Stack.Screen
