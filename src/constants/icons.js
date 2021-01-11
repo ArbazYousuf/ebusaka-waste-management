@@ -28,6 +28,8 @@ export const google = require('../assets/icons/google.png');
 
 export const face = require('../assets/icons/face.png');
 export const page = require('../assets/icons/page.png');
+export const f_Profile = require('../assets/icons/profile.png');
+export const f_notification = require('../assets/icons/notificationfooter.png');
 
 export default {
   bellNotification,
@@ -58,4 +60,6 @@ export default {
   google,
   face,
   page,
+  f_Profile,
+  f_notification,
 };
