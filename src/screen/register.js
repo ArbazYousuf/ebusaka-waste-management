@@ -47,14 +47,7 @@ export default function Registration({navigation}) {
     setOnActive((prev) => {
       return {...prev, phone: true};
     });
-    // alert('hello');
   };
-  // phoneInput.current.onFocus = () => {
-  //   // setOnActive((prev) => {
-  //   //   return {...prev, phone: true};
-  //   // });
-  //   alert('hello');
-  // };
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>

@@ -74,7 +74,7 @@ export default function EditProfile() {
             backgroundColor: 'white',
             width: RFValue(350),
             height: RFValue(250),
-            borderRadius: RFValue(20),
+            borderRadius: RFValue(10),
             shadowColor: '#000',
             shadowOffset: {
               width: 0,
@@ -138,7 +138,6 @@ export default function EditProfile() {
       </View>
       <View
         style={{
-          //   backgroundColor: 'green',
           flex: 0.2,
           justifyContent: 'center',
           alignItems: 'center',
@@ -156,7 +155,7 @@ export default function EditProfile() {
             elevation: 8,
             width: RFValue(340),
             height: RFValue(60),
-            borderRadius: RFValue(20),
+            borderRadius: RFValue(10),
             backgroundColor: 'white',
             justifyContent: 'center',
           }}>
@@ -165,7 +164,6 @@ export default function EditProfile() {
               flexDirection: 'row',
               justifyContent: 'space-between',
               alignItems: 'center',
-              //   padding: RFValue(10),
             }}>
             <View style={{flexDirection: 'row', paddingLeft: RFValue(10)}}>
               <Icon name="lock" type="FontAwesome" />

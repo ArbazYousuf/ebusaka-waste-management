@@ -147,7 +147,6 @@ export default function Profile({navigation}) {
             justifyContent: 'center',
             padding: RFValue(20),
             marginTop: RFValue(20),
-            // alignItems: 'center',
           }}>
           <View
             style={{

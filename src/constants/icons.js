@@ -27,6 +27,9 @@ export const faq = require('../assets/icons/faq.png');
 export const refer = require('../assets/icons/message.png');
 export const chat = require('../assets/icons/chat.png');
 //profile page icons
+
+export const visa = require('../assets/icons/visa.png');
+
 export default {
   bellNotification,
   star,
@@ -54,4 +57,5 @@ export default {
   faq,
   refer,
   chat,
+  visa,
 };

@@ -21,6 +21,7 @@ import VerifyCode from '../screen/confirmationCode';
 import Feed from '../screen/feed';
 import Notification from '../screen/notification';
 import EditProfile from '../screen/editProfile';
+import GarbageServices from '../screen/garbageServices';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -148,7 +149,7 @@ function Navigation(props) {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={'Login'}>
+      <Stack.Navigator initialRouteName={'GarbageServices'}>
         <Stack.Screen
           name="ForgetPassword"
           component={ForgetPassword}
@@ -234,6 +235,32 @@ function Navigation(props) {
           name="VerifyCode"
           component={VerifyCode}
           options={{headerShown: false}}
+        />
+
+        <Stack.Screen
+          name="GarbageServices"
+          component={GarbageServices}
+          options={{headerShown: false}}
+
+          // options={{
+          //   title: 'Garbage Services',
+          //   headerStyle: {
+          //     backgroundColor: theme.COLORS.white,
+          //     height: RFValue(80),
+          //   },
+          //   // headerTitleAlign: 'center',
+          //   headerTintColor: 'black',
+          //   headerTitleStyle: {
+          //     color: theme.COLORS.black,
+          //     fontSize: RFValue(24),
+          //     fontWeight: 'bold',
+          //     lineHeight: 30,
+          //     marginLeft: RFValue(-20),
+          //     fontFamily: 'Roboto-Bold',
+          //   },
+          //   headerLeft: ({onPress}) => <Left onPress={onPress} />,
+          //   headerRight: ({onPress}) => <Right onPress={onPress} />,
+          // }}
         />
 
         <Stack.Screen
