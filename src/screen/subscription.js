@@ -13,9 +13,10 @@ import {theme, FONTS, icons} from '../constants';
 import CustomTextInput from '../components/CustomTextInput';
 import DropDownPicker from 'react-native-custom-dropdown';
 
-const PaymentButton = ({color, text, isChecked, image}) => {
+const PaymentButton = ({color, text, isChecked, image, onChange}) => {
   return (
-    <View
+    <TouchableOpacity
+      onPress={() => onChange(text ? text : 'visa')}
       style={{
         width: RFValue(320),
         height: RFValue(50),
@@ -57,8 +58,20 @@ const PaymentButton = ({color, text, isChecked, image}) => {
           //   backgroundColor: 'white',
           borderWidth: 1,
           borderColor: 'white',
-        }}></View>
-    </View>
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        {isChecked && (
+          <View
+            style={{
+              width: RFValue(15),
+              height: RFValue(15),
+              borderRadius: RFValue(8),
+              backgroundColor: 'white',
+            }}></View>
+        )}
+      </View>
+    </TouchableOpacity>
   );
 };
 
@@ -69,6 +82,8 @@ function Subscription() {
     name: false,
     bag: false,
   });
+
+  const [paymentMethod, setpaymentMethod] = useState('visa');
   const [activeList, setactiveList] = useState({
     wasteType: false,
     company: false,
@@ -78,6 +93,11 @@ function Subscription() {
     marginBottom: RFValue(4),
     color: theme.COLORS.primary,
   };
+
+  const paymentChange = (method) => {
+    setpaymentMethod(method);
+  };
+
   return (
     <View style={{backgroundColor: 'white', flex: 1}}>
       {/* <Header onChange={(val) => console.warn(val)} /> */}
@@ -120,6 +140,8 @@ function Subscription() {
               icon="user"
               iconType="FontAwesome"
               iconColor={theme.COLORS.lightGray}
+              cBorderRadius={5}
+              cIconPadding={10}
               cWidth={320}
               onFocus={() =>
                 setOnActive((prev) => {
@@ -328,7 +350,9 @@ function Subscription() {
               icon="shopping-bag"
               iconType="FontAwesome"
               iconColor={theme.COLORS.lightGray}
+              cIconPadding={10}
               cWidth={320}
+              cBorderRadius={5}
               onFocus={() =>
                 setOnActive((prev) => {
                   return {...prev, bag: true};
@@ -372,16 +396,30 @@ function Subscription() {
             </Text>
           </View>
           <View style={{justifyContent: 'center', alignItems: 'center'}}>
-            <PaymentButton color="#0C54A8" image={icons.visa} />
-            <PaymentButton color="#70A12F" text="Wallet Account" />
-            <PaymentButton color="#FE9900" text="Mobile Money" />
+            <PaymentButton
+              color="#0C54A8"
+              image={icons.visa}
+              onChange={paymentChange}
+              isChecked={paymentMethod == 'visa' ? true : false}
+            />
+            <PaymentButton
+              color="#70A12F"
+              text="Wallet Account"
+              onChange={paymentChange}
+              isChecked={paymentMethod == 'Wallet Account' ? true : false}
+            />
+            <PaymentButton
+              color="#FE9900"
+              text="Mobile Money"
+              onChange={paymentChange}
+              isChecked={paymentMethod == 'Mobile Money' ? true : false}
+            />
           </View>
         </View>
       </View>
 
       <View style={{justifyContent: 'center', alignItems: 'center'}}>
         <CustomButton
-          //   size="lg"
           cWidth={320}
           color={theme.COLORS.primary}
           onPress={() => navigation.navigate('VerifyCode')}>

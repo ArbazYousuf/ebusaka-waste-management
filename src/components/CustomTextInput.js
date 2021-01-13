@@ -24,6 +24,8 @@ export default function CustomTextInput({
   activeColor,
   onFocus,
   onBlur,
+  cBorderRadius,
+  cIconPadding,
 }) {
   const [isVisible, setIsVisible] = useState(true);
   const [passwordIcon, setpasswordIcon] = useState('eye');
@@ -33,7 +35,7 @@ export default function CustomTextInput({
     <View
       style={{
         backgroundColor: '#FFFFFF',
-        borderRadius: RFValue(10),
+        borderRadius: cBorderRadius ? RFValue(cBorderRadius) : RFValue(10),
         borderWidth: 1,
         width: cWidth ? RFValue(cWidth) : RFValue(320),
         height: RFValue(50),
@@ -41,7 +43,7 @@ export default function CustomTextInput({
         flexDirection: 'row',
         alignItems: 'center',
         borderColor: activeColor ? activeColor : theme.COLORS.lightGray,
-        paddingLeft: RFValue(2),
+        paddingLeft: cIconPadding ? RFValue(cIconPadding) : RFValue(2),
       }}>
       {icon && (
         <Icon

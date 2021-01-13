@@ -9,16 +9,25 @@ import {
 } from 'react-native';
 import {View, Text, Icon} from 'native-base';
 import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
-import {theme, images, icons} from '../constants';
+import {theme, images, icons, FONTS} from '../constants';
 import SafeAreaView from 'react-native-safe-area-view';
 import {TextInput} from 'react-native-gesture-handler';
 
 export default function Home({navigation}) {
   return (
-    <SafeAreaView style={{flex: 1}}>
-      <StatusBar backgroundColor={theme.COLORS.primary} />
+    <SafeAreaView style={{flex: 1, backgroundColor: theme.COLORS.white}}>
+      <StatusBar
+        // translucent={true}
+        backgroundColor={'white'}
+        barStyle="dark-content"
+      />
       <View style={styles.Container}>
-        <View style={{margin: RFValue(20), flexDirection: 'row'}}>
+        <View
+          style={{
+            margin: RFValue(20),
+            marginTop: RFValue(30),
+            flexDirection: 'row',
+          }}>
           <View>
             <Text
               style={{
@@ -74,6 +83,15 @@ export default function Home({navigation}) {
               alignContent: 'center',
               marginRight: 10,
               width: '72%',
+              shadowColor: '#000',
+              shadowOffset: {
+                width: 0,
+                height: 3,
+              },
+              shadowOpacity: 0.29,
+              shadowRadius: 4.65,
+
+              elevation: 7,
             }}>
             <Icon
               style={{
@@ -114,15 +132,32 @@ export default function Home({navigation}) {
           <Text style={{fontSize: RFValue(16), fontFamily: 'Roboto-Bold'}}>
             Our Services
           </Text>
-          <View style={{marginTop: RFValue(20)}}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('GarbageServices')}
+            style={{marginTop: RFValue(20)}}>
             <View
               style={{
                 width: RFValue(90),
                 height: RFValue(120),
                 borderRadius: RFValue(20),
-                backgroundColor: 'yellow',
-              }}></View>
-          </View>
+                backgroundColor: '#2AC17C',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Image
+                resizeMode="contain"
+                source={images.garbage}
+                style={{width: RFValue(50), height: RFValue(50)}}
+              />
+              <Text
+                style={[
+                  FONTS.h4,
+                  {color: theme.COLORS.white, textAlign: 'center'},
+                ]}>
+                Garbage Services
+              </Text>
+            </View>
+          </TouchableOpacity>
         </View>
         <View style={{margin: RFValue(20)}}>
           <Text style={{fontSize: RFValue(16), fontFamily: 'Roboto-Bold'}}>
@@ -136,6 +171,15 @@ export default function Home({navigation}) {
                 borderRadius: RFValue(20),
                 backgroundColor: 'white',
                 flexDirection: 'row',
+                shadowColor: '#000',
+                shadowOffset: {
+                  width: 0,
+                  height: 3,
+                },
+                shadowOpacity: 0.29,
+                shadowRadius: 4.65,
+
+                elevation: 7,
               }}>
               <View
                 style={{

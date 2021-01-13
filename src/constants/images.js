@@ -12,6 +12,7 @@ export const demoMap = require('../assets/images/demoMap.png');
 export const login_header = require('../assets/images/login.png');
 export const register_header = require('../assets/images/register_header.png');
 export const sms = require('../assets/images/sms.png');
+export const garbage = require('../assets/images/garbage.png');
 
 export default {
   intro_1,
@@ -25,4 +26,5 @@ export default {
   login_header,
   register_header,
   sms,
+  garbage,
 };

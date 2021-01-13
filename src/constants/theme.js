@@ -23,6 +23,7 @@ export const COLORS = {
   gray: '#707070',
   darkYellow: '#FF9800',
   ashWhite: '#F9F9F9',
+  defaultBackground: '#F2F2F2',
 };
 export const SIZES = {
   // global sizes

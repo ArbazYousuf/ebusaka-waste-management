@@ -22,6 +22,7 @@ import Feed from '../screen/feed';
 import Notification from '../screen/notification';
 import EditProfile from '../screen/editProfile';
 import GarbageServices from '../screen/garbageServices';
+import AddSpecialPickUp from '../screen/addSpecialPickUp';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -149,7 +150,7 @@ function Navigation(props) {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={'GarbageServices'}>
+      <Stack.Navigator initialRouteName={'Home'}>
         <Stack.Screen
           name="ForgetPassword"
           component={ForgetPassword}
@@ -198,6 +199,12 @@ function Navigation(props) {
         <Stack.Screen
           name="Profile"
           component={Profile}
+          options={{headerShown: false}}
+        />
+
+        <Stack.Screen
+          name="AddSpecialPickUp"
+          component={AddSpecialPickUp}
           options={{headerShown: false}}
         />
         <Stack.Screen

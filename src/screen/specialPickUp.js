@@ -12,10 +12,19 @@ import CustomButton from '../components/CustomButton';
 import CalendarStrip from 'react-native-calendar-strip';
 import moment from 'moment';
 import {FONTS, theme} from '../constants';
-function SpecialPickUp() {
+import SpecialPickUpModal from '../modals/specialPickupModal';
+function SpecialPickUp({navigation}) {
+  const [openmodal, setopenmodal] = useState(false);
+  const [data, setdata] = useState([
+    {time: '09:00', title: 'Event 1', description: 'Event 1 Description'},
+    {time: '10:45', title: 'Event 2', description: 'Event 2 Description'},
+    {time: '12:00', title: 'Event 3', description: 'Event 3 Description'},
+    {time: '14:00', title: 'Event 4', description: 'Event 4 Description'},
+    {time: '16:30', title: 'Event 5', description: 'Event 5 Description'},
+  ]);
   return (
     <SafeAreaView style={{flex: 1}}>
-      <View style={{backgroundColor: 'white', flex: 1}}>
+      <View style={{backgroundColor: 'white', flex: 0.4}}>
         <CalendarStrip
           scrollable
           calendarAnimation={{type: 'sequence', duration: 30}}
@@ -39,12 +48,19 @@ function SpecialPickUp() {
           highlightDateNumberStyle={{
             color: theme.COLORS.white,
           }}
-          markedDatesStyle={{
-            width: 5,
-            backgroundColor: 'yellow',
-            borderColor: 'red',
-            borderWidth: 10,
+          highlightDateNameStyle={{
+            color: theme.COLORS.white,
           }}
+          // dayContainerStyle={{
+          //   backgroundColor: theme.COLORS.primary,
+          //   borderRadius: RFValue(8),
+          // }}
+          // markedDatesStyle={{
+          //   width: 5,
+          //   // backgroundColor: 'yellow',
+          //   borderColor: 'red',
+          //   borderWidth: 10,
+          // }}
           //   customDatesStyles={{
 
           //   }}
@@ -54,16 +70,128 @@ function SpecialPickUp() {
           useIsoWeekday={false}
         />
         <TouchableOpacity
+          onPress={() => navigation.navigate('AddSpecialPickUp')}
           style={{
             backgroundColor: 'white',
             height: RFValue(40),
             padding: RFValue(5),
           }}>
-          <Text style={[FONTS.h4, {color: theme.COLORS.primary}]}>
+          <Text style={[FONTS.h4, {color: theme.COLORS.lightPrimary}]}>
             + Add New Pickup
           </Text>
         </TouchableOpacity>
       </View>
+      {[...Array(10)].map((val, index) => {
+        return (
+          <View
+            style={{
+              backgroundColor: '#F2F2F2',
+              // padding: 10,
+              paddingTop: index > 0 ? -30 : 20,
+              flexDirection: 'row',
+            }}>
+            <View
+              style={{
+                // paddingTop: RFValue(40),
+                paddingRight: RFValue(10),
+                justifyContent: 'center',
+                alignItems: 'center',
+                // height: RFValue(100),
+                paddingLeft: RFValue(10),
+              }}>
+              <Text
+                style={[
+                  FONTS.h4,
+                  {color: 'gray', paddingTop: index > 0 ? 30 : RFValue(30)},
+                ]}>
+                11:00
+              </Text>
+              <View
+                style={{
+                  height: RFValue(60),
+                  backgroundColor: '#DEDEDE',
+                  width: RFValue(1),
+                  // marginTop: index > 0 ? -10 : RFValue(30),
+                  marginTop: 2,
+                }}></View>
+            </View>
+            <View
+              style={{
+                width: RFValue(280),
+                borderRadius: RFValue(10),
+                height: 100,
+                backgroundColor: theme.COLORS.white,
+                flexDirection: 'row',
+              }}>
+              <View
+                style={{
+                  height: '98%',
+                  alignSelf: 'flex-start',
+                  margin: RFValue(2),
+                  backgroundColor: theme.COLORS.lightPrimary,
+                  width: RFValue(9),
+                  borderBottomLeftRadius: 10,
+                  borderTopLeftRadius: 10,
+                }}></View>
+              <View style={{paddingHorizontal: RFValue(20)}}>
+                <Text style={[FONTS.h4, {paddingTop: RFValue(20)}]}>
+                  Household wastes
+                </Text>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    flex: 1,
+                    alignItems: 'flex-end',
+                    paddingBottom: RFValue(10),
+                  }}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <Icon
+                      name="bag"
+                      type="SimpleLineIcons"
+                      style={{fontSize: RFValue(18), color: theme.COLORS.gray}}
+                    />
+                    <Text
+                      style={[
+                        FONTS.p,
+                        {
+                          fontSize: RFValue(13),
+                          color: theme.COLORS.gray,
+                          marginRight: RFValue(12),
+                        },
+                      ]}>
+                      120 Bags
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <Icon
+                      name="location"
+                      type="EvilIcons"
+                      style={{fontSize: RFValue(20), color: theme.COLORS.gray}}
+                    />
+                    <Text
+                      style={[
+                        FONTS.p,
+                        {fontSize: RFValue(13), color: theme.COLORS.gray},
+                      ]}>
+                      Pickup Address
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+          </View>
+        );
+      })}
     </SafeAreaView>
   );
 }

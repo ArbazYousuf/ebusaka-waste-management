@@ -15,10 +15,10 @@ import Subscription from './subscription';
 import SpecialPickUp from './specialPickUp';
 import {ScrollView} from 'react-native-gesture-handler';
 
-const Header = ({onChange}) => {
+const GarbageServices = ({onChange, navigation}) => {
   const [active, setactive] = useState('sub');
-  const [sub, setsub] = useState(false);
-  const [special, setspecial] = useState(true);
+  const [sub, setsub] = useState(true);
+  const [special, setspecial] = useState(false);
 
   //   onChange = () => {
   //     return active;
@@ -51,9 +51,27 @@ const Header = ({onChange}) => {
             paddingTop: RFValue(20),
             height: RFValue(100),
           }}>
-          <View style={{flexDirection: 'row', paddingBottom: RFValue(20)}}>
-            <Icon name="left" type="AntDesign" />
-            <Text style={[FONTS.h2, {paddingHorizontal: RFValue(5)}]}>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'flex-start',
+              alignItems: 'center',
+            }}>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Icon
+                name="left"
+                type="AntDesign"
+                style={{fontSize: RFValue(18), paddingLeft: RFValue(10)}}
+              />
+            </TouchableOpacity>
+            <Text
+              style={[
+                {
+                  paddingHorizontal: RFValue(5),
+                  fontFamily: 'Roboto-Bold',
+                  fontSize: RFValue(25),
+                },
+              ]}>
               Garbage Services
             </Text>
           </View>
@@ -121,9 +139,9 @@ const Header = ({onChange}) => {
         </View>
       </View>
       {sub && <Subscription />}
-      {special && <SpecialPickUp />}
+      {special && <SpecialPickUp navigation={navigation} />}
     </ScrollView>
   );
 };
 
-export default Header;
+export default GarbageServices;
