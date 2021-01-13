@@ -33,7 +33,7 @@ function FooterTab() {
       tabBarOptions={{
         showLabel: true,
         activeTintColor: theme.COLORS.primary,
-        inactiveTintColor: 'black',
+        inactiveTintColor: '#DEDEDE',
       }}>
       <Tab.Screen
         options={{
@@ -78,13 +78,13 @@ function FooterTab() {
           tabBarLabel: 'Notification',
           tabBarIcon: ({color}) => (
             <Image
-              resizeMode="center"
+              resizeMode="contain"
               style={{
-                width: RFValue(30),
-                height: RFValue(30),
+                width: RFValue(20),
+                height: RFValue(15),
                 tintColor: color,
               }}
-              source={icons.f_calendar}
+              source={icons.f_notification}
             />
           ),
         }}
@@ -96,13 +96,13 @@ function FooterTab() {
           tabBarLabel: 'Profile',
           tabBarIcon: ({color}) => (
             <Image
-              resizeMode="center"
+              resizeMode="contain"
               style={{
-                width: RFValue(40),
-                height: RFValue(30),
+                width: RFValue(20),
+                height: RFValue(15),
                 tintColor: color,
               }}
-              source={icons.f_user}
+              source={icons.f_Profile}
             />
           ),
         }}
