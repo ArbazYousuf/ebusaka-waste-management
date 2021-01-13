@@ -47,19 +47,12 @@ export default function Registration({navigation}) {
     setOnActive((prev) => {
       return {...prev, phone: true};
     });
-    // alert('hello');
   };
-  // phoneInput.current.onFocus = () => {
-  //   // setOnActive((prev) => {
-  //   //   return {...prev, phone: true};
-  //   // });
-  //   alert('hello');
-  // };
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <SafeAreaView style={{flex: 1, backgroundColor: theme.COLORS.backColor}}>
-        <KeyboardAvoidingView style={{flex: 1}} behavior="padding">
+        <KeyboardAvoidingView style={{flex: 1}}>
           <View
             style={{
               flex: 0.4,

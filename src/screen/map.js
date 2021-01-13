@@ -177,10 +177,10 @@ function Map({navigation}) {
               justifyContent: 'space-around',
             }}>
             <TouchableOpacity>
-              <Image
+              {/* <Image
                 source={icons.call}
                 style={{width: RFValue(40), height: RFValue(40), margin: 5}}
-              />
+              /> */}
             </TouchableOpacity>
             <TouchableOpacity onPress={() => navigation.navigate('Chat')}>
               <Image
