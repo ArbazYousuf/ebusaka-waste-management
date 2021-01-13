@@ -15,7 +15,7 @@ import {TextInput} from 'react-native-gesture-handler';
 
 export default function Home({navigation}) {
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: theme.COLORS.white}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: theme.COLORS.backColor}}>
       <StatusBar
         // translucent={true}
         backgroundColor={'white'}

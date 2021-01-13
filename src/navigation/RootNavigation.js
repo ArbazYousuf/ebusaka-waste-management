@@ -43,8 +43,8 @@ function FooterTab() {
               <Image
                 resizeMode="center"
                 style={{
-                  width: RFValue(30),
-                  height: RFValue(30),
+                  width: RFValue(20),
+                  height: RFValue(25),
                   tintColor: color,
                 }}
                 source={icons.f_home}
@@ -62,8 +62,8 @@ function FooterTab() {
             <Image
               resizeMode="center"
               style={{
-                width: RFValue(30),
-                height: RFValue(30),
+                width: RFValue(20),
+                height: RFValue(25),
                 tintColor: color,
               }}
               source={icons.f_job}
@@ -81,7 +81,7 @@ function FooterTab() {
               resizeMode="contain"
               style={{
                 width: RFValue(20),
-                height: RFValue(15),
+                height: RFValue(25),
                 tintColor: color,
               }}
               source={icons.f_notification}
@@ -99,7 +99,7 @@ function FooterTab() {
               resizeMode="contain"
               style={{
                 width: RFValue(20),
-                height: RFValue(15),
+                height: RFValue(25),
                 tintColor: color,
               }}
               source={icons.f_Profile}
@@ -150,7 +150,7 @@ function Navigation(props) {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={'Home'}>
+      <Stack.Navigator initialRouteName={'Login'}>
         <Stack.Screen
           name="ForgetPassword"
           component={ForgetPassword}
