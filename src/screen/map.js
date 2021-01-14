@@ -161,8 +161,43 @@ function Map({navigation}) {
         <Marker coordinate={origin} title={'Origin'} />
         <Marker coordinate={destination} title={'Destination'} />
       </MapView>
-      <View style={{position: 'absolute'}}>
+      <View
+        style={{
+          position: 'absolute',
+          top: RFValue(50),
+          flexDirection: 'row',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Icon
+            name="cross"
+            type="Entypo"
+            style={{fontSize: RFValue(25), paddingLeft: RFValue(10)}}
+          />
+        </TouchableOpacity>
+        <Text style={[FONTS.h2, {paddingLeft: RFValue(5)}]}>
+          Pin location on Map
+        </Text>
+      </View>
+      <View
+        style={{position: 'absolute', top: RFValue(90), alignSelf: 'center'}}>
         <DestinationSearch />
+      </View>
+      <View
+        style={{
+          flexDirection: 'row',
+          position: 'absolute',
+          bottom: 30,
+          justifyContent: 'center',
+          alignItems: 'center',
+          alignSelf: 'center',
+        }}>
+        <CustomButton
+          onPress={() => navigation.navigate('Home')}
+          color={theme.COLORS.primary}>
+          Confirm Pickup
+        </CustomButton>
       </View>
     </>
   );

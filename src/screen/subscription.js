@@ -75,7 +75,7 @@ const PaymentButton = ({color, text, isChecked, image, onChange}) => {
   );
 };
 
-function Subscription() {
+function Subscription({navigation}) {
   const [nonActiveColor, setactiveColor] = useState(theme.COLORS.lightGray);
   const [wasteType, setwasteType] = useState('');
   const [onActive, setOnActive] = useState({
@@ -172,6 +172,7 @@ function Subscription() {
                 <Text>Address*</Text>
               </View>
               <TouchableOpacity
+                onPress={() => navigation.navigate('Map')}
                 style={{
                   flexDirection: 'row',
                   alignItems: 'center',

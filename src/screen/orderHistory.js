@@ -5,20 +5,20 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   StatusBar,
+  FlatList,
 } from 'react-native';
 import {View, Text, Icon, Row} from 'native-base';
 import {RFValue} from 'react-native-responsive-fontsize';
 import SafeAreaView from 'react-native-safe-area-view';
 import CustomButton from '../components/CustomButton';
+import DestinationSearch from '../components/DestinationSearch';
 import {FONTS, theme} from '../constants';
-import Subscription from './subscription';
-import SpecialPickUp from './specialPickUp';
-import {ScrollView} from 'react-native-gesture-handler';
+import OrderComponent from '../components/OrderComponent';
 
-const GarbageServices = ({onChange, navigation}) => {
+export default function OrderHistory({navigation}) {
   const [active, setactive] = useState('sub');
-  const [sub, setsub] = useState(true);
-  const [special, setspecial] = useState(false);
+  const [activeSub, setactiveSub] = useState(true);
+  const [pastSub, setpastSub] = useState(false);
 
   //   onChange = () => {
   //     return active;
@@ -30,11 +30,12 @@ const GarbageServices = ({onChange, navigation}) => {
     fontSize: RFValue(15),
     color: theme.COLORS.primary,
   };
-
   return (
-    <ScrollView contentContainerStyle={{backgroundColor: 'white'}}>
+    <SafeAreaView style={{flex: 1}}>
       <View
         style={{
+          backgroundColor: 'red',
+          flex: 0.2,
           overflow: 'hidden',
           paddingBottom: 5,
           justifyContent: 'center',
@@ -73,7 +74,7 @@ const GarbageServices = ({onChange, navigation}) => {
                   fontSize: RFValue(25),
                 },
               ]}>
-              Garbage Services
+              Order History
             </Text>
           </View>
 
@@ -86,63 +87,72 @@ const GarbageServices = ({onChange, navigation}) => {
             }}>
             <TouchableOpacity
               onPress={() => {
-                setspecial(false);
-                setsub(true);
+                setactiveSub(true);
+                setpastSub(false);
               }}
               style={{paddingHorizontal: RFValue(5), alignItems: 'center'}}>
               <Text
                 style={[
-                  sub
+                  activeSub
                     ? activeStyle
                     : {
                         paddingBottom: RFValue(5),
                         fontFamily: 'Roboto-Medium',
                       },
                 ]}>
-                Subscription
+                Avtive Subscription
               </Text>
-              {sub && (
+              {activeSub && (
                 <View
                   style={{
                     borderBottomColor: theme.COLORS.primary,
                     borderBottomWidth: 2,
                     backgroundColor: theme.COLORS.primary,
-                    width: RFValue(70),
+                    width: RFValue(100),
+                    alignSelf: 'center',
                   }}></View>
               )}
             </TouchableOpacity>
 
             <TouchableOpacity
               onPress={() => {
-                setspecial(true);
-                setsub(false);
+                setactiveSub(false);
+                setpastSub(true);
               }}
               style={{paddingHorizontal: RFValue(5), alignItems: 'center'}}>
               <Text
                 style={[
-                  special
+                  pastSub
                     ? activeStyle
                     : {paddingBottom: RFValue(5), fontFamily: 'Roboto-Medium'},
                 ]}>
-                Special Pickup
+                Past Subscription
               </Text>
-              {special && (
+              {pastSub && (
                 <View
                   style={{
+                    alignSelf: 'center',
                     borderBottomColor: theme.COLORS.primary,
                     borderBottomWidth: 2,
                     backgroundColor: theme.COLORS.primary,
-                    width: RFValue(70),
+                    width: RFValue(100),
                   }}></View>
               )}
             </TouchableOpacity>
           </View>
         </View>
       </View>
-      {sub && <Subscription navigation={navigation} />}
-      {special && <SpecialPickUp navigation={navigation} />}
-    </ScrollView>
+      <View style={{flex: 1, backgroundColor: theme.COLORS.backColor}}>
+        <FlatList
+          data={[1, 2, 3, 5]}
+          renderItem={() => (
+            <TouchableOpacity
+              style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
+              <OrderComponent />
+            </TouchableOpacity>
+          )}
+        />
+      </View>
+    </SafeAreaView>
   );
-};
-
-export default GarbageServices;
+}

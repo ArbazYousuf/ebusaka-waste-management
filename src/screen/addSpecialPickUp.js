@@ -167,6 +167,7 @@ function AddSpecialPickUp({navigation}) {
                   <Text>Address*</Text>
                 </View>
                 <TouchableOpacity
+                  onPress={() => navigation.navigate('Map')}
                   style={{
                     flexDirection: 'row',
                     alignItems: 'center',

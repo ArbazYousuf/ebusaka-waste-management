@@ -12,7 +12,6 @@ import Chat from '../screen/chat';
 
 import {TouchableHighlight, Text, Image} from 'react-native';
 import {RFValue} from 'react-native-responsive-fontsize';
-
 import Home from '../screen/home';
 import User from '../screen/user';
 import Profile from '../screen/profile';
@@ -23,6 +22,7 @@ import Notification from '../screen/notification';
 import EditProfile from '../screen/editProfile';
 import GarbageServices from '../screen/garbageServices';
 import AddSpecialPickUp from '../screen/addSpecialPickUp';
+import OrderHistory from '../screen/orderHistory';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -150,7 +150,7 @@ function Navigation(props) {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={'Login'}>
+      <Stack.Navigator initialRouteName={'Home'}>
         <Stack.Screen
           name="ForgetPassword"
           component={ForgetPassword}
@@ -196,6 +196,13 @@ function Navigation(props) {
           component={FooterTab}
           options={{headerShown: false}}
         />
+
+        <Stack.Screen
+          name="OrderHistory"
+          component={OrderHistory}
+          options={{headerShown: false}}
+        />
+
         <Stack.Screen
           name="Profile"
           component={Profile}

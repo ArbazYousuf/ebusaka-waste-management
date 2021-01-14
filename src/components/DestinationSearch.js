@@ -23,10 +23,10 @@ const DestinationSearch = (props) => {
       <View
         style={{
           padding: 10,
-          height: RFValue(70),
+          height: RFValue(60),
           backgroundColor: 'white',
           borderRadius: 10,
-          width: 300,
+          width: RFValue(320),
           //   padding: 20,
           flexDirection: 'row',
           justifyContent: 'center',
@@ -37,7 +37,7 @@ const DestinationSearch = (props) => {
             width: 20,
             height: 20,
             borderColor: theme.COLORS.primary,
-            borderWidth: 2,
+            borderWidth: 3,
             borderRadius: 10,
           }}></View>
         <GooglePlacesAutocomplete
@@ -47,7 +47,7 @@ const DestinationSearch = (props) => {
           }}
           styles={{
             textInput: {
-              height: RFValue(60),
+              height: RFValue(50),
               marginLeft: 10,
             },
           }}
