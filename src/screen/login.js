@@ -7,11 +7,10 @@ import {
   Keyboard,
   StatusBar,
 } from 'react-native';
-import {View, Text, Icon, Row} from 'native-base';
+import {View, Text, Icon, Row, Toast} from 'native-base';
 import {RFValue} from 'react-native-responsive-fontsize';
 import SafeAreaView from 'react-native-safe-area-view';
 import CustomButton from '../components/CustomButton';
-import {Form, Item, Input, Label} from 'native-base';
 import {FONTS, icons, images, theme} from '../constants';
 import CustomTextInput from '../components/CustomTextInput';
 import CustomSignIn from '../components/customSignIn';
@@ -19,11 +18,13 @@ import LinearGradient from 'react-native-linear-gradient';
 import {selectAuth} from '../redux/slices/auth';
 import {useSelector, useDispatch} from 'react-redux';
 import {AsyncLogin} from '../redux/actions/asyncAuth';
+import ToastError from '../utils/toastErr';
 
 export default function Login({navigation}) {
   const [isVisible, setIsVisible] = useState(true);
   const [passwordIcon, setpasswordIcon] = useState('eye');
   const [showText, setshowText] = useState(true);
+  const [phone, setphone] = useState(null);
   const dispatch = useDispatch();
   const state = useSelector(selectAuth);
 
@@ -47,6 +48,20 @@ export default function Login({navigation}) {
   const _keyboardDidHide = () => {
     setshowText(true);
   };
+
+  const onSubmitLogin = () => {
+    let reg = /^[0]?[92]\d{11}$/;
+    if (phone) {
+      if (reg.test(phone)) {
+        dispatch(AsyncLogin({phone}));
+      } else {
+        ToastError('Invalid Number');
+      }
+    } else {
+      ToastError('Please Input Number');
+    }
+  };
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: theme.COLORS.backColor}}>
       <StatusBar translucent={true} backgroundColor={'transparent'} />
@@ -155,15 +170,14 @@ export default function Login({navigation}) {
                 inputType="numeric"
                 icon="phone"
                 iconType="Entypo"
+                onChangeText={(text) => setphone(text)}
               />
             </View>
           </View>
 
           <View
             style={{justifyContent: 'center', alignItems: 'center', flex: 0.3}}>
-            <CustomButton
-              onPress={() => dispatch(AsyncLogin('helo'))}
-              color={theme.COLORS.primary}>
+            <CustomButton onPress={onSubmitLogin} color={theme.COLORS.primary}>
               Log In
             </CustomButton>
           </View>

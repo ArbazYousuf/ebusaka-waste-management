@@ -18,13 +18,20 @@ import {FONTS, icons, images, theme} from '../constants';
 import CustomTextInput from '../components/CustomTextInput';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import CustomSignIn from '../components/customSignIn';
+import {useSelector, useDispatch} from 'react-redux';
+import ToastError from '../utils/toastErr';
+import {selectAuth} from '../redux/slices/auth';
+import {AsyncRegister} from '../redux/actions/asyncAuth';
+import moment from 'moment';
 
 export default function Registration({navigation}) {
   const [nonActiveColor, setactiveColor] = useState(theme.COLORS.lightGray);
-  const [value, setValue] = useState('');
+  const [phone, setphone] = useState('');
   const [formattedValue, setFormattedValue] = useState('');
   const [valid, setValid] = useState(false);
   const [showMessage, setShowMessage] = useState(false);
+  const [dateSelected, setdateSelected] = useState(false);
+
   const [onActive, setOnActive] = useState({
     name: false,
     email: false,
@@ -34,19 +41,64 @@ export default function Registration({navigation}) {
   const [isShowModal, setisShowModal] = useState(false);
   const phoneInput = useRef(null);
   const [date, setDate] = useState(new Date(1598051730000));
-  const [mode, setMode] = useState('date');
+  const [name, setname] = useState('');
+  const [email, setemail] = useState('');
   const [show, setShow] = useState(false);
+  const dispatch = useDispatch();
+  const state = useSelector(selectAuth);
+
+  // const onChange = (event, selectedDate) => {
+  //   const currentDate = selectedDate || date;
+  //   setShow(Platform.OS === 'ios');
+  //   setDate(currentDate);
+  // };
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setShow(Platform.OS === 'ios');
     setDate(currentDate);
+    setdateSelected(true);
   };
 
   const onFocus = () => {
     setOnActive((prev) => {
       return {...prev, phone: true};
     });
+  };
+
+  const onSubmitRegister = () => {
+    const isValid = phoneInput.current.isValidNumber(phone);
+    const countryCode = phoneInput.current.getCallingCode();
+
+    console.log('countryCode', countryCode);
+
+    let reg = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/; //email
+
+    if (reg.test(email) && isValid) {
+      let obj = {
+        phone: `+${countryCode}${phone}`,
+        fullname: name,
+        email,
+        dob: moment(date).format('MM/DD/YYYY'),
+      };
+      dispatch(AsyncRegister(obj));
+    } else {
+      if (!reg.test(email)) {
+        ToastError('Invalid Email');
+      } else if (!isValid) {
+        ToastError('Invalid Number');
+      }
+    }
+
+    // if (phone) {
+    //   if (reg.test(phone)) {
+    //     dispatch(AsyncLogin({phone}));
+    //   } else {
+    //     ToastError('Invalid Number');
+    //   }
+    // } else {
+    //   ToastError('Please Input Number');
+    // }
   };
 
   return (
@@ -101,6 +153,7 @@ export default function Registration({navigation}) {
                   icon="user"
                   iconType="Entypo"
                   iconColor={theme.COLORS.lightGray}
+                  onChangeText={(text) => setname(text)}
                   onFocus={() =>
                     setOnActive((prev) => {
                       return {...prev, name: true};
@@ -135,6 +188,7 @@ export default function Registration({navigation}) {
                   icon="email"
                   iconType="MaterialIcons"
                   iconColor={theme.COLORS.lightGray}
+                  onChangeText={(text) => setemail(text)}
                   onFocus={() =>
                     setOnActive((prev) => {
                       return {...prev, email: true};
@@ -165,8 +219,8 @@ export default function Registration({navigation}) {
                 </Text>
                 <PhoneInput
                   ref={phoneInput}
-                  defaultValue={value}
-                  value={value}
+                  defaultValue={phone}
+                  value={phone}
                   defaultCode="ZM"
                   textInputProps={{
                     onFocus: () => {
@@ -181,7 +235,7 @@ export default function Registration({navigation}) {
                     },
                   }}
                   onChangeText={(text) => {
-                    setValue(text);
+                    setphone(text);
                   }}
                   textInputStyle={{
                     fontSize: 16,
@@ -251,14 +305,16 @@ export default function Registration({navigation}) {
                       color: show ? theme.COLORS.primary : nonActiveColor,
                       paddingLeft: RFValue(10),
                     }}>
-                    Date of Birth
+                    {dateSelected
+                      ? moment(date).format('MMMM Do YYYY')
+                      : 'Date of Birth'}
                   </Text>
                 </TouchableOpacity>
               </View>
               <View>
                 <CustomButton
                   color={theme.COLORS.primary}
-                  onPress={() => navigation.navigate('VerifyCode')}>
+                  onPress={onSubmitRegister}>
                   Get Started
                 </CustomButton>
               </View>
@@ -273,7 +329,7 @@ export default function Registration({navigation}) {
                 }}
                 testID="dateTimePicker"
                 value={date}
-                mode={mode}
+                mode="date"
                 is24Hour={true}
                 display="default"
                 onChange={onChange}

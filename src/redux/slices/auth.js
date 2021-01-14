@@ -1,5 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {AsyncLogin} from '../actions/asyncAuth';
+import {AsyncLogin, AsyncRegister} from '../actions/asyncAuth';
 
 export const authSlice = createSlice({
   name: 'auth',
@@ -32,19 +32,37 @@ export const authSlice = createSlice({
   },
   extraReducers: {
     [AsyncLogin.pending]: (state, action) => {
+      console.log('pending', action.payload);
       state.isLoading = true;
     },
     [AsyncLogin.fulfilled]: (state, action) => {
-      console.warn('i have got param', action);
+      console.log('fullfilled', action.payload);
 
       state.isLoading = false;
       state.user = action.payload;
     },
     [AsyncLogin.rejected]: (state, action) => {
-      console.warn('rejected', action.payload);
+      console.log('rejected', action.error.message);
+      state.isLoading = false;
+      state.user = null;
+      state.error = action.error.message;
+    },
+
+    [AsyncRegister.pending]: (state, action) => {
+      console.log('pending', action.payload);
+      state.isLoading = true;
+    },
+    [AsyncRegister.fulfilled]: (state, action) => {
+      console.log('fullfilled', action.payload);
+
       state.isLoading = false;
       state.user = action.payload;
-      state.error = action.payload;
+    },
+    [AsyncRegister.rejected]: (state, action) => {
+      console.log('rejected', action.error.message);
+      state.isLoading = false;
+      state.user = null;
+      state.error = action.error.message;
     },
   },
 });

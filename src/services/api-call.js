@@ -1,5 +1,5 @@
 import axios from 'axios';
-export const API_URL = 'http://192.168.18.72:5000/'; //dev
+export const API_URL = 'http://192.168.18.72:5000/api'; //dev
 // export const API_URL = 'http://72.255.61.236:3055/'; //prd
 // export const API_URL = 'http://192.168.0.104:3055/'; //prd
 
@@ -69,7 +69,7 @@ export function del(path, id, token) {
 
 export function login(path, obj) {
   const API_REQ_URL = API_URL + path;
-  console.log(API_REQ_URL, '---', {obj});
+  console.warn(API_REQ_URL, '---', {obj});
   let request;
   request = axios.post(API_REQ_URL, obj);
   return request;
