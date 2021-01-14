@@ -11,16 +11,20 @@ import {View, Text, Icon, Row} from 'native-base';
 import {RFValue} from 'react-native-responsive-fontsize';
 import SafeAreaView from 'react-native-safe-area-view';
 import CustomButton from '../components/CustomButton';
-
 import {Form, Item, Input, Label} from 'native-base';
 import {FONTS, icons, images, theme} from '../constants';
 import CustomTextInput from '../components/CustomTextInput';
 import CustomSignIn from '../components/customSignIn';
 import LinearGradient from 'react-native-linear-gradient';
+import {selectAuth} from '../redux/slices/auth';
+import {useSelector, useDispatch} from 'react-redux';
+
 export default function Login({navigation}) {
   const [isVisible, setIsVisible] = useState(true);
   const [passwordIcon, setpasswordIcon] = useState('eye');
   const [showText, setshowText] = useState(true);
+  const dispatch = useDispatch();
+  const state = useSelector(selectAuth);
 
   useEffect(() => {
     Keyboard.addListener('keyboardDidShow', _keyboardDidShow);
@@ -32,6 +36,8 @@ export default function Login({navigation}) {
       Keyboard.removeListener('keyboardDidHide', _keyboardDidHide);
     };
   }, []);
+
+  console.warn(state);
 
   const _keyboardDidShow = () => {
     setshowText(false);

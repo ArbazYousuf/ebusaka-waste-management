@@ -4,6 +4,8 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {images} from './src/constants';
 import RootNavigation from './src/navigation/RootNavigation';
 import {AppProvider} from './src/Context/AppProvider';
+import {Provider} from 'react-redux';
+import Store from './src/redux/store';
 
 function App() {
   React.useEffect(() => {
@@ -11,9 +13,11 @@ function App() {
   }, []);
   return (
     <SafeAreaProvider>
-      <AppProvider>
-        <RootNavigation />
-      </AppProvider>
+      <Provider store={Store}>
+        <AppProvider>
+          <RootNavigation />
+        </AppProvider>
+      </Provider>
     </SafeAreaProvider>
   );
 }
