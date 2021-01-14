@@ -18,6 +18,7 @@ import CustomSignIn from '../components/customSignIn';
 import LinearGradient from 'react-native-linear-gradient';
 import {selectAuth} from '../redux/slices/auth';
 import {useSelector, useDispatch} from 'react-redux';
+import {AsyncLogin} from '../redux/actions/asyncAuth';
 
 export default function Login({navigation}) {
   const [isVisible, setIsVisible] = useState(true);
@@ -161,7 +162,7 @@ export default function Login({navigation}) {
           <View
             style={{justifyContent: 'center', alignItems: 'center', flex: 0.3}}>
             <CustomButton
-              onPress={() => navigation.navigate('Home')}
+              onPress={() => dispatch(AsyncLogin('helo'))}
               color={theme.COLORS.primary}>
               Log In
             </CustomButton>

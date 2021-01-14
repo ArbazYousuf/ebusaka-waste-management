@@ -1,10 +1,10 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import {login} from '../../services/api-call';
 
-export const Login = createAsyncThunk(
+export const AsyncLogin = createAsyncThunk(
   'auth/login',
   async (params, ThunkApi) => {
-    console.log('params', params);
+    console.warn('params', params);
 
     const isLogin = (resolve, reject) => {
       login('user/login')
@@ -12,6 +12,7 @@ export const Login = createAsyncThunk(
           resolve(val);
         })
         .catch((error) => {
+          console.warn(error);
           reject(error);
         });
     };
