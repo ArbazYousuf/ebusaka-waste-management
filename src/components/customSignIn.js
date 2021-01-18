@@ -7,7 +7,6 @@ import {
   Image,
 } from 'react-native';
 
-import {Icon} from 'native-base';
 import {RFValue} from 'react-native-responsive-fontsize';
 
 const CustomSignIn = ({
@@ -39,8 +38,6 @@ const CustomSignIn = ({
         alignItems: 'center',
         margin: 2,
         justifyContent: 'center',
-        // borderColor: invisisble ? color : undefined,
-        // borderWidth: invisisble ? 2 : undefined,
         shadowColor: '#000',
         shadowOffset: {
           width: 0,
@@ -52,15 +49,12 @@ const CustomSignIn = ({
       }}>
       {icon && (
         <Image
-          // type={iconType}
-          // name={icon}
           source={icon}
           style={{
             width: 20,
             height: 20,
             // color: '#ffff',
             // fontSize: RFValue(20),
-            textAlign: 'center',
             alignSelf: 'center',
             marginRight: 10,
           }}

@@ -1,5 +1,5 @@
 import axios from 'axios';
-export const API_URL = 'http://192.168.18.72:5000/api'; //dev
+export const API_URL = 'http://192.168.18.171:5000/api'; //dev
 // export const API_URL = 'http://72.255.61.236:3055/'; //prd
 // export const API_URL = 'http://192.168.0.104:3055/'; //prd
 

@@ -7,9 +7,11 @@ export const authSlice = createSlice({
     user: null,
     isLoading: false,
     error: null,
+    value: 0,
   },
   reducers: {
     // increment: (state) => {
+    //   console.warn('state-slice', state);
     //   // Redux Toolkit allows us to write "mutating" logic in reducers. It
     //   // doesn't actually mutate the state because it uses the Immer library,
     //   // which detects changes to a "draft state" and produces a brand new
@@ -42,24 +44,26 @@ export const authSlice = createSlice({
       state.user = action.payload;
     },
     [AsyncLogin.rejected]: (state, action) => {
-      console.log('rejected', action.error.message);
+      console.log('rejected-------slice', action);
       state.isLoading = false;
       state.user = null;
-      state.error = action.error.message;
+      state.error = action.payload;
     },
 
     [AsyncRegister.pending]: (state, action) => {
       console.log('pending', action.payload);
       state.isLoading = true;
+      state.error = '';
     },
     [AsyncRegister.fulfilled]: (state, action) => {
       console.log('fullfilled', action.payload);
 
       state.isLoading = false;
-      state.user = action.payload;
+      state.error = action.payload;
+      state.user = '';
     },
     [AsyncRegister.rejected]: (state, action) => {
-      console.log('rejected', action.error.message);
+      console.log('rejected slice', action);
       state.isLoading = false;
       state.user = null;
       state.error = action.error.message;
@@ -68,7 +72,7 @@ export const authSlice = createSlice({
 });
 
 export const {
-  // increment,
+  increment,
   // decrement,
   // incrementByAmount,
   // incrementByAmount2,
@@ -89,6 +93,19 @@ export const incrementAsync = (amount) => (dispatch) => {
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state) => state.counter.value)`
-export const selectAuth = (state) => state.auth;
+// export const selectAuth = (state) => state.auth;
+// console.log('authSlice.reducer', authSlice.reducer);
 
 export default authSlice.reducer;
+
+//  const { usersSuccess } = slice.actions
+
+//  export const fetchUsers = () => async dispatch => {
+//     try {
+//         await api.get('/users')
+//             .then((response) => dispatch(usersSuccess(response.data)))
+//     }
+//     catch (e) {
+//         return console.error(e.message);
+//     }
+// }

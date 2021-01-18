@@ -45,7 +45,10 @@
     "react-native-simple-toast": "^1.1.3",
     "react-native-splash-screen": "^3.2.0",
     "react-redux": "^7.2.2",
-    "reanimated-bottom-sheet": "^1.0.0-alpha.22"
+    "reanimated-bottom-sheet": "^1.0.0-alpha.22",
+    "redux": "^4.0.5",
+    "redux-logger": "^3.0.6",
+    "redux-persist": "^6.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.8.4",

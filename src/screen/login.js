@@ -15,7 +15,6 @@ import {FONTS, icons, images, theme} from '../constants';
 import CustomTextInput from '../components/CustomTextInput';
 import CustomSignIn from '../components/customSignIn';
 import LinearGradient from 'react-native-linear-gradient';
-import {selectAuth} from '../redux/slices/auth';
 import {useSelector, useDispatch} from 'react-redux';
 import {AsyncLogin} from '../redux/actions/asyncAuth';
 import ToastError from '../utils/toastErr';
@@ -26,9 +25,8 @@ export default function Login({navigation}) {
   const [passwordIcon, setpasswordIcon] = useState('eye');
   const [showText, setshowText] = useState(true);
   const [phone, setphone] = useState(null);
-
   const dispatch = useDispatch();
-  const state = useSelector(selectAuth);
+  const Auth = useSelector((state) => state.Auth);
 
   useEffect(() => {
     Keyboard.addListener('keyboardDidShow', _keyboardDidShow);
@@ -48,20 +46,23 @@ export default function Login({navigation}) {
   const _keyboardDidHide = () => {
     setshowText(true);
   };
+  console.warn('---statee----', Auth);
 
   const onSubmitLogin = () => {
-    navigation.navigate('Home');
+    // navigation.navigate('Home');
 
-    // let reg = /^[0]?[92]\d{11}$/;
-    // if (phone) {
-    //   if (reg.test(phone)) {
-    //     dispatch(AsyncLogin({phone}));
-    //   } else {
-    //     ToastError('Invalid Number');
-    //   }
-    // } else {
-    //   ToastError('Please Input Number');
-    // }
+    console.warn('---statee----login', Auth);
+
+    let reg = /^[0]?[92]\d{11}$/;
+    if (phone) {
+      if (reg.test(phone)) {
+        dispatch(AsyncLogin({phone}));
+      } else {
+        ToastError('Invalid Number');
+      }
+    } else {
+      ToastError('Please Input Number');
+    }
   };
 
   return (
@@ -222,32 +223,3 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
-
-{
-  /* <View
-              style={{
-                position: 'absolute',
-                height: 150,
-                width: 180,
-                backgroundColor: theme.COLORS.lightPrimary,
-                borderBottomLeftRadius: 100,
-                borderBottomRightRadius: 100,
-                left: -5,
-              }}></View>
-            <View
-              style={{
-                height: 200,
-                width: 300,
-                backgroundColor: theme.COLORS.primary,
-                // borderBottomLeftRadius: 150,
-                // borderBottomRightRadius: 150,
-                borderBottomStartRadius: 280,
-                borderBottomEndRadius: 280,
-                position: 'absolute',
-                left: -170,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <Text style={[FONTS.h2, {color: 'white'}]}>ebusaka</Text>
-            </View> */
-}

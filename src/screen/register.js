@@ -20,7 +20,6 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import CustomSignIn from '../components/customSignIn';
 import {useSelector, useDispatch} from 'react-redux';
 import ToastError from '../utils/toastErr';
-import {selectAuth} from '../redux/slices/auth';
 import {AsyncRegister} from '../redux/actions/asyncAuth';
 import moment from 'moment';
 
@@ -45,13 +44,15 @@ export default function Registration({navigation}) {
   const [email, setemail] = useState('');
   const [show, setShow] = useState(false);
   const dispatch = useDispatch();
-  const state = useSelector(selectAuth);
+  const Auth = useSelector((state) => state.Auth);
 
   // const onChange = (event, selectedDate) => {
   //   const currentDate = selectedDate || date;
   //   setShow(Platform.OS === 'ios');
   //   setDate(currentDate);
   // };
+
+  console.warn('state----', Auth);
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -67,39 +68,45 @@ export default function Registration({navigation}) {
   };
 
   const onSubmitRegister = () => {
-    navigation.navigate('Home');
-    // const isValid = phoneInput.current.isValidNumber(phone);
-    // const countryCode = phoneInput.current.getCallingCode();
+    // navigation.navigate('Home');
+    const isValid = phoneInput.current.isValidNumber(phone);
+    const countryCode = phoneInput.current.getCallingCode();
 
-    // console.log('countryCode', countryCode);
+    console.log('countryCode', countryCode);
 
-    // let reg = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/; //email
+    let reg = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/; //email
 
-    // if (reg.test(email) && isValid) {
-    //   let obj = {
-    //     phone: `+${countryCode}${phone}`,
-    //     fullname: name,
-    //     email,
-    //     dob: moment(date).format('MM/DD/YYYY'),
-    //   };
-    //   dispatch(AsyncRegister(obj));
-    // } else {
-    //   if (!reg.test(email)) {
-    //     ToastError('Invalid Email');
-    //   } else if (!isValid) {
-    //     ToastError('Invalid Number');
-    //   }
-    // }
+    if (reg.test(email) && isValid) {
+      let obj = {
+        data: {
+          phone: `+${countryCode}${phone}`,
+          fullname: name,
+          email,
+          dob: moment(date).format('MM/DD/YYYY'),
+        },
+        nav: {
+          ...navigation,
+        },
+      };
+      console.warn('pass');
+      dispatch(AsyncRegister(obj));
+    } else {
+      if (!reg.test(email)) {
+        ToastError('Invalid Email');
+      } else if (!isValid) {
+        ToastError('Invalid Number');
+      }
+    }
 
-    // if (phone) {
-    //   if (reg.test(phone)) {
-    //     dispatch(AsyncLogin({phone}));
-    //   } else {
-    //     ToastError('Invalid Number');
-    //   }
-    // } else {
-    //   ToastError('Please Input Number');
-    // }
+    if (phone) {
+      if (reg.test(phone)) {
+        dispatch(AsyncLogin({phone}));
+      } else {
+        ToastError('Invalid Number');
+      }
+    } else {
+      ToastError('Please Input Number');
+    }
   };
 
   return (

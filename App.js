@@ -8,6 +8,8 @@ import {Provider} from 'react-redux';
 import Store from './src/redux/store';
 import {PermissionsAndroid, Platform, Dimensions} from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
+import {PersistGate} from 'redux-persist/integration/react';
+import {persistStore} from 'redux-persist';
 
 let {width, height} = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
@@ -75,18 +77,22 @@ function App() {
     //   (error) => console.warn(error.message),
     // );
   };
+  let persistor = persistStore(Store);
 
   React.useEffect(() => {
     getPermission();
 
     SplashScreen.hide();
   }, []);
+
   return (
     <SafeAreaProvider>
       <Provider store={Store}>
-        <AppProvider value={{isOnline, location, setisOnline, setlocation}}>
-          <RootNavigation />
-        </AppProvider>
+        <PersistGate loading={null} persistor={persistor}>
+          <AppProvider value={{isOnline, location, setisOnline, setlocation}}>
+            <RootNavigation />
+          </AppProvider>
+        </PersistGate>
       </Provider>
     </SafeAreaProvider>
   );
