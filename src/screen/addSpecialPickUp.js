@@ -8,13 +8,14 @@ import {
   ScrollView,
 } from 'react-native';
 import {View, Text, Icon, Row} from 'native-base';
-import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
+import {RFValue} from 'react-native-responsive-fontsize';
 import SafeAreaView from 'react-native-safe-area-view';
 import CustomButton from '../components/CustomButton';
 import {theme, FONTS, icons} from '../constants';
 import CustomTextInput from '../components/CustomTextInput';
 import DropDownPicker from 'react-native-custom-dropdown';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import MapBox from '../components/MapBox';
 
 function AddSpecialPickUp({navigation}) {
   const [nonActiveColor, setactiveColor] = useState(theme.COLORS.lightGray);
@@ -199,10 +200,12 @@ function AddSpecialPickUp({navigation}) {
               <View
                 style={{
                   height: RFValue(100),
-                  backgroundColor: theme.COLORS.primary,
+                  // backgroundColor: theme.COLORS.primary,
                   margin: RFValue(5),
                   borderRadius: RFValue(5),
-                }}></View>
+                }}>
+                <MapBox />
+              </View>
             </View>
           </View>
         </View>

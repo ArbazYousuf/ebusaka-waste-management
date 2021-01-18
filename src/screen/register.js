@@ -67,28 +67,29 @@ export default function Registration({navigation}) {
   };
 
   const onSubmitRegister = () => {
-    const isValid = phoneInput.current.isValidNumber(phone);
-    const countryCode = phoneInput.current.getCallingCode();
+    navigation.navigate('Home');
+    // const isValid = phoneInput.current.isValidNumber(phone);
+    // const countryCode = phoneInput.current.getCallingCode();
 
-    console.log('countryCode', countryCode);
+    // console.log('countryCode', countryCode);
 
-    let reg = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/; //email
+    // let reg = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/; //email
 
-    if (reg.test(email) && isValid) {
-      let obj = {
-        phone: `+${countryCode}${phone}`,
-        fullname: name,
-        email,
-        dob: moment(date).format('MM/DD/YYYY'),
-      };
-      dispatch(AsyncRegister(obj));
-    } else {
-      if (!reg.test(email)) {
-        ToastError('Invalid Email');
-      } else if (!isValid) {
-        ToastError('Invalid Number');
-      }
-    }
+    // if (reg.test(email) && isValid) {
+    //   let obj = {
+    //     phone: `+${countryCode}${phone}`,
+    //     fullname: name,
+    //     email,
+    //     dob: moment(date).format('MM/DD/YYYY'),
+    //   };
+    //   dispatch(AsyncRegister(obj));
+    // } else {
+    //   if (!reg.test(email)) {
+    //     ToastError('Invalid Email');
+    //   } else if (!isValid) {
+    //     ToastError('Invalid Number');
+    //   }
+    // }
 
     // if (phone) {
     //   if (reg.test(phone)) {

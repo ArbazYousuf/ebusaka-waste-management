@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   Image,
   StyleSheet,
@@ -19,12 +19,14 @@ import {selectAuth} from '../redux/slices/auth';
 import {useSelector, useDispatch} from 'react-redux';
 import {AsyncLogin} from '../redux/actions/asyncAuth';
 import ToastError from '../utils/toastErr';
+import {AppContext} from '../Context/AppProvider';
 
 export default function Login({navigation}) {
   const [isVisible, setIsVisible] = useState(true);
   const [passwordIcon, setpasswordIcon] = useState('eye');
   const [showText, setshowText] = useState(true);
   const [phone, setphone] = useState(null);
+
   const dispatch = useDispatch();
   const state = useSelector(selectAuth);
 
@@ -39,8 +41,6 @@ export default function Login({navigation}) {
     };
   }, []);
 
-  console.warn(state);
-
   const _keyboardDidShow = () => {
     setshowText(false);
   };
@@ -50,16 +50,18 @@ export default function Login({navigation}) {
   };
 
   const onSubmitLogin = () => {
-    let reg = /^[0]?[92]\d{11}$/;
-    if (phone) {
-      if (reg.test(phone)) {
-        dispatch(AsyncLogin({phone}));
-      } else {
-        ToastError('Invalid Number');
-      }
-    } else {
-      ToastError('Please Input Number');
-    }
+    navigation.navigate('Home');
+
+    // let reg = /^[0]?[92]\d{11}$/;
+    // if (phone) {
+    //   if (reg.test(phone)) {
+    //     dispatch(AsyncLogin({phone}));
+    //   } else {
+    //     ToastError('Invalid Number');
+    //   }
+    // } else {
+    //   ToastError('Please Input Number');
+    // }
   };
 
   return (

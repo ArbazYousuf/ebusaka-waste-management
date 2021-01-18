@@ -10,8 +10,6 @@ import {
 import {View, Text, Icon, Row} from 'native-base';
 import {RFValue} from 'react-native-responsive-fontsize';
 import SafeAreaView from 'react-native-safe-area-view';
-import CustomButton from '../components/CustomButton';
-import DestinationSearch from '../components/DestinationSearch';
 import {FONTS, theme} from '../constants';
 import OrderComponent from '../components/OrderComponent';
 
@@ -34,7 +32,7 @@ export default function OrderHistory({navigation}) {
     <SafeAreaView style={{flex: 1}}>
       <View
         style={{
-          backgroundColor: 'red',
+          // backgroundColor: 'red',
           flex: 0.2,
           overflow: 'hidden',
           paddingBottom: 5,

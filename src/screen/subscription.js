@@ -12,6 +12,7 @@ import CustomButton from '../components/CustomButton';
 import {theme, FONTS, icons} from '../constants';
 import CustomTextInput from '../components/CustomTextInput';
 import DropDownPicker from 'react-native-custom-dropdown';
+import MapBox from '../components/MapBox';
 
 const PaymentButton = ({color, text, isChecked, image, onChange}) => {
   return (
@@ -204,10 +205,12 @@ function Subscription({navigation}) {
             <View
               style={{
                 height: RFValue(100),
-                backgroundColor: theme.COLORS.primary,
+                // backgroundColor: theme.COLORS.primary,
                 margin: RFValue(5),
                 borderRadius: RFValue(5),
-              }}></View>
+              }}>
+              <MapBox />
+            </View>
           </View>
         </View>
       </View>

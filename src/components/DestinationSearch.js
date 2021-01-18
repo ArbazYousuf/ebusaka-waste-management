@@ -4,6 +4,7 @@ import {Icon} from 'native-base';
 // import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import {RFValue} from 'react-native-responsive-fontsize';
 import {theme} from '../constants';
+import {Button} from 'react-native';
 // import Geolocation from '@react-native-community/geolocation';
 
 // // import styles from './styles.js';
@@ -120,112 +121,121 @@ const workPlace = {
   geometry: {location: {lat: 48.8496818, lng: 2.2940881}},
 };
 
-const GooglePlacesInput = () => {
+const GooglePlacesInput = React.forwardRef(({onSelect}, parentRef) => {
+  // const re = React.useRef();
   return (
-    <GooglePlacesAutocomplete
-      placeholder="Search"
-      minLength={2} // minimum length of text to search
-      autoFocus={false}
-      returnKeyType={'search'} // Can be left out for default return key https://facebook.github.io/react-native/docs/textinput.html#returnkeytype
-      listViewDisplayed={false} // true/false/undefined
-      fetchDetails={true}
-      renderDescription={(row) => row.description} // custom description render
-      onPress={(data, details = null) => {
-        // 'details' is provided when fetchDetails = true
-        console.log(data, details);
-      }}
-      getDefaultValue={() => ''}
-      query={{
-        // available options: https://developers.google.com/places/web-service/autocomplete
-        key: 'AIzaSyB-5FKcvAr7K72CVjQ7NzI4T2XA4MfjmHw',
-        language: 'en', // language of the results
-        types: 'address', // default: 'geocode'
-      }}
-      styles={{
-        textInput: {
-          paddingLeft: RFValue(30),
-        },
+    <>
+      <GooglePlacesAutocomplete
+        ref={parentRef}
+        placeholder="Search"
+        minLength={2} // minimum length of text to search
+        autoFocus={false}
+        returnKeyType={'search'} // Can be left out for default return key https://facebook.github.io/react-native/docs/textinput.html#returnkeytype
+        listViewDisplayed={false} // true/false/undefined
+        fetchDetails={true}
+        renderDescription={(row) => row.description} // custom description render
+        onPress={(data, details = null) => {
+          // 'details' is provided when fetchDetails = true
+          console.log(data, details);
+          onSelect(data, details);
+        }}
+        getDefaultValue={() => ''}
+        query={{
+          // available options: https://developers.google.com/places/web-service/autocomplete
+          key: 'AIzaSyB-5FKcvAr7K72CVjQ7NzI4T2XA4MfjmHw',
+          language: 'en', // language of the results
+          types: 'address', // default: 'geocode'
+        }}
+        styles={{
+          textInput: {
+            paddingLeft: RFValue(30),
+          },
 
-        textInputContainer: {
-          width: '90%',
-          alignItems: 'center',
-          alignSelf: 'center',
-          // borderRadius: 30,
-        },
-
-        listView: {
-          width: '90%',
-          alignSelf: 'center',
-        },
-        description: {
-          fontWeight: 'bold',
-        },
-        predefinedPlacesDescription: {
-          color: '#1faadb',
-        },
-      }}
-      renderLeftButton={() => (
-        <View
-          style={{
-            position: 'absolute',
-            top: RFValue(15),
-            width: 15,
-            height: 15,
-            borderColor: theme.COLORS.primary,
-            borderWidth: 2,
-            borderRadius: 8,
-            justifyContent: 'center',
+          textInputContainer: {
+            width: '90%',
             alignItems: 'center',
             alignSelf: 'center',
-            zIndex: 1,
-            left: RFValue(10),
-          }}></View>
-      )}
-      renderRightButton={() => (
-        <View
-          style={{
-            justifyContent: 'center',
-            alignItems: 'center',
-            // top: 100,
-            // position: 'absolute',
-            // zIndex: 1,
-          }}>
-          <Icon
-            name="search"
-            type="EvilIcons"
+            // borderRadius: 30,
+          },
+
+          listView: {
+            width: '90%',
+            alignSelf: 'center',
+          },
+          description: {
+            fontWeight: 'bold',
+          },
+          predefinedPlacesDescription: {
+            color: '#1faadb',
+          },
+        }}
+        renderLeftButton={() => (
+          <View
             style={{
               position: 'absolute',
+              top: RFValue(15),
+              width: 15,
+              height: 15,
+              borderColor: theme.COLORS.primary,
+              borderWidth: 2,
+              borderRadius: 8,
+              justifyContent: 'center',
+              alignItems: 'center',
               alignSelf: 'center',
-              right: 30,
-            }}
-          />
-        </View>
-      )}
-      enablePoweredByContainer={false}
-      currentLocation={true} // Will add a 'Current location' button at the top of the predefined places list
-      currentLocationLabel="Current location"
-      nearbyPlacesAPI="GooglePlacesSearch" // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch
-      GoogleReverseGeocodingQuery={
-        {
-          // available options for GoogleReverseGeocoding API : https://developers.google.com/maps/documentation/geocoding/intro
+              zIndex: 1,
+              left: RFValue(10),
+            }}></View>
+        )}
+        renderRightButton={() => (
+          <View
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              // top: 100,
+              // position: 'absolute',
+              // zIndex: 1,
+            }}>
+            <Icon
+              name="search"
+              type="EvilIcons"
+              style={{
+                position: 'absolute',
+                alignSelf: 'center',
+                right: 30,
+              }}
+            />
+          </View>
+        )}
+        enablePoweredByContainer={false}
+        currentLocation={true} // Will add a 'Current location' button at the top of the predefined places list
+        currentLocationLabel="Current location"
+        nearbyPlacesAPI="GooglePlacesSearch" // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch
+        GoogleReverseGeocodingQuery={
+          {
+            // available options for GoogleReverseGeocoding API : https://developers.google.com/maps/documentation/geocoding/intro
+          }
         }
-      }
-      // GooglePlacesSearchQuery={{
-      //   // available options for GooglePlacesSearch API : https://developers.google.com/places/web-service/search
-      //   rankby: 'distance',
-      //   types: 'food',
-      // }}
-      // filterReverseGeocodingByTypes={[
-      //   'locality',
-      //   'administrative_area_level_3',
-      // ]} // filter the reverse geocoding results by types - ['locality', 'administrative_area_level_3'] if you want to display only cities
-      predefinedPlaces={[homePlace, workPlace]}
-      debounce={200} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
-      // renderLeftButton={() => (
-      //   <Image source={require('path/custom/left-icon')} />
-      // )}
-    />
+        // GooglePlacesSearchQuery={{
+        //   // available options for GooglePlacesSearch API : https://developers.google.com/places/web-service/search
+        //   rankby: 'distance',
+        //   types: 'food',
+        // }}
+        // filterReverseGeocodingByTypes={[
+        //   'locality',
+        //   'administrative_area_level_3',
+        // ]} // filter the reverse geocoding results by types - ['locality', 'administrative_area_level_3'] if you want to display only cities
+        predefinedPlaces={[homePlace, workPlace]}
+        debounce={200} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
+        // renderLeftButton={() => (
+        //   <Image source={require('path/custom/left-icon')} />
+        // )}
+      />
+      {/* <Button
+        title="refff"
+        onPress={() => re.current.setAddressText('testtingg')}
+      /> */}
+    </>
   );
-};
+});
 
 export default GooglePlacesInput;

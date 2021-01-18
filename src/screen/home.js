@@ -13,14 +13,18 @@ import {theme, images, icons, FONTS} from '../constants';
 import SafeAreaView from 'react-native-safe-area-view';
 import {TextInput} from 'react-native-gesture-handler';
 import OrderComponent from '../components/OrderComponent';
+import {AppContext} from '../Context/AppProvider';
 
 export default function Home({navigation}) {
+  const {location} = useContext(AppContext);
+
+  console.warn(location);
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: theme.COLORS.backColor}}>
       <StatusBar
         // translucent={true}
         backgroundColor={'white'}
-        barStyle="dark-content"
+        barStyle="default"
       />
       <View style={styles.Container}>
         <View

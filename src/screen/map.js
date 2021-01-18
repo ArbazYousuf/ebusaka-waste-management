@@ -335,28 +335,19 @@ import {
   Dimensions,
   StyleSheet,
   ActivityIndicator,
-  TextInput,
   TouchableOpacity,
-  Modal,
-  TouchableHighlight,
 } from 'react-native';
 import {Icon, Radio} from 'native-base';
 import MapView from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
-import BottomSheet from 'reanimated-bottom-sheet';
 import CustomButton from '../components/CustomButton';
-import MapViewDirections from 'react-native-maps-directions';
 import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
-import {Container, Item, Input, Button} from 'native-base';
 import {FONTS, icons, theme} from '../constants';
-import Header from '../components/header';
-import CustomRadioButton from '../components/CustomRadioButton';
 import {AppContext} from '../Context/AppProvider';
-import DestinationSearch from '../components/DestinationSearch';
+import Geocoder from 'react-native-geocoder';
+import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 
-const origin = {latitude: 24.928182, longitude: 67.1126082};
 const GOOGLE_MAPS_APIKEY = 'AIzaSyB-5FKcvAr7K72CVjQ7NzI4T2XA4MfjmHw';
-let destination = {};
 
 let {width, height} = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
@@ -367,8 +358,7 @@ const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 function Map({navigation}) {
-  const {isOnline, setisOnline} = useContext(AppContext);
-
+  Geocoder.fallbackToGoogle(GOOGLE_MAPS_APIKEY);
   const getPermission = async () => {
     // this.CheckLocation();
 
@@ -402,15 +392,30 @@ function Map({navigation}) {
 
   const bs = React.useRef();
 
-  const [animating, setanimating] = useState(true);
+  const mapView = React.useRef();
+  const autoCompleteRef = React.useRef();
+
+  const [animating, setanimating] = useState(false);
 
   const [isLoading, setisLoading] = useState(false);
 
   const [isCollect, setisCollect] = useState(false);
 
   const [isChecked, setisChecked] = useState(false);
+  // const [isLoading, setisLoading] = useState(false);
 
   const [isModalOpen, setisModalOpen] = useState(false);
+
+  const {location, setlocation} = useContext(AppContext);
+
+  const homePlace = {
+    description: 'Home',
+    geometry: {location: {lat: location.latitude, lng: location.longitude}},
+  };
+  const workPlace = {
+    description: 'Work',
+    geometry: {location: {lat: location.latitude, lng: location.longitude}},
+  };
 
   const CheckLocation = () => {
     Geolocation.getCurrentPosition(
@@ -421,6 +426,9 @@ function Map({navigation}) {
           latitudeDelta: LATITUDE_DELTA,
           longitudeDelta: LONGITUDE_DELTA,
         });
+        // console.log('check location', mapView.current);
+        // mapView.current.animateToCoordinate(region, 1);
+        setanimating(!animating);
       },
       (error) => console.warn(error.message),
       {
@@ -440,39 +448,57 @@ function Map({navigation}) {
     );
   };
 
-  useEffect(() => {
-    getPermission();
+  // useEffect(() => {
+  //   // CheckLocation();
+  //   getPermission();
 
-    return () => {
-      Geolocation.clearWatch();
-    };
-  }, []);
+  //   return () => {
+  //     Geolocation.clearWatch();
+  //   };
+  // }, []);
 
-  const onDropped = () => {
-    // this.setState({
-    //   isLoading: true,
-    // });
-
+  const onRegionChange = async (region) => {
+    // console.log('region', region);
     setisLoading(true);
+    autoCompleteRef.current.clear();
+    setregion((prev) => {
+      region;
+    });
+  };
+
+  const onRegionChangeComplete = async (region) => {
+    let {latitude, longitude} = region;
+    let ret = await Geocoder.geocodePosition({lat: latitude, lng: longitude});
+    let address = await ret[0].formattedAddress;
+    await setisLoading(false);
+    autoCompleteRef.current.setAddressText(address);
   };
 
   const selectLocation = (data, detail) => {
     console.log('data', data);
     console.log('detail', detail);
-  };
-  // destination = {
-  //   latitude: 37.3318456,
-  //   longitude: -122.0296002,
-  // };
+    let {lat, lng} = detail?.geometry.location;
+    console.log('detail', lat, lng);
+    let r = {
+      latitude: lat,
+      longitude: lng,
+      latitudeDelta: LONGITUDE_DELTA,
+      longitudeDelta: LONGITUDE_DELTA,
+    };
+    mapView.current.animateToRegion(r, 2000);
 
-  const origin = {latitude: 37.3318456, longitude: -122.0296002};
-  const destination = {latitude: 37.771707, longitude: -122.4053769};
+    // setregion((prev) => ({...prev, latitude: lat, longitude: lng}));
+    // console.log('region', region);
+  };
+
+  // const origin = {latitude: 37.3318456, longitude: -122.0296002};
+  // const destination = {latitude: 37.771707, longitude: -122.4053769};
   return (
     <View style={styles.container}>
-      {!animating ? (
+      {!location ? (
         <ActivityIndicator
           animating={animating}
-          color="#bc2b78"
+          color={theme.COLORS.primary}
           size="large"
           style={{height: '100%', width: '100%'}}
         />
@@ -480,19 +506,31 @@ function Map({navigation}) {
         <View>
           <MapView
             style={{width: '100%', height: '100%'}}
-            // ref={this.handleRef}
-            zoomEnabled={true}
+            ref={mapView}
+            onRegionChange={onRegionChange}
             // showsUserLocation={true}
             showsMyLocationButton={true}
-            region={region}
+            // region={region}
+            initialRegion={location}
+            // showsCompass={true}
+            onRegionChangeComplete={onRegionChangeComplete}
             zoomEnabled={true}>
-            <MapView.Marker coordinate={region}>
+            {/* <MapView.Marker
+              coordinate={region}
+              draggable
+              onDragEnd={(t, map, coords) => setDestination(coords)}
+              coordinate={region}
+              position={region}
+              centerOffset={{x: -18, y: -60}}
+              anchor={{x: 0.69, y: 1}}
+              pinColor={COLOR.marker}
+              onDragStart={() => setMarkerPosition()}>
               <Image
                 source={icons.mapMarker}
                 resizeMode="contain"
                 style={{height: RFValue(35), width: RFValue(35)}}
               />
-            </MapView.Marker>
+            </MapView.Marker> */}
 
             {/* <MapViewDirections
               origin={origin}
@@ -502,7 +540,7 @@ function Map({navigation}) {
               strokeWidth={3}
               strokeColor="red"
             /> */}
-            <MapView.Marker coordinate={destination}>
+            {/* <MapView.Marker coordinate={destination}>
               <Icon
                 name="location"
                 type="Entypo"
@@ -513,8 +551,22 @@ function Map({navigation}) {
                   color: '#0c233c',
                 }}
               />
-            </MapView.Marker>
+            </MapView.Marker> */}
           </MapView>
+          <View
+            style={{
+              left: '50%',
+              marginLeft: -24,
+              marginTop: -48,
+              position: 'absolute',
+              top: RFPercentage(52),
+            }}>
+            <Image
+              style={{height: 48, width: 48}}
+              resizeMode="contain"
+              source={icons.mapMarker}
+            />
+          </View>
           <View
             style={{
               position: 'absolute',
@@ -541,7 +593,133 @@ function Map({navigation}) {
               alignSelf: 'center',
               width: '100%',
             }}>
-            <DestinationSearch onSelect={selectLocation} />
+            {isLoading && (
+              <View
+                style={{
+                  position: 'absolute',
+                  zIndex: 1,
+                  top: 20,
+                  alignSelf: 'center',
+                }}>
+                <ActivityIndicator color={theme.COLORS.primary} size="large" />
+              </View>
+            )}
+            <GooglePlacesAutocomplete
+              ref={autoCompleteRef}
+              multiline={true}
+              enableHighAccuracyLocation={true}
+              placeholder="Search"
+              minLength={2} // minimum length of text to search
+              autoFocus={false}
+              returnKeyType={'search'} // Can be left out for default return key https://facebook.github.io/react-native/docs/textinput.html#returnkeytype
+              listViewDisplayed={false} // true/false/undefined
+              fetchDetails={true}
+              renderDescription={(row) => row.description} // custom description render
+              onPress={(data, details = null) => {
+                // 'details' is provided when fetchDetails = true
+                console.log(data, details);
+                selectLocation(data, details);
+              }}
+              getDefaultValue={() => ''}
+              query={{
+                // available options: https://developers.google.com/places/web-service/autocomplete
+                key: 'AIzaSyB-5FKcvAr7K72CVjQ7NzI4T2XA4MfjmHw',
+                language: 'en', // language of the results
+                // types: 'address', // default: 'geocode'
+                components: 'country:pk,zm',
+              }}
+              styles={{
+                textInputContainer: {
+                  height: '100%',
+                },
+                textInput: {
+                  paddingLeft: RFValue(30),
+                  height: RFValue(80),
+                },
+
+                textInputContainer: {
+                  width: '90%',
+                  alignItems: 'center',
+                  alignSelf: 'center',
+                  // borderRadius: 30,
+                },
+
+                listView: {
+                  width: '90%',
+                  alignSelf: 'center',
+                },
+                description: {
+                  fontWeight: 'bold',
+                },
+                predefinedPlacesDescription: {
+                  color: '#1faadb',
+                },
+              }}
+              renderLeftButton={() => (
+                <View
+                  style={{
+                    position: 'absolute',
+                    top: RFValue(35),
+                    width: 15,
+                    height: 15,
+                    borderColor: theme.COLORS.primary,
+                    borderWidth: 2,
+                    borderRadius: 8,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    alignSelf: 'center',
+                    zIndex: 1,
+                    left: RFValue(10),
+                  }}></View>
+              )}
+              renderRightButton={() => (
+                <View
+                  style={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    // top: 100,
+                    // position: 'absolute',
+                    // zIndex: 1,
+                  }}>
+                  <Icon
+                    name="search"
+                    type="EvilIcons"
+                    style={{
+                      position: 'absolute',
+                      alignSelf: 'center',
+                      right: 30,
+                    }}
+                  />
+                </View>
+              )}
+              enablePoweredByContainer={false}
+              currentLocation={true} // Will add a 'Current location' button at the top of the predefined places list
+              currentLocationLabel="Current location"
+              nearbyPlacesAPI="GooglePlacesSearch" // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch
+              GoogleReverseGeocodingQuery={
+                {
+                  // available options for GoogleReverseGeocoding API : https://developers.google.com/maps/documentation/geocoding/intro
+                }
+              }
+              // GooglePlacesSearchQuery={{
+              //   // available options for GooglePlacesSearch API : https://developers.google.com/places/web-service/search
+              //   rankby: 'distance',
+              //   types: 'food',
+              // }}
+              // filterReverseGeocodingByTypes={[
+              //   'locality',
+              //   'administrative_area_level_3',
+              // ]} // filter the reverse geocoding results by types - ['locality', 'administrative_area_level_3'] if you want to display only cities
+              predefinedPlaces={[homePlace, workPlace]}
+              debounce={200} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
+              // renderLeftButton={() => (
+              //   <Image source={require('path/custom/left-icon')} />
+              // )}
+            />
+            {/* <Button
+        title="refff"
+        onPress={() => re.current.setAddressText('testtingg')}
+      /> */}
           </View>
           <View
             style={{
