@@ -1,9 +1,11 @@
 import React, {useState} from 'react';
-import {Text, StyleSheet, View, Image} from 'react-native';
+import {Text, StyleSheet, View, Image, ActivityIndicator} from 'react-native';
 import {Icon, Row} from 'native-base';
 import {RFValue} from 'react-native-responsive-fontsize';
 import SafeAreaView from 'react-native-safe-area-view';
 import CustomButton from '../components/CustomButton';
+import {useSelector, useDispatch} from 'react-redux';
+
 import {
   CodeField,
   Cursor,
@@ -11,6 +13,8 @@ import {
   useClearByFocusCell,
 } from 'react-native-confirmation-code-field';
 import {images, theme, FONTS} from '../constants';
+import ToastError from '../utils/toastErr';
+import {AsyncVerifyOtp} from '../redux/actions/asyncAuth';
 
 const styles = StyleSheet.create({
   root: {flex: 1, padding: 60},
@@ -35,13 +39,27 @@ const styles = StyleSheet.create({
 
 const CELL_COUNT = 4;
 
-const VerifyCode = ({navigation}) => {
+const OTP = ({navigation}) => {
   const [value, setValue] = useState('');
   const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
     value,
     setValue,
   });
+  const Auth = useSelector((state) => state.Auth);
+  const dispatch = useDispatch();
+
+  const onProceed = () => {
+    if (Auth?.user?.otp == value) {
+      let obj = {
+        token: Auth?.user?.token,
+        nav: navigation,
+      };
+      dispatch(AsyncVerifyOtp(obj));
+    } else {
+      ToastError('Invalid OTP');
+    }
+  };
 
   return (
     <SafeAreaView style={styles.root}>
@@ -90,14 +108,16 @@ const VerifyCode = ({navigation}) => {
           alignItems: 'center',
           padding: RFValue(20),
         }}>
-        <CustomButton
-          onPress={() => navigation.navigate('Home')}
-          color={theme.COLORS.primary}>
-          Proceed
+        <CustomButton onPress={onProceed} color={theme.COLORS.primary}>
+          {Auth.isLoading ? (
+            <ActivityIndicator color="white" size="small" />
+          ) : (
+            'Proceed'
+          )}
         </CustomButton>
       </View>
     </SafeAreaView>
   );
 };
 
-export default VerifyCode;
+export default OTP;

@@ -7,6 +7,7 @@ import {
   StatusBar,
   Image,
   KeyboardAvoidingView,
+  ActivityIndicator,
 } from 'react-native';
 import {View, Text, Icon, Row, ListItem, Body} from 'native-base';
 import {RFValue, RFPercentage} from 'react-native-responsive-fontsize';
@@ -96,16 +97,6 @@ export default function Registration({navigation}) {
       } else if (!isValid) {
         ToastError('Invalid Number');
       }
-    }
-
-    if (phone) {
-      if (reg.test(phone)) {
-        dispatch(AsyncLogin({phone}));
-      } else {
-        ToastError('Invalid Number');
-      }
-    } else {
-      ToastError('Please Input Number');
     }
   };
 
@@ -323,7 +314,11 @@ export default function Registration({navigation}) {
                 <CustomButton
                   color={theme.COLORS.primary}
                   onPress={onSubmitRegister}>
-                  Get Started
+                  {Auth.isLoading ? (
+                    <ActivityIndicator color="white" size="small" />
+                  ) : (
+                    'Get Started'
+                  )}
                 </CustomButton>
               </View>
             </Form>

@@ -6,6 +6,7 @@ import {
   KeyboardAvoidingView,
   Keyboard,
   StatusBar,
+  ActivityIndicator,
 } from 'react-native';
 import {View, Text, Icon, Row, Toast} from 'native-base';
 import {RFValue} from 'react-native-responsive-fontsize';
@@ -25,6 +26,8 @@ export default function Login({navigation}) {
   const [passwordIcon, setpasswordIcon] = useState('eye');
   const [showText, setshowText] = useState(true);
   const [phone, setphone] = useState(null);
+  const [onActive, setOnActive] = useState(false);
+
   const dispatch = useDispatch();
   const Auth = useSelector((state) => state.Auth);
 
@@ -53,10 +56,14 @@ export default function Login({navigation}) {
 
     console.warn('---statee----login', Auth);
 
-    let reg = /^[0]?[92]\d{11}$/;
+    let reg = /^[0]?[+92]\d{12}$/;
     if (phone) {
       if (reg.test(phone)) {
-        dispatch(AsyncLogin({phone}));
+        let obj = {
+          phone,
+          nav: navigation,
+        };
+        dispatch(AsyncLogin(obj));
       } else {
         ToastError('Invalid Number');
       }
@@ -169,11 +176,20 @@ export default function Login({navigation}) {
                 Phone Number
               </Text>
               <CustomTextInput
+                defaultValue="+"
                 placeholder="Phone Number"
                 inputType="numeric"
                 icon="phone"
                 iconType="Entypo"
+                iconColor={theme.COLORS.lightGray}
                 onChangeText={(text) => setphone(text)}
+                onFocus={() => {
+                  setOnActive(true);
+                }}
+                onBlur={() => {
+                  setOnActive(false);
+                }}
+                activeColor={onActive ? theme.COLORS.primary : null}
               />
             </View>
           </View>
@@ -181,7 +197,11 @@ export default function Login({navigation}) {
           <View
             style={{justifyContent: 'center', alignItems: 'center', flex: 0.3}}>
             <CustomButton onPress={onSubmitLogin} color={theme.COLORS.primary}>
-              Log In
+              {Auth.isLoading ? (
+                <ActivityIndicator color="white" size="small" />
+              ) : (
+                'Log In'
+              )}
             </CustomButton>
           </View>
           <TouchableOpacity

@@ -75,6 +75,22 @@ export function login(path, obj) {
   return request;
 }
 
+export function verifyMe(path, token) {
+  const API_REQ_URL = API_URL + path;
+  console.warn(API_REQ_URL, '---', {path}, token);
+  const config = {
+    headers: {Authorization: `Bearer ${token}`},
+  };
+
+  let request;
+  try {
+    request = axios.put(API_REQ_URL, {}, config);
+  } catch (error) {
+    throw error;
+  }
+  return request;
+}
+
 export function reg(path, obj) {
   const API_REQ_URL = API_URL + path;
   console.log(API_REQ_URL, obj);

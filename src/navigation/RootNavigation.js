@@ -9,14 +9,14 @@ import ForgetPassword from '../screen/forgetPassword';
 import {theme, FONTS, icons} from '../constants';
 import {Icon} from 'native-base';
 import Chat from '../screen/chat';
-
+import {useSelector, useDispatch} from 'react-redux';
 import {TouchableHighlight, Text, Image} from 'react-native';
 import {RFValue} from 'react-native-responsive-fontsize';
 import Home from '../screen/home';
 import User from '../screen/user';
 import Profile from '../screen/profile';
 import Map from '../screen/map';
-import VerifyCode from '../screen/confirmationCode';
+import OTP from '../screen/OTP';
 import Feed from '../screen/feed';
 import Notification from '../screen/notification';
 import EditProfile from '../screen/editProfile';
@@ -145,12 +145,16 @@ const Right = ({onPress}) => {
 };
 
 function Navigation(props) {
+  const Auth = useSelector((state) => state.Auth);
+
   const noHeader = {headerShown: false};
   const [initialRouteName, setinitialRouteName] = React.useState('');
 
+  const initialScreen = Auth.user ? 'Home' : 'Login';
+
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={'Login'}>
+      <Stack.Navigator initialRouteName={initialScreen}>
         <Stack.Screen
           name="ForgetPassword"
           component={ForgetPassword}
@@ -246,8 +250,8 @@ function Navigation(props) {
         /> */}
 
         <Stack.Screen
-          name="VerifyCode"
-          component={VerifyCode}
+          name="OTP"
+          component={OTP}
           options={{headerShown: false}}
         />
 

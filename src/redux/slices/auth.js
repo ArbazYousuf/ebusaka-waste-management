@@ -1,5 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {AsyncLogin, AsyncRegister} from '../actions/asyncAuth';
+import {AsyncLogin, AsyncRegister, AsyncVerifyOtp} from '../actions/asyncAuth';
 
 export const authSlice = createSlice({
   name: 'auth',
@@ -7,7 +7,6 @@ export const authSlice = createSlice({
     user: null,
     isLoading: false,
     error: null,
-    value: 0,
   },
   reducers: {
     // increment: (state) => {
@@ -33,6 +32,8 @@ export const authSlice = createSlice({
     // },
   },
   extraReducers: {
+    // <-------login----------------->
+
     [AsyncLogin.pending]: (state, action) => {
       console.log('pending', action.payload);
       state.isLoading = true;
@@ -49,7 +50,7 @@ export const authSlice = createSlice({
       state.user = null;
       state.error = action.payload;
     },
-
+    // <-------register----------------->
     [AsyncRegister.pending]: (state, action) => {
       console.log('pending', action.payload);
       state.isLoading = true;
@@ -59,13 +60,34 @@ export const authSlice = createSlice({
       console.log('fullfilled', action.payload);
 
       state.isLoading = false;
-      state.error = action.payload;
-      state.user = '';
+      state.error = '';
+      state.user = action.payload;
     },
     [AsyncRegister.rejected]: (state, action) => {
       console.log('rejected slice', action);
       state.isLoading = false;
       state.user = null;
+      state.error = action.error.message;
+    },
+
+    // <-------verify me----------------->
+
+    [AsyncVerifyOtp.pending]: (state, action) => {
+      console.log('pending', action.payload);
+      state.isLoading = true;
+      state.error = '';
+    },
+    [AsyncVerifyOtp.fulfilled]: (state, action) => {
+      console.log('fullfilled', action.payload);
+
+      state.isLoading = false;
+      state.error = '';
+      state.user = action.payload;
+    },
+    [AsyncVerifyOtp.rejected]: (state, action) => {
+      console.log('rejected slice', action);
+      state.isLoading = false;
+      // state.user = null;
       state.error = action.error.message;
     },
   },
