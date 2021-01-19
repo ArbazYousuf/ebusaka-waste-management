@@ -150,7 +150,7 @@ function Navigation(props) {
   const noHeader = {headerShown: false};
   const [initialRouteName, setinitialRouteName] = React.useState('');
 
-  const initialScreen = Auth.user ? 'Home' : 'Login';
+  const initialScreen = Auth.isLogin ? 'Home' : 'Login';
 
   return (
     <NavigationContainer>

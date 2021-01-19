@@ -1,9 +1,10 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   Image,
   StyleSheet,
   TouchableOpacity,
   KeyboardAvoidingView,
+  ActivityIndicator,
 } from 'react-native';
 import {View, Text, Icon, Row} from 'native-base';
 import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
@@ -13,6 +14,11 @@ import {theme, FONTS, icons} from '../constants';
 import CustomTextInput from '../components/CustomTextInput';
 import DropDownPicker from 'react-native-custom-dropdown';
 import MapBox from '../components/MapBox';
+import {useDispatch, useSelector} from 'react-redux';
+import {AppContext} from '../Context/AppProvider';
+import {AsyncPostSub} from '../redux/actions/asyncJob';
+// import {AsyncGetCompanies} from '../redux/actions/asyncJob';
+// import {unwrapResult} from '@reduxjs/toolkit';
 
 const PaymentButton = ({color, text, isChecked, image, onChange}) => {
   return (
@@ -76,20 +82,68 @@ const PaymentButton = ({color, text, isChecked, image, onChange}) => {
   );
 };
 
-function Subscription({navigation}) {
+function Subscription({navigation, route}) {
   const [nonActiveColor, setactiveColor] = useState(theme.COLORS.lightGray);
   const [wasteType, setwasteType] = useState('');
+  const [selectedComapny, setselectedComapny] = useState('');
+  const [selectedWaste, setselectedWaste] = useState('');
+  const [noOfBags, setnoOfBags] = useState(0);
+  const [weight, setweight] = useState(0);
   const [onActive, setOnActive] = useState({
     name: false,
     bag: false,
   });
-
+  const [name, setname] = useState('');
+  const [companies, setcompanies] = useState([]);
   const [paymentMethod, setpaymentMethod] = useState('visa');
   const [activeList, setactiveList] = useState({
     wasteType: false,
     company: false,
+    weight: false,
   });
+  const {address, location} = useContext(AppContext);
+  const dispatch = useDispatch();
+  const Jobs = useSelector((state) => state.Jobs);
+  const Auth = useSelector((state) => state.Auth);
 
+  const onSubmitSubscribe = () => {
+    console.warn(address, location);
+    // "user": "5ffd9c7174ab7b3bc22c27e2",
+    // "fullname": "Muhammad Arbaz",
+    // "direction": {
+    //     "address": "76 Block 2",
+    //     "coordinates": ["1212","1222"]
+    // },
+    // "weight": "20",
+    // "note": "hellow everyone",
+    // "waste_type": "chemical",
+    // "company": "id",
+    // "subscription_id":"dfdfd",
+    //     "no_of_bags": 10
+
+    let obj = {
+      data: {
+        user: Auth?.user?._id,
+        fullname: name,
+        direction: {
+          address,
+          coordinates: location,
+        },
+        weight,
+        note: 'hellow everyone',
+        waste_type: selectedWaste?.value,
+        company: selectedComapny?.value,
+        subscription_id: 'testing',
+        no_of_bags: noOfBags,
+      },
+      token: Auth?.token,
+      nav: navigation,
+    };
+
+    dispatch(AsyncPostSub(obj));
+  };
+
+  // const [companies, setcompanies] = useState([]);
   const activeTextStyle = {
     marginBottom: RFValue(4),
     color: theme.COLORS.primary,
@@ -98,7 +152,19 @@ function Subscription({navigation}) {
   const paymentChange = (method) => {
     setpaymentMethod(method);
   };
+  // console.log(location);
+  console.log('address', address);
+  useEffect(() => {
+    let companies =
+      Jobs.companies &&
+      Jobs.companies.map(({_id, name}) => ({
+        label: name,
+        value: _id,
+      }));
+    setcompanies(companies);
+  }, []);
 
+  console.log('state---', companies);
   return (
     <View style={{backgroundColor: 'white', flex: 1}}>
       {/* <Header onChange={(val) => console.warn(val)} /> */}
@@ -143,6 +209,7 @@ function Subscription({navigation}) {
               iconColor={theme.COLORS.lightGray}
               cBorderRadius={5}
               cIconPadding={10}
+              onChangeText={(text) => setname(text)}
               cWidth={320}
               onFocus={() =>
                 setOnActive((prev) => {
@@ -214,7 +281,7 @@ function Subscription({navigation}) {
           </View>
         </View>
       </View>
-      <View style={{height: 400}}>
+      <View style={{height: 500}}>
         <View style={{padding: RFValue(10)}}>
           <Text style={[FONTS.h3, {}]}>Choose Service</Text>
         </View>
@@ -231,7 +298,7 @@ function Subscription({navigation}) {
             elevation: 9,
             backgroundColor: theme.COLORS.white,
             width: RFValue(350),
-            height: RFValue(280),
+            height: RFValue(380),
             borderRadius: 10,
             alignSelf: 'center',
             alignItems: 'center',
@@ -249,13 +316,13 @@ function Subscription({navigation}) {
             <DropDownPicker
               items={[
                 {
-                  label: 'UK',
-                  value: 'uk',
+                  label: 'Wet',
+                  value: 'wet',
                   // icon: () => <Icon name="flag" size={18} color="#900" />,
                 },
                 {
-                  label: 'France',
-                  value: 'france',
+                  label: 'Plastic',
+                  value: 'plastic',
                   // icon: () => <Icon name="flag" size={18} color="#900" />,
                 },
               ]}
@@ -278,7 +345,7 @@ function Subscription({navigation}) {
               dropDownStyle={{
                 backgroundColor: '#fafafa',
               }}
-              onChangeItem={(item) => setwasteType(item)}
+              onChangeItem={(item) => setselectedWaste(item)}
               onOpen={() => {
                 setactiveList((pre) => ({...pre, wasteType: true}));
               }}
@@ -299,18 +366,7 @@ function Subscription({navigation}) {
               Select Waste Company
             </Text>
             <DropDownPicker
-              items={[
-                {
-                  label: 'UK',
-                  value: 'uk',
-                  // icon: () => <Icon name="flag" size={18} color="#900" />,
-                },
-                {
-                  label: 'France',
-                  value: 'france',
-                  // icon: () => <Icon name="flag" size={18} color="#900" />,
-                },
-              ]}
+              items={companies}
               defaultValue={wasteType}
               containerStyle={{
                 height: RFValue(50),
@@ -327,7 +383,7 @@ function Subscription({navigation}) {
                 justifyContent: 'flex-start',
               }}
               dropDownStyle={{backgroundColor: '#fafafa'}}
-              onChangeItem={(item) => setwasteType(item)}
+              onChangeItem={(item) => setselectedComapny(item)}
               onOpen={() => {
                 setactiveList((pre) => ({...pre, company: true}));
               }}
@@ -350,6 +406,7 @@ function Subscription({navigation}) {
             </Text>
             <CustomTextInput
               placeholder="Please Write Here"
+              onChangeText={(num) => setnoOfBags(num)}
               inputType="numeric"
               icon="shopping-bag"
               iconType="FontAwesome"
@@ -368,6 +425,42 @@ function Subscription({navigation}) {
                 })
               }
               activeColor={onActive.bag ? theme.COLORS.primary : null}
+            />
+          </View>
+          <View style={{padding: RFValue(5)}}>
+            <Text
+              style={[
+                FONTS.h4,
+                {
+                  color: onActive.weight
+                    ? theme.COLORS.primary
+                    : nonActiveColor,
+                  paddingBottom: RFValue(5),
+                },
+              ]}>
+              Approximately Weight
+            </Text>
+            <CustomTextInput
+              placeholder="Please Write Here"
+              onChangeText={(num) => setweight(num)}
+              inputType="numeric"
+              icon="shopping-bag"
+              iconType="FontAwesome"
+              iconColor={theme.COLORS.lightGray}
+              cIconPadding={10}
+              cWidth={320}
+              cBorderRadius={5}
+              onFocus={() =>
+                setOnActive((prev) => {
+                  return {...prev, weight: true};
+                })
+              }
+              onBlur={() =>
+                setOnActive((prev) => {
+                  return {...prev, weight: false};
+                })
+              }
+              activeColor={onActive.weight ? theme.COLORS.primary : null}
             />
           </View>
         </View>
@@ -426,8 +519,12 @@ function Subscription({navigation}) {
         <CustomButton
           cWidth={320}
           color={theme.COLORS.primary}
-          onPress={() => navigation.navigate('VerifyCode')}>
-          Subscribe
+          onPress={onSubmitSubscribe}>
+          {Jobs.isLoading ? (
+            <ActivityIndicator color="white" size="small" />
+          ) : (
+            'Subscribe'
+          )}
         </CustomButton>
       </View>
     </View>

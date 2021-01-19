@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Image,
   StyleSheet,
@@ -13,15 +13,29 @@ import CalendarStrip from 'react-native-calendar-strip';
 import moment from 'moment';
 import {FONTS, theme} from '../constants';
 import SpecialPickUpModal from '../modals/specialPickupModal';
-function SpecialPickUp({navigation}) {
+import {useDispatch, useSelector} from 'react-redux';
+import ToastError from '../utils/toastErr';
+import {AsyncGetMySpecial} from '../redux/actions/asyncJob';
+function SpecialPickUp({navigation, route}) {
   const [openmodal, setopenmodal] = useState(false);
-  const [data, setdata] = useState([
-    {time: '09:00', title: 'Event 1', description: 'Event 1 Description'},
-    {time: '10:45', title: 'Event 2', description: 'Event 2 Description'},
-    {time: '12:00', title: 'Event 3', description: 'Event 3 Description'},
-    {time: '14:00', title: 'Event 4', description: 'Event 4 Description'},
-    {time: '16:30', title: 'Event 5', description: 'Event 5 Description'},
-  ]);
+  const [selectedDate, setselectedDate] = useState('');
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(AsyncGetMySpecial());
+  }, []);
+
+  const onAddNewPickUp = () => {
+    if (selectedDate) {
+      navigation.navigate('AddSpecialPickUp', {
+        date: moment(selectedDate).toISOString(),
+      });
+    } else {
+      ToastError('Select Date First');
+    }
+  };
+  // console.log('selected date', moment(selectedDate).toISOString());
   return (
     <SafeAreaView style={{flex: 1}}>
       <View style={{backgroundColor: 'white', flex: 0.4}}>
@@ -66,11 +80,11 @@ function SpecialPickUp({navigation}) {
           //   }}
           //   markedDates={this.state.markedDates}
           //   datesBlacklist={this.datesBlacklistFunc}
-          //   onDateSelected={this.onDateSelected}
+          onDateSelected={(date) => setselectedDate(date)}
           useIsoWeekday={false}
         />
         <TouchableOpacity
-          onPress={() => navigation.navigate('AddSpecialPickUp')}
+          onPress={onAddNewPickUp}
           style={{
             backgroundColor: 'white',
             height: RFValue(40),

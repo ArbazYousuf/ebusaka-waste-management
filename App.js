@@ -10,6 +10,7 @@ import {PermissionsAndroid, Platform, Dimensions} from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
 import {PersistGate} from 'redux-persist/integration/react';
 import {persistStore} from 'redux-persist';
+import Geocoder from 'react-native-geocoder';
 
 let {width, height} = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
@@ -22,6 +23,7 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 function App() {
   const [location, setlocation] = useState('');
   const [isOnline, setisOnline] = useState(false);
+  const [address, setaddress] = useState('');
 
   const getPermission = async () => {
     // this.CheckLocation();
@@ -49,13 +51,21 @@ function App() {
 
   const CheckLocation = () => {
     Geolocation.getCurrentPosition(
-      (position) => {
+      async (position) => {
         setlocation({
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
           latitudeDelta: LATITUDE_DELTA,
           longitudeDelta: LONGITUDE_DELTA,
         });
+
+        let ret = await Geocoder.geocodePosition({
+          lat: location.latitude,
+          lng: location.longitude,
+        });
+        let address = await ret[0].formattedAddress;
+        setaddress(address);
+
         // console.log('check location', mapView.current);
         // mapView.current.animateToCoordinate(region, 1);
         // setanimating(!animating);
@@ -76,6 +86,13 @@ function App() {
     //   },
     //   (error) => console.warn(error.message),
     // );
+
+    // let ret = await Geocoder.geocodePosition({
+    //   lat: location.latitude,
+    //   lng: location.longitude,
+    // });
+    // let address = await ret[0].formattedAddress;
+    // setaddress(address);
   };
   let persistor = persistStore(Store);
 
@@ -84,12 +101,20 @@ function App() {
 
     SplashScreen.hide();
   }, []);
-
+  console.warn(address);
   return (
     <SafeAreaProvider>
       <Provider store={Store}>
         <PersistGate loading={null} persistor={persistor}>
-          <AppProvider value={{isOnline, location, setisOnline, setlocation}}>
+          <AppProvider
+            value={{
+              isOnline,
+              location,
+              setisOnline,
+              setlocation,
+              address,
+              setaddress,
+            }}>
             <RootNavigation />
           </AppProvider>
         </PersistGate>

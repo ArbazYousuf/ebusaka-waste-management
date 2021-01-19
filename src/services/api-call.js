@@ -17,7 +17,7 @@ export const API_URL = 'http://192.168.18.171:5000/api'; //dev
 export function get(path, token) {
   const API_REQ_URL = API_URL + path;
   const config = {
-    headers: {'auth-token': `${token}`},
+    headers: {Authorization: `Bearer ${token}`},
   };
   console.log('BOOM', API_REQ_URL, config);
   let request;
@@ -27,9 +27,14 @@ export function get(path, token) {
 
 export function post(path, obj, token) {
   const API_REQ_URL = API_URL + path;
-  console.log('post==>', API_REQ_URL, token, obj);
+  console.log(
+    'post==>',
+    API_REQ_URL,
+    token ? 'token get' : 'token not get',
+    obj,
+  );
   const config = {
-    headers: {'auth-token': `${token}`},
+    headers: {Authorization: `Bearer ${token}`},
   };
   let request;
   request = axios.post(API_REQ_URL, obj, config);
@@ -41,7 +46,7 @@ export function put(path, obj, id, token) {
   const API_REQ_URL = `${API_URL}${path}/${id}`;
   console.log('put==>', API_REQ_URL, obj);
   const config = {
-    headers: {'auth-token': `${token}`},
+    headers: {Authorization: `Bearer ${token}`},
   };
   let request;
   try {
@@ -56,7 +61,7 @@ export function del(path, id, token) {
   const API_REQ_URL = `${API_URL}${path}/${id}`;
   console.log('del==>', API_REQ_URL, {token});
   const config = {
-    headers: {'auth-token': `${token}`},
+    headers: {Authorization: `Bearer ${token}`},
   };
   let request;
   try {

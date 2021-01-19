@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import {
   StyleSheet,
   Image,
@@ -14,11 +14,29 @@ import SafeAreaView from 'react-native-safe-area-view';
 import {TextInput} from 'react-native-gesture-handler';
 import OrderComponent from '../components/OrderComponent';
 import {AppContext} from '../Context/AppProvider';
-
+import {useSelector, useDispatch} from 'react-redux';
+import {AsyncGetCompanies} from '../redux/actions/asyncJob';
+// import {unwrapResult} from '@reduxjs/toolkit';
 export default function Home({navigation}) {
   const {location} = useContext(AppContext);
+  let Auth = useSelector((state) => state.Auth);
+  let dispatch = useDispatch();
+  // const [companies, setcompanies] = useState([]);
 
+  console.warn(Auth);
   console.warn(location);
+
+  useEffect(() => {
+    dispatch(AsyncGetCompanies());
+    // .then(unwrapResult)
+    // .then((res) => {
+    //   console.log('res', res);
+    //   setcompanies(res?.company);
+    // });
+
+    // return () => {
+    // }
+  }, []);
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: theme.COLORS.backColor}}>
       <StatusBar

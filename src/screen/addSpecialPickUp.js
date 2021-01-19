@@ -1,23 +1,26 @@
-import React, {useState} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import {
   Image,
   StyleSheet,
   TouchableOpacity,
-  KeyboardAvoidingView,
   StatusBar,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import {View, Text, Icon, Row} from 'native-base';
 import {RFValue} from 'react-native-responsive-fontsize';
-import SafeAreaView from 'react-native-safe-area-view';
 import CustomButton from '../components/CustomButton';
 import {theme, FONTS, icons} from '../constants';
 import CustomTextInput from '../components/CustomTextInput';
 import DropDownPicker from 'react-native-custom-dropdown';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import moment from 'moment';
 import MapBox from '../components/MapBox';
+import {AppContext} from '../Context/AppProvider';
+import {AsyncPostSp} from '../redux/actions/asyncJob';
+import {useDispatch, useSelector} from 'react-redux';
 
-function AddSpecialPickUp({navigation}) {
+function AddSpecialPickUp({navigation, route}) {
   const [nonActiveColor, setactiveColor] = useState(theme.COLORS.lightGray);
   const [wasteType, setwasteType] = useState('');
   const [onActive, setOnActive] = useState({
@@ -25,23 +28,85 @@ function AddSpecialPickUp({navigation}) {
     bag: false,
   });
   const [show, setShow] = useState(false);
-  const [date, setDate] = useState(new Date(1598051730000));
+  const [time, setTime] = useState(new Date(1598051730000));
   const [mode, setMode] = useState('date');
   const [activeList, setactiveList] = useState({
     wasteType: false,
     company: false,
+    weight: false,
   });
+  const [selectedComapny, setselectedComapny] = useState('');
+  const [selectedWaste, setselectedWaste] = useState('');
+  const [noOfBags, setnoOfBags] = useState(0);
+  const [weight, setweight] = useState(0);
+  const [selectedTime, setselectedTime] = useState('');
+  const [companies, setcompanies] = useState([]);
+  const [name, setname] = useState('');
 
-  const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
+  const {address, location} = useContext(AppContext);
+  const dispatch = useDispatch();
+  const Jobs = useSelector((state) => state.Jobs);
+  const Auth = useSelector((state) => state.Auth);
+
+  const onChange = (event, selectedTime) => {
+    const currentTime = selectedTime || time;
     setShow(Platform.OS === 'ios');
-    setDate(currentDate);
+    setTime(currentTime);
+    setselectedTime(currentTime);
+  };
+
+  useEffect(() => {
+    let companies = Jobs.companies.map(({_id, name}) => ({
+      label: name,
+      value: _id,
+    }));
+    setcompanies(companies);
+  }, []);
+
+  const onSubmitSpecial = () => {
+    console.warn(address, location);
+    // "user": "5ffd9c7174ab7b3bc22c27e2",
+    // "fullname": "Muhammad Arbaz",
+    // "direction": {
+    //     "address": "76 Block 2",
+    //     "coordinates": ["1212","1222"]
+    // },
+    // "weight": "20",
+    // "note": "hellow everyone",
+    // "waste_type": "chemical",
+    // "company": "id",
+    // "subscription_id":"dfdfd",
+    //     "no_of_bags": 10
+
+    let obj = {
+      data: {
+        user: Auth?.user?._id,
+        fullname: name,
+        direction: {
+          address,
+          coordinates: location,
+        },
+        weight,
+        note: 'hellow everyone',
+        waste_type: selectedWaste?.value,
+        company: selectedComapny?.value,
+        subscription_id: 'testing',
+        no_of_bags: noOfBags,
+        time: time,
+        date: route?.params?.date,
+      },
+      token: Auth?.token,
+      nav: navigation,
+    };
+
+    dispatch(AsyncPostSp(obj));
   };
 
   const activeTextStyle = {
     marginBottom: RFValue(4),
     color: theme.COLORS.primary,
   };
+  console.log(route?.params?.date);
   return (
     <ScrollView>
       <View style={{backgroundColor: 'white', flex: 1}}>
@@ -136,6 +201,7 @@ function AddSpecialPickUp({navigation}) {
                 icon="user"
                 iconType="FontAwesome"
                 iconColor={theme.COLORS.lightGray}
+                onChangeText={(text) => setname(text)}
                 cBorderRadius={5}
                 cIconPadding={10}
                 cWidth={320}
@@ -244,13 +310,13 @@ function AddSpecialPickUp({navigation}) {
               <DropDownPicker
                 items={[
                   {
-                    label: 'UK',
-                    value: 'uk',
+                    label: 'Wet',
+                    value: 'Wet',
                     // icon: () => <Icon name="flag" size={18} color="#900" />,
                   },
                   {
-                    label: 'France',
-                    value: 'france',
+                    label: 'Plastic',
+                    value: 'Plastic',
                     // icon: () => <Icon name="flag" size={18} color="#900" />,
                   },
                 ]}
@@ -273,7 +339,7 @@ function AddSpecialPickUp({navigation}) {
                 dropDownStyle={{
                   backgroundColor: '#fafafa',
                 }}
-                onChangeItem={(item) => setwasteType(item)}
+                onChangeItem={(item) => setselectedWaste(item)}
                 onOpen={() => {
                   setactiveList((pre) => ({...pre, wasteType: true}));
                 }}
@@ -294,18 +360,7 @@ function AddSpecialPickUp({navigation}) {
                 Select Waste Company
               </Text>
               <DropDownPicker
-                items={[
-                  {
-                    label: 'UK',
-                    value: 'uk',
-                    // icon: () => <Icon name="flag" size={18} color="#900" />,
-                  },
-                  {
-                    label: 'France',
-                    value: 'france',
-                    // icon: () => <Icon name="flag" size={18} color="#900" />,
-                  },
-                ]}
+                items={companies || []}
                 defaultValue={wasteType}
                 containerStyle={{
                   height: RFValue(50),
@@ -322,7 +377,7 @@ function AddSpecialPickUp({navigation}) {
                   justifyContent: 'flex-start',
                 }}
                 dropDownStyle={{backgroundColor: '#fafafa'}}
-                onChangeItem={(item) => setwasteType(item)}
+                onChangeItem={(item) => setselectedComapny(item)}
                 onOpen={() => {
                   setactiveList((pre) => ({...pre, company: true}));
                 }}
@@ -407,7 +462,9 @@ function AddSpecialPickUp({navigation}) {
                     color: show ? theme.COLORS.primary : nonActiveColor,
                     paddingLeft: RFValue(10),
                   }}>
-                  Please Select From Here
+                  {selectedTime
+                    ? moment(selectedTime).format('hh:mm')
+                    : '  Please Select From Here'}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -419,8 +476,12 @@ function AddSpecialPickUp({navigation}) {
             //   size="lg"
             cWidth={320}
             color={theme.COLORS.primary}
-            onPress={() => navigation.goBack()}>
-            Add
+            onPress={onSubmitSpecial}>
+            {Jobs.isLoading ? (
+              <ActivityIndicator color="white" size="small" />
+            ) : (
+              'Add'
+            )}
           </CustomButton>
         </View>
       </View>
@@ -432,7 +493,7 @@ function AddSpecialPickUp({navigation}) {
             color: theme.COLORS.primary,
           }}
           testID="dateTimePicker"
-          value={date}
+          value={time}
           mode="time"
           is24Hour={true}
           display="default"

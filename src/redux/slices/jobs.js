@@ -1,14 +1,19 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {AsyncLogin, AsyncRegister, AsyncVerifyOtp} from '../actions/asyncAuth';
+import {
+  AsyncGetCompanies,
+  AsyncPostSp,
+  AsyncPostSub,
+} from '../actions/asyncJob';
 
-export const authSlice = createSlice({
-  name: 'auth',
+export const jobSlice = createSlice({
+  name: 'jobs',
   initialState: {
-    token: '',
-    user: null,
+    companies: null,
     isLoading: false,
     error: null,
-    isLogin: false,
+    mysubscription: [],
+    // justPostNow: [],
+    message: '',
   },
   reducers: {
     // increment: (state) => {
@@ -34,66 +39,64 @@ export const authSlice = createSlice({
     // },
   },
   extraReducers: {
-    // <-------login----------------->
+    // <-------get companies----------------->
 
-    [AsyncLogin.pending]: (state, action) => {
+    [AsyncGetCompanies.pending]: (state, action) => {
       console.log('pending', action.payload);
       state.isLoading = true;
+      state.error = '';
     },
-    [AsyncLogin.fulfilled]: (state, action) => {
+    [AsyncGetCompanies.fulfilled]: (state, action) => {
       console.log('fullfilled', action.payload);
 
       state.isLoading = false;
-      state.user = action.payload;
-      state.token = action.payload.token;
+      state.companies = action.payload.company;
+      state.error = '';
     },
-    [AsyncLogin.rejected]: (state, action) => {
+    [AsyncGetCompanies.rejected]: (state, action) => {
       console.log('rejected-------slice', action);
       state.isLoading = false;
-      state.user = null;
+      state.companies = null;
       state.error = action.payload;
     },
-    // <-------register----------------->
-    [AsyncRegister.pending]: (state, action) => {
+    // <-------post subscription----------------->
+
+    [AsyncPostSub.pending]: (state, action) => {
       console.log('pending', action.payload);
       state.isLoading = true;
       state.error = '';
     },
-    [AsyncRegister.fulfilled]: (state, action) => {
+    [AsyncPostSub.fulfilled]: (state, action) => {
       console.log('fullfilled', action.payload);
 
       state.isLoading = false;
+      state.message = action.payload;
       state.error = '';
-      state.user = action.payload;
-      state.token = action.payload.token;
     },
-    [AsyncRegister.rejected]: (state, action) => {
-      console.log('rejected slice', action);
+    [AsyncPostSub.rejected]: (state, action) => {
+      console.log('rejected-------slice', action);
       state.isLoading = false;
-      state.user = null;
-      state.error = action.error.message;
+      state.error = action.payload;
     },
 
-    // <-------verify me----------------->
+    // <-------post special job----------------->
 
-    [AsyncVerifyOtp.pending]: (state, action) => {
+    [AsyncPostSp.pending]: (state, action) => {
       console.log('pending', action.payload);
       state.isLoading = true;
       state.error = '';
     },
-    [AsyncVerifyOtp.fulfilled]: (state, action) => {
+    [AsyncPostSp.fulfilled]: (state, action) => {
       console.log('fullfilled', action.payload);
 
       state.isLoading = false;
+      state.message = action.payload;
       state.error = '';
-      state.user = action.payload.user;
-      state.isLogin = true;
     },
-    [AsyncVerifyOtp.rejected]: (state, action) => {
-      console.log('rejected slice', action);
+    [AsyncPostSp.rejected]: (state, action) => {
+      console.log('rejected-------slice', action);
       state.isLoading = false;
-      // state.user = null;
-      state.error = action.error.message;
+      state.error = action.payload;
     },
   },
 });
@@ -104,7 +107,7 @@ export const {
   // incrementByAmount,
   // incrementByAmount2,
   // startAsync,
-} = authSlice.actions;
+} = jobSlice.actions;
 
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
@@ -123,7 +126,7 @@ export const incrementAsync = (amount) => (dispatch) => {
 // export const selectAuth = (state) => state.auth;
 // console.log('authSlice.reducer', authSlice.reducer);
 
-export default authSlice.reducer;
+export default jobSlice.reducer;
 
 //  const { usersSuccess } = slice.actions
 

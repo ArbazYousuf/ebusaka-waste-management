@@ -15,7 +15,7 @@ import Subscription from './subscription';
 import SpecialPickUp from './specialPickUp';
 import {ScrollView} from 'react-native-gesture-handler';
 
-const GarbageServices = ({onChange, navigation}) => {
+const GarbageServices = ({onChange, navigation, route}) => {
   const [active, setactive] = useState('sub');
   const [sub, setsub] = useState(true);
   const [special, setspecial] = useState(false);
@@ -139,8 +139,8 @@ const GarbageServices = ({onChange, navigation}) => {
           </View>
         </View>
       </View>
-      {sub && <Subscription navigation={navigation} />}
-      {special && <SpecialPickUp navigation={navigation} />}
+      {sub && <Subscription navigation={navigation} route={route} />}
+      {special && <SpecialPickUp navigation={navigation} route={route} />}
     </ScrollView>
   );
 };
