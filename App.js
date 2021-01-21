@@ -6,12 +6,19 @@ import RootNavigation from './src/navigation/RootNavigation';
 import {AppProvider} from './src/Context/AppProvider';
 import {Provider} from 'react-redux';
 import Store from './src/redux/store';
-import {PermissionsAndroid, Platform, Dimensions} from 'react-native';
+import {
+  PermissionsAndroid,
+  Platform,
+  Dimensions,
+  LogBox,
+  YellowBox,
+} from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
 import {PersistGate} from 'redux-persist/integration/react';
 import {persistStore} from 'redux-persist';
 import Geocoder from 'react-native-geocoder';
-
+// LogBox.ignoreLogs('WARNINGS');
+YellowBox.ignoreWarnings(['']);
 let {width, height} = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
 

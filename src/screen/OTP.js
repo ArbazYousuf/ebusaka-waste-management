@@ -50,15 +50,15 @@ const OTP = ({navigation}) => {
   const dispatch = useDispatch();
 
   const onProceed = () => {
-    if (Auth?.user?.otp == value) {
-      let obj = {
-        token: Auth?.user?.token,
-        nav: navigation,
-      };
-      dispatch(AsyncVerifyOtp(obj));
-    } else {
-      ToastError('Invalid OTP');
-    }
+    // if (Auth?.user?.otp == value) {
+    let obj = {
+      token: Auth?.user?.token,
+      nav: navigation,
+    };
+    dispatch(AsyncVerifyOtp(obj));
+    // } else {
+    // ToastError('Invalid OTP');
+    // }
   };
 
   return (

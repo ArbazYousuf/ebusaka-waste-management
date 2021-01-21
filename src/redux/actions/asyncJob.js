@@ -47,7 +47,7 @@ export const AsyncGetMySpecial = createAsyncThunk(
         return await res.data;
       } else {
         ToastError(res.data?.message);
-        // console.log('res', res);
+      // console.log('res', res);
         throw Error(res.data?.message);
       }
     } catch (error) {

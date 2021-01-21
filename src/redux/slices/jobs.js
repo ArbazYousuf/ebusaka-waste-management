@@ -3,6 +3,7 @@ import {
   AsyncGetCompanies,
   AsyncPostSp,
   AsyncPostSub,
+  AsyncGetMySpecial,
 } from '../actions/asyncJob';
 
 export const jobSlice = createSlice({
@@ -12,6 +13,7 @@ export const jobSlice = createSlice({
     isLoading: false,
     error: null,
     mysubscription: [],
+    mySpecial: [],
     // justPostNow: [],
     message: '',
   },
@@ -94,6 +96,26 @@ export const jobSlice = createSlice({
       state.error = '';
     },
     [AsyncPostSp.rejected]: (state, action) => {
+      console.log('rejected-------slice', action);
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+
+    // <-------get my special job----------------->
+
+    [AsyncGetMySpecial.pending]: (state, action) => {
+      console.log('pending', action.payload);
+      state.isLoading = true;
+      state.error = '';
+    },
+    [AsyncGetMySpecial.fulfilled]: (state, action) => {
+      console.log('fullfilled', action.payload);
+
+      state.isLoading = false;
+      state.mySpecial = action.payload;
+      state.error = '';
+    },
+    [AsyncGetMySpecial.rejected]: (state, action) => {
       console.log('rejected-------slice', action);
       state.isLoading = false;
       state.error = action.payload;

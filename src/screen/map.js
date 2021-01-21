@@ -406,7 +406,7 @@ function Map({navigation}) {
 
   const [isModalOpen, setisModalOpen] = useState(false);
 
-  const {location, setlocation} = useContext(AppContext);
+  const {location, setlocation, setaddress} = useContext(AppContext);
 
   const homePlace = {
     description: 'Home',
@@ -464,6 +464,7 @@ function Map({navigation}) {
     setregion((prev) => {
       region;
     });
+    // setlocation(region);
   };
 
   const onRegionChangeComplete = async (region) => {
@@ -472,6 +473,8 @@ function Map({navigation}) {
     let address = await ret[0].formattedAddress;
     await setisLoading(false);
     autoCompleteRef.current.setAddressText(address);
+    setlocation(region);
+    setaddress(address);
   };
 
   const selectLocation = (data, detail) => {

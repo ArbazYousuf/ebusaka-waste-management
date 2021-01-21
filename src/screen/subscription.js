@@ -17,8 +17,9 @@ import MapBox from '../components/MapBox';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppContext} from '../Context/AppProvider';
 import {AsyncPostSub} from '../redux/actions/asyncJob';
+import CustomModal from '../components/modal';
 // import {AsyncGetCompanies} from '../redux/actions/asyncJob';
-// import {unwrapResult} from '@reduxjs/toolkit';
+import {unwrapResult} from '@reduxjs/toolkit';
 
 const PaymentButton = ({color, text, isChecked, image, onChange}) => {
   return (
@@ -101,6 +102,7 @@ function Subscription({navigation, route}) {
     company: false,
     weight: false,
   });
+  const [openModal, setopenModal] = useState(false);
   const {address, location} = useContext(AppContext);
   const dispatch = useDispatch();
   const Jobs = useSelector((state) => state.Jobs);
@@ -140,7 +142,22 @@ function Subscription({navigation, route}) {
       nav: navigation,
     };
 
-    dispatch(AsyncPostSub(obj));
+    dispatch(AsyncPostSub(obj))
+      .then(unwrapResult)
+      .then((res) => {
+        console.log('res', res);
+        if (res.success) {
+          handleModal();
+          setname((prev) => '');
+          setselectedComapny((prev) => '');
+          setnoOfBags((prev) => 0);
+          setweight((prev) => 0);
+        }
+      });
+  };
+
+  const handleModal = () => {
+    setopenModal(!openModal);
   };
 
   // const [companies, setcompanies] = useState([]);
@@ -202,6 +219,7 @@ function Subscription({navigation, route}) {
               Full Name*
             </Text>
             <CustomTextInput
+              value={name}
               placeholder="Please Write Here"
               inputType="default"
               icon="user"
@@ -405,6 +423,7 @@ function Subscription({navigation, route}) {
               No of bags
             </Text>
             <CustomTextInput
+              value={noOfBags}
               placeholder="Please Write Here"
               onChangeText={(num) => setnoOfBags(num)}
               inputType="numeric"
@@ -441,6 +460,7 @@ function Subscription({navigation, route}) {
               Approximately Weight
             </Text>
             <CustomTextInput
+              value={weight}
               placeholder="Please Write Here"
               onChangeText={(num) => setweight(num)}
               inputType="numeric"
@@ -526,6 +546,13 @@ function Subscription({navigation, route}) {
             'Subscribe'
           )}
         </CustomButton>
+        <CustomModal
+          mainHeading="Subscription Activated Successfully"
+          subHeading="subscription created !"
+          buttonText="Continue"
+          handleModal={handleModal}
+          visible={openModal}
+        />
       </View>
     </View>
   );

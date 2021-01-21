@@ -16,14 +16,28 @@ import SpecialPickUpModal from '../modals/specialPickupModal';
 import {useDispatch, useSelector} from 'react-redux';
 import ToastError from '../utils/toastErr';
 import {AsyncGetMySpecial} from '../redux/actions/asyncJob';
+import {unwrapResult} from '@reduxjs/toolkit';
 function SpecialPickUp({navigation, route}) {
   const [openmodal, setopenmodal] = useState(false);
   const [selectedDate, setselectedDate] = useState('');
+  const [myJobs, setmyJobs] = useState([]);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(AsyncGetMySpecial());
+    dispatch(AsyncGetMySpecial())
+      .then(unwrapResult)
+      .then((res) => {
+        console.log('res unwrap', res);
+        if (res.success) {
+          let {jobs} = res;
+          setmyJobs(jobs);
+        }
+      })
+
+      .catch(() => {
+        setmyJobs([]);
+      });
   }, []);
 
   const onAddNewPickUp = () => {
@@ -95,7 +109,8 @@ function SpecialPickUp({navigation, route}) {
           </Text>
         </TouchableOpacity>
       </View>
-      {[...Array(10)].map((val, index) => {
+      {myJobs.map((val, index) => {
+        console.log('val', val);
         return (
           <View
             style={{
@@ -118,7 +133,7 @@ function SpecialPickUp({navigation, route}) {
                   FONTS.h4,
                   {color: 'gray', paddingTop: index > 0 ? 30 : RFValue(30)},
                 ]}>
-                11:00
+                {moment(val?.time).format('HH:mm')}
               </Text>
               <View
                 style={{
@@ -149,7 +164,7 @@ function SpecialPickUp({navigation, route}) {
                 }}></View>
               <View style={{paddingHorizontal: RFValue(20)}}>
                 <Text style={[FONTS.h4, {paddingTop: RFValue(20)}]}>
-                  Household wastes
+                  {val?.jobinfo?.waste_type}
                 </Text>
                 <View
                   style={{
@@ -178,7 +193,7 @@ function SpecialPickUp({navigation, route}) {
                           marginRight: RFValue(12),
                         },
                       ]}>
-                      120 Bags
+                      {val?.jobinfo?.no_of_bags}
                     </Text>
                   </View>
                   <View
@@ -195,9 +210,9 @@ function SpecialPickUp({navigation, route}) {
                     <Text
                       style={[
                         FONTS.p,
-                        {fontSize: RFValue(13), color: theme.COLORS.gray},
+                        {fontSize: RFValue(8), color: theme.COLORS.gray},
                       ]}>
-                      Pickup Address
+                      {val?.jobinfo?.direction?.address.substr(0, 40)}
                     </Text>
                   </View>
                 </View>

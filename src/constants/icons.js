@@ -31,6 +31,7 @@ export const chat = require('../assets/icons/chat.png');
 //profile page icons
 
 export const visa = require('../assets/icons/visa.png');
+export const correct = require('../assets/icons/correct.png');
 
 export default {
   bellNotification,
@@ -62,4 +63,5 @@ export default {
   refer,
   chat,
   visa,
+  correct,
 };

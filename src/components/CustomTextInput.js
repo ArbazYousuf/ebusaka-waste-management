@@ -27,6 +27,7 @@ export default function CustomTextInput({
   cBorderRadius,
   cIconPadding,
   defaultValue,
+  ...props
 }) {
   const [isVisible, setIsVisible] = useState(true);
   const [passwordIcon, setpasswordIcon] = useState('eye');
@@ -71,6 +72,7 @@ export default function CustomTextInput({
         onFocus={onFocus}
         onBlur={onBlur}
         defaultValue={defaultValue}
+        {...props}
       />
       {password && (
         <Icon

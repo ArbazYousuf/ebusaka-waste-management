@@ -19,6 +19,8 @@ import MapBox from '../components/MapBox';
 import {AppContext} from '../Context/AppProvider';
 import {AsyncPostSp} from '../redux/actions/asyncJob';
 import {useDispatch, useSelector} from 'react-redux';
+import CustomModal from '../components/modal';
+import {unwrapResult} from '@reduxjs/toolkit';
 
 function AddSpecialPickUp({navigation, route}) {
   const [nonActiveColor, setactiveColor] = useState(theme.COLORS.lightGray);
@@ -42,6 +44,7 @@ function AddSpecialPickUp({navigation, route}) {
   const [selectedTime, setselectedTime] = useState('');
   const [companies, setcompanies] = useState([]);
   const [name, setname] = useState('');
+  const [openModal, setopenModal] = useState(false);
 
   const {address, location} = useContext(AppContext);
   const dispatch = useDispatch();
@@ -62,6 +65,10 @@ function AddSpecialPickUp({navigation, route}) {
     }));
     setcompanies(companies);
   }, []);
+
+  const handleModal = () => {
+    setopenModal(!openModal);
+  };
 
   const onSubmitSpecial = () => {
     console.warn(address, location);
@@ -99,14 +106,25 @@ function AddSpecialPickUp({navigation, route}) {
       nav: navigation,
     };
 
-    dispatch(AsyncPostSp(obj));
+    dispatch(AsyncPostSp(obj))
+      .then(unwrapResult)
+      .then((res) => {
+        console.log('res', res);
+        if (res.success) {
+          handleModal();
+          setname((prev) => '');
+          setselectedComapny((prev) => '');
+          setnoOfBags((prev) => 0);
+          setweight((prev) => 0);
+        }
+      });
   };
 
   const activeTextStyle = {
     marginBottom: RFValue(4),
     color: theme.COLORS.primary,
   };
-  console.log(route?.params?.date);
+  console.log(noOfBags);
   return (
     <ScrollView>
       <View style={{backgroundColor: 'white', flex: 1}}>
@@ -205,6 +223,7 @@ function AddSpecialPickUp({navigation, route}) {
                 cBorderRadius={5}
                 cIconPadding={10}
                 cWidth={320}
+                value={name}
                 onFocus={() =>
                   setOnActive((prev) => {
                     return {...prev, name: true};
@@ -404,6 +423,7 @@ function AddSpecialPickUp({navigation, route}) {
                 icon="shopping-bag"
                 iconType="FontAwesome"
                 iconColor={theme.COLORS.lightGray}
+                onChangeText={(num) => setnoOfBags(num)}
                 cIconPadding={10}
                 cWidth={320}
                 cBorderRadius={5}
@@ -417,6 +437,7 @@ function AddSpecialPickUp({navigation, route}) {
                     return {...prev, bag: false};
                   })
                 }
+                value={noOfBags}
                 activeColor={onActive.bag ? theme.COLORS.primary : null}
               />
             </View>
@@ -500,6 +521,13 @@ function AddSpecialPickUp({navigation, route}) {
           onChange={onChange}
         />
       )}
+      <CustomModal
+        mainHeading="Job Posted Successfully"
+        subHeading="Special job Added"
+        handleModal={handleModal}
+        visible={openModal}
+        buttonText="Continue"
+      />
     </ScrollView>
   );
 }
