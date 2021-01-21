@@ -1,5 +1,10 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {AsyncLogin, AsyncRegister, AsyncVerifyOtp} from '../actions/asyncAuth';
+import {
+  AsyncLogin,
+  AsyncRegister,
+  AsyncUserUpdate,
+  AsyncVerifyOtp,
+} from '../actions/asyncAuth';
 
 export const authSlice = createSlice({
   name: 'auth',
@@ -90,6 +95,28 @@ export const authSlice = createSlice({
       state.isLogin = true;
     },
     [AsyncVerifyOtp.rejected]: (state, action) => {
+      console.log('rejected slice', action);
+      state.isLoading = false;
+      // state.user = null;
+      state.error = action.error.message;
+    },
+
+    // <-------update me----------------->
+
+    [AsyncUserUpdate.pending]: (state, action) => {
+      console.log('pending', action.payload);
+      state.isLoading = true;
+      state.error = '';
+    },
+    [AsyncUserUpdate.fulfilled]: (state, action) => {
+      console.log('fullfilled', action.payload);
+
+      state.isLoading = false;
+      state.error = '';
+      state.user = action.payload.user;
+      state.isLogin = true;
+    },
+    [AsyncUserUpdate.rejected]: (state, action) => {
       console.log('rejected slice', action);
       state.isLoading = false;
       // state.user = null;

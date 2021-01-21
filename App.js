@@ -18,7 +18,7 @@ import {PersistGate} from 'redux-persist/integration/react';
 import {persistStore} from 'redux-persist';
 import Geocoder from 'react-native-geocoder';
 // LogBox.ignoreLogs('WARNINGS');
-YellowBox.ignoreWarnings(['']);
+// YellowBox.ignoreWarnings(['']);
 let {width, height} = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
 
@@ -108,7 +108,7 @@ function App() {
 
     SplashScreen.hide();
   }, []);
-  console.warn(address);
+  console.log('location', location);
   return (
     <SafeAreaProvider>
       <Provider store={Store}>

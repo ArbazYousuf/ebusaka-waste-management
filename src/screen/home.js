@@ -6,6 +6,7 @@ import {
   FlatList,
   StatusBar,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import {View, Text, Icon} from 'native-base';
 import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
@@ -15,11 +16,15 @@ import {TextInput} from 'react-native-gesture-handler';
 import OrderComponent from '../components/OrderComponent';
 import {AppContext} from '../Context/AppProvider';
 import {useSelector, useDispatch} from 'react-redux';
-import {AsyncGetCompanies} from '../redux/actions/asyncJob';
+import {
+  AsyncGetCompanies,
+  AsyncGetMySubscription,
+} from '../redux/actions/asyncJob';
 // import {unwrapResult} from '@reduxjs/toolkit';
 export default function Home({navigation}) {
   const {location} = useContext(AppContext);
   let Auth = useSelector((state) => state.Auth);
+  let Jobs = useSelector((state) => state.Jobs);
   let dispatch = useDispatch();
   // const [companies, setcompanies] = useState([]);
 
@@ -28,6 +33,7 @@ export default function Home({navigation}) {
 
   useEffect(() => {
     dispatch(AsyncGetCompanies());
+    dispatch(AsyncGetMySubscription());
     // .then(unwrapResult)
     // .then((res) => {
     //   console.log('res', res);
@@ -189,14 +195,18 @@ export default function Home({navigation}) {
           </Text>
         </View>
 
-        <FlatList
-          data={[1, 2, 3]}
-          renderItem={() => (
-            <View style={{justifyContent: 'center', alignItems: 'center'}}>
-              <OrderComponent />
-            </View>
-          )}
-        />
+        {Jobs.isLoading ? (
+          <ActivityIndicator color={theme.COLORS.primary} size="large" />
+        ) : (
+          <FlatList
+            data={Jobs.mySubscriptions}
+            renderItem={({item, index}) => (
+              <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                <OrderComponent {...item} />
+              </View>
+            )}
+          />
+        )}
       </View>
       {/* <View style={{flex: 0.1}} /> */}
     </SafeAreaView>

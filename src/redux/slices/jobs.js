@@ -4,6 +4,7 @@ import {
   AsyncPostSp,
   AsyncPostSub,
   AsyncGetMySpecial,
+  AsyncGetMySubscription,
 } from '../actions/asyncJob';
 
 export const jobSlice = createSlice({
@@ -12,7 +13,7 @@ export const jobSlice = createSlice({
     companies: null,
     isLoading: false,
     error: null,
-    mysubscription: [],
+    mySubscriptions: [],
     mySpecial: [],
     // justPostNow: [],
     message: '',
@@ -112,10 +113,30 @@ export const jobSlice = createSlice({
       console.log('fullfilled', action.payload);
 
       state.isLoading = false;
-      state.mySpecial = action.payload;
+      state.mySpecial = action.payload?.jobs;
       state.error = '';
     },
     [AsyncGetMySpecial.rejected]: (state, action) => {
+      console.log('rejected-------slice', action);
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+
+    // <-------get my subscriptions job----------------->
+
+    [AsyncGetMySubscription.pending]: (state, action) => {
+      console.log('pending', action.payload);
+      state.isLoading = true;
+      state.error = '';
+    },
+    [AsyncGetMySubscription.fulfilled]: (state, action) => {
+      console.log('fullfilled', action.payload);
+
+      state.isLoading = false;
+      state.mySubscriptions = action.payload?.jobs;
+      state.error = '';
+    },
+    [AsyncGetMySubscription.rejected]: (state, action) => {
       console.log('rejected-------slice', action);
       state.isLoading = false;
       state.error = action.payload;

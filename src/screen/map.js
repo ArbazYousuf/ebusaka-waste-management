@@ -473,7 +473,22 @@ function Map({navigation}) {
     let address = await ret[0].formattedAddress;
     await setisLoading(false);
     autoCompleteRef.current.setAddressText(address);
+    console.log('region', region);
+    // let r = {
+    //   latitude: region.latitude,
+    //   longitude: region.longitude,
+    //   latitudeDelta: region.latitudeDelta,
+    //   longitudeDelta: region.longitudeDelta,
+    // };
+    console.log('r', r);
     setlocation(region);
+    // setlocation((prev)=>{
+
+    //   latitude: position.coords.latitude,
+    //   longitude: position.coords.longitude,
+    //   latitudeDelta: LATITUDE_DELTA,
+    //   longitudeDelta: LONGITUDE_DELTA,
+    // });
     setaddress(address);
   };
 

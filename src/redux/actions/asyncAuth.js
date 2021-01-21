@@ -72,6 +72,29 @@ export const AsyncVerifyOtp = createAsyncThunk(
   },
 );
 
+export const AsyncUserUpdate = createAsyncThunk(
+  'auth/userUpdate',
+  async (params, ThunkApi) => {
+    console.warn('params', params);
+    let {data, token} = params;
+    console.log(token);
+    try {
+      const res = await put('/user/', data, '', token);
+      if (res.data?.success) {
+        // console.log('res', res.data);
+        return await res.data;
+      } else {
+        ToastError(res.data?.message);
+        // console.log('res', res);
+        throw Error(res.data?.message);
+      }
+    } catch (error) {
+      // console.log('error', error.message);
+      return ThunkApi.rejectWithValue(error?.message);
+    }
+  },
+);
+
 // export const AsyncRegister = createAsyncThunk(
 //   'auth/signup',
 //   async (params, ThunkApi) => {

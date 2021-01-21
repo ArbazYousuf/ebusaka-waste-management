@@ -15,6 +15,7 @@ import Header from '../components/header';
 import {AppContext} from '../Context/AppProvider';
 import LinearGradient from 'react-native-linear-gradient';
 import {FlatList} from 'react-native-gesture-handler';
+import {useSelector} from 'react-redux';
 
 const ShowMenu = ({icon, name, nav}) => {
   console.warn(icon, name);
@@ -57,6 +58,8 @@ const ShowMenu = ({icon, name, nav}) => {
 };
 
 export default function Profile({navigation}) {
+  const Auth = useSelector(({Auth}) => Auth);
+
   return (
     <SafeAreaView style={{flex: 1}}>
       <ScrollView contentContainerStyle={{flexGrow: 1}}>
@@ -90,10 +93,10 @@ export default function Profile({navigation}) {
                   }}></View>
                 <View style={{padding: RFValue(10)}}>
                   <Text style={[FONTS.h4, {color: theme.COLORS.white}]}>
-                    Lennon Austin
+                    {Auth.user.fullname}
                   </Text>
                   <Text style={[FONTS.p, {color: theme.COLORS.white}]}>
-                    admin@demo.com
+                    {Auth.user.email}
                   </Text>
                 </View>
               </View>

@@ -7,10 +7,10 @@ import {
 } from 'react-native';
 import {View, Text, Icon, Row} from 'native-base';
 import {RFValue} from 'react-native-responsive-fontsize';
-import SafeAreaView from 'react-native-safe-area-view';
-import CustomButton from '../components/CustomButton';
+import {images} from '../constants';
+import FastImage from 'react-native-fast-image';
 
-export default function OrderComponent() {
+export default function OrderComponent({jobinfo}) {
   return (
     <View style={{marginTop: RFValue(20)}}>
       <View
@@ -32,11 +32,24 @@ export default function OrderComponent() {
         }}>
         <View
           style={{
-            backgroundColor: 'blue',
-            margin: RFValue(15),
             width: RFValue(60),
             borderRadius: RFValue(10),
-          }}></View>
+            margin: RFValue(15),
+          }}>
+          {jobinfo?.company?.picture ? (
+            <FastImage
+              source={{uri: jobinfo?.company?.picture}}
+              style={{width: undefined, height: undefined, flex: 1}}
+              resizeMode="contain"
+            />
+          ) : (
+            <Image
+              source={images.emptyImage}
+              style={{width: undefined, height: undefined, flex: 1}}
+              resizeMode="contain"
+            />
+          )}
+        </View>
         <View style={{marginTop: RFValue(12), flex: 1}}>
           <View
             style={{
@@ -44,7 +57,7 @@ export default function OrderComponent() {
               justifyContent: 'space-between',
             }}>
             <Text style={{fontSize: RFValue(13), fontFamily: 'Roboto-Bold'}}>
-              Company Name
+              {jobinfo?.company?.name}
             </Text>
             <Text
               style={{
@@ -74,13 +87,17 @@ export default function OrderComponent() {
                 fontSize: RFValue(11),
                 fontFamily: 'Roboto-Regular',
                 color: '#707070',
+                marginRight: RFValue(12),
               }}>
-              Address of the company
+              {jobinfo?.company?.direction?.address ?? 'Location not available'}
             </Text>
             <Icon
-              style={{fontSize: RFValue(15), color: '#707070'}}
+              style={{
+                fontSize: RFValue(15),
+                color: '#707070',
+              }}
               type="EvilIcons"
-              name="location"
+              name="credit-card"
             />
             <Text
               style={{
@@ -96,11 +113,17 @@ export default function OrderComponent() {
               flexDirection: 'row',
               marginTop: RFValue(5),
               marginLeft: RFValue(-5),
+              alignItems: 'center',
+              // backgroundColor: 'yellow',
             }}>
             <Icon
-              style={{fontSize: RFValue(15), color: '#707070'}}
-              type="EvilIcons"
-              name="location"
+              style={{
+                fontSize: RFValue(15),
+                color: '#707070',
+                marginRight: RFValue(5),
+              }}
+              type="SimpleLineIcons"
+              name="bag"
             />
             <Text
               style={{
@@ -108,7 +131,7 @@ export default function OrderComponent() {
                 fontFamily: 'Roboto-Regular',
                 color: '#707070',
               }}>
-              120 Bags
+              {jobinfo?.no_of_bags} Bags
             </Text>
           </View>
         </View>

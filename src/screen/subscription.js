@@ -172,13 +172,15 @@ function Subscription({navigation, route}) {
   // console.log(location);
   console.log('address', address);
   useEffect(() => {
-    let companies =
-      Jobs.companies &&
-      Jobs.companies.map(({_id, name}) => ({
-        label: name,
-        value: _id,
-      }));
-    setcompanies(companies);
+    if (Jobs?.companies.length > 0) {
+      let companies =
+        Jobs.companies &&
+        Jobs.companies.map(({_id, name}) => ({
+          label: name,
+          value: _id,
+        }));
+      setcompanies(companies);
+    }
   }, []);
 
   console.log('state---', companies);

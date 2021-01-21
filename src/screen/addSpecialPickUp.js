@@ -69,6 +69,7 @@ function AddSpecialPickUp({navigation, route}) {
   const handleModal = () => {
     setopenModal(!openModal);
   };
+  console.log('address', address);
 
   const onSubmitSpecial = () => {
     console.warn(address, location);
@@ -516,7 +517,7 @@ function AddSpecialPickUp({navigation, route}) {
           testID="dateTimePicker"
           value={time}
           mode="time"
-          is24Hour={true}
+          // is24Hour={true}
           display="default"
           onChange={onChange}
         />

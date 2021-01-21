@@ -47,7 +47,35 @@ export const AsyncGetMySpecial = createAsyncThunk(
         return await res.data;
       } else {
         ToastError(res.data?.message);
-      // console.log('res', res);
+        // console.log('res', res);
+        throw Error(res.data?.message);
+      }
+    } catch (error) {
+      // console.log('error', error.message);
+      return ThunkApi.rejectWithValue(error?.message);
+    }
+  },
+);
+
+export const AsyncGetMySubscription = createAsyncThunk(
+  'jobs/mySubscriptions',
+  async (params, ThunkApi) => {
+    console.warn('params', params);
+    let state = ThunkApi.getState();
+    let token = state.Auth.token;
+    let id = state.Auth.user?._id;
+    console.warn('token', state.Auth.token);
+    // let {phone, nav} = params;
+
+    try {
+      const res = await get(`/subsjob/me/${id}`, token);
+      if (res.data?.success) {
+        // console.log('res', res.data);
+        // nav.navigate('OTP');
+        return await res.data;
+      } else {
+        ToastError(res.data?.message);
+        // console.log('res', res);
         throw Error(res.data?.message);
       }
     } catch (error) {
@@ -68,6 +96,7 @@ export const AsyncPostSub = createAsyncThunk(
       if (res.data?.success) {
         console.log('res', res.data);
         // nav.navigate('OTP');
+        ThunkApi.dispatch(AsyncGetMySubscription());
         return await res.data;
       } else {
         ToastError(res.data?.message);
@@ -91,6 +120,8 @@ export const AsyncPostSp = createAsyncThunk(
       if (res.data?.success) {
         console.log('res', res.data);
         // nav.navigate('OTP');
+        ThunkApi.dispatch(AsyncGetMySpecial());
+        // nav.goBack();
         return await res.data;
       } else {
         ToastError(res.data?.message);
