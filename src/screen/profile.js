@@ -93,10 +93,10 @@ export default function Profile({navigation}) {
                   }}></View>
                 <View style={{padding: RFValue(10)}}>
                   <Text style={[FONTS.h4, {color: theme.COLORS.white}]}>
-                    {Auth.user.fullname}
+                    {Auth?.user?.fullname}
                   </Text>
                   <Text style={[FONTS.p, {color: theme.COLORS.white}]}>
-                    {Auth.user.email}
+                    {Auth?.user?.email}
                   </Text>
                 </View>
               </View>

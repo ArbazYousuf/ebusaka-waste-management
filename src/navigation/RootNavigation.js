@@ -114,7 +114,7 @@ function FooterTab() {
 }
 
 const Left = ({onPress}) => {
-  console.log('onPress', onPress);
+  // console.log('onPress', onPress);
   return (
     <TouchableHighlight onPress={onPress}>
       <Icon
@@ -133,7 +133,7 @@ const Left = ({onPress}) => {
 };
 
 const Right = ({onPress}) => {
-  console.log('onPress', onPress);
+  // console.log('onPress', onPress);
   return (
     <TouchableHighlight onPress={onPress}>
       <Text
