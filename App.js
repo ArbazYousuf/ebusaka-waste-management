@@ -6,17 +6,12 @@ import RootNavigation from './src/navigation/RootNavigation';
 import {AppProvider} from './src/Context/AppProvider';
 import {Provider} from 'react-redux';
 import Store from './src/redux/store';
-import {
-  PermissionsAndroid,
-  Platform,
-  Dimensions,
-  LogBox,
-  YellowBox,
-} from 'react-native';
+import {PermissionsAndroid, Platform, Dimensions, LogBox} from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
 import {PersistGate} from 'redux-persist/integration/react';
 import {persistStore} from 'redux-persist';
 import Geocoder from 'react-native-geocoder';
+import OneSignal from 'react-native-onesignal';
 // LogBox.ignoreLogs('WARNINGS');
 // YellowBox.ignoreWarnings(['']);
 let {width, height} = Dimensions.get('window');
@@ -103,10 +98,68 @@ function App() {
   };
   let persistor = persistStore(Store);
 
-  React.useEffect(() => {
+  React.useEffect(async () => {
     getPermission();
 
     SplashScreen.hide();
+
+    /* O N E S I G N A L   S E T U P */
+    OneSignal.setAppId('66fc683b-7eb5-4186-8f04-af71ce56f49a');
+    OneSignal.setLogLevel(6, 0);
+    OneSignal.setRequiresUserPrivacyConsent(this.state.requiresPrivacyConsent);
+    OneSignal.promptForPushNotificationsWithUserResponse((response) => {
+      this.OSLog('Prompt response:', response);
+    });
+
+    /* O N E S I G N A L  H A N D L E R S */
+    OneSignal.setNotificationWillShowInForegroundHandler(
+      (notifReceivedEvent) => {
+        this.OSLog(
+          'OneSignal: notification will show in foreground:',
+          notifReceivedEvent,
+        );
+        let notif = notifReceivedEvent.getNotification();
+
+        const button1 = {
+          text: 'Cancel',
+          onPress: () => {
+            notifReceivedEvent.complete();
+          },
+          style: 'cancel',
+        };
+
+        const button2 = {
+          text: 'Complete',
+          onPress: () => {
+            notifReceivedEvent.complete(notif);
+          },
+        };
+
+        Alert.alert('Complete notification?', 'Test', [button1, button2], {
+          cancelable: true,
+        });
+      },
+    );
+    OneSignal.setNotificationOpenedHandler((notification) => {
+      this.OSLog('OneSignal: notification opened:', notification);
+    });
+    OneSignal.setInAppMessageClickHandler((event) => {
+      this.OSLog('OneSignal IAM clicked:', event);
+    });
+    OneSignal.addEmailSubscriptionObserver((event) => {
+      this.OSLog('OneSignal: email subscription changed: ', event);
+    });
+    OneSignal.addSubscriptionObserver((event) => {
+      this.OSLog('OneSignal: subscription changed:', event);
+      this.setState({isSubscribed: event.to.isSubscribed});
+    });
+    OneSignal.addPermissionObserver((event) => {
+      this.OSLog('OneSignal: permission changed:', event);
+    });
+
+    const deviceState = await OneSignal.getDeviceState();
+
+    console.warn('state', deviceState);
   }, []);
   console.log('location', location);
   return (

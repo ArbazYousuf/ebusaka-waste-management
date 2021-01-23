@@ -1,16 +1,18 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
-import {icons} from '../constants';
-import {Image, Platform} from 'react-native';
+import {FONTS, icons, theme} from '../constants';
+import {Image, Platform, Text, View} from 'react-native';
 import {RFValue} from 'react-native-responsive-fontsize';
 import {AppContext} from '../Context/AppProvider';
 import Geolocation from '@react-native-community/geolocation';
+import CustomButton from './CustomButton';
 
 const GOOGLE_MAPS_APIKEY = 'AIzaSyB1KoK7KQe0YzwScTNjC7lHRSi7my056bk';
 
 const MapBox = (props) => {
   const {location, setlocation} = useContext(AppContext);
+  const [isLocation, setisLocation] = useState(false);
 
   const origin = {
     latitude: 28.450627,
@@ -22,7 +24,16 @@ const MapBox = (props) => {
     longitude: -16.269045,
   };
 
-  console.warn(location);
+  useEffect(() => {
+    if (location) {
+      setisLocation(true);
+    } else {
+      setisLocation(false);
+      getPermission();
+    }
+  }, []);
+
+  // console.warn(location);
 
   const getPermission = async () => {
     // this.CheckLocation();
@@ -79,7 +90,7 @@ const MapBox = (props) => {
     // );
   };
 
-  return location ? (
+  return isLocation ? (
     <>
       <MapView
         style={{width: '100%', height: '100%'}}
@@ -88,7 +99,7 @@ const MapBox = (props) => {
         //   initialCamera={location}
         //   camera={location}
       >
-        <MapView.Marker coordinate={location}>
+        <MapView.Marker coordinate={location ? location : origin}>
           <Image
             source={icons.mapMarker}
             resizeMode="contain"
@@ -113,7 +124,24 @@ const MapBox = (props) => {
       </MapView>
     </>
   ) : (
-    getPermission()
+    // getPermission()
+    <View
+      style={{
+        justifyContent: 'center',
+        alignItems: 'center',
+        // backgroundColor: theme.COLORS.primary,
+        // width:RFValue
+      }}>
+      {/* <Text style={[FONTS.h3, {color: theme.COLORS.primary}]}>
+        Enable Location
+      </Text> */}
+      <CustomButton
+        color={theme.COLORS.primary}
+        onPress={getPermission}
+        size="sm">
+        Enable Location
+      </CustomButton>
+    </View>
   );
 };
 
