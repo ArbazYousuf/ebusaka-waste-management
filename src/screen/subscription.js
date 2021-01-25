@@ -252,7 +252,6 @@ function Subscription({navigation, route}) {
                 justifyContent: 'space-around',
                 // backgroundColor: 'yellow',
                 width: RFValue(350),
-                height: RFValue(50),
                 alignItems: 'center',
                 marginTop: RFValue(-20),
               }}>
@@ -301,7 +300,7 @@ function Subscription({navigation, route}) {
           </View>
         </View>
       </View>
-      <View style={{height: 500}}>
+      <View style={{}}>
         <View style={{padding: RFValue(10)}}>
           <Text style={[FONTS.h3, {}]}>Choose Service</Text>
         </View>
@@ -318,7 +317,6 @@ function Subscription({navigation, route}) {
             elevation: 9,
             backgroundColor: theme.COLORS.white,
             width: RFValue(350),
-            height: RFValue(380),
             borderRadius: 10,
             alignSelf: 'center',
             alignItems: 'center',

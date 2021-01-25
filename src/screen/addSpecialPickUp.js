@@ -179,7 +179,7 @@ function AddSpecialPickUp({navigation, route}) {
           </View>
         </View>
 
-        <View style={{height: 400, justifyContent: 'center'}}>
+        <View style={{justifyContent: 'center'}}>
           <View style={{padding: RFValue(10)}}>
             <Text style={[FONTS.h3, {}]}>Personal Information</Text>
           </View>
@@ -196,7 +196,6 @@ function AddSpecialPickUp({navigation, route}) {
               elevation: 9,
               backgroundColor: theme.COLORS.white,
               width: RFValue(350),
-              height: RFValue(280),
               borderRadius: 10,
               alignSelf: 'center',
               alignItems: 'center',
@@ -295,7 +294,7 @@ function AddSpecialPickUp({navigation, route}) {
             </View>
           </View>
         </View>
-        <View style={{height: 550}}>
+        <View style={{marginBottom: 30}}>
           <View style={{padding: RFValue(10)}}>
             <Text style={[FONTS.h3, {}]}>Choose Service</Text>
           </View>
@@ -312,7 +311,6 @@ function AddSpecialPickUp({navigation, route}) {
               elevation: 9,
               backgroundColor: theme.COLORS.white,
               width: RFValue(350),
-              height: RFValue(400),
               borderRadius: 10,
               alignSelf: 'center',
               alignItems: 'center',
