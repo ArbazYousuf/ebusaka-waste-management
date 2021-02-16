@@ -17,6 +17,8 @@ import {useSelector} from 'react-redux';
 import {AsyncUserUpdate} from '../redux/actions/asyncAuth';
 import {useDispatch} from 'react-redux';
 import {unwrapResult} from '@reduxjs/toolkit';
+import ImagePicker from 'react-native-image-picker';
+import {API_URL} from '../services/api-call';
 
 const ShowDetails = ({title, value, onChangeText, isEdit}) => {
   return (
@@ -77,6 +79,10 @@ export default function EditProfile() {
   const [phone, setphone] = useState(Auth?.user?.phone);
   const [address, setaddress] = useState(Auth?.user?.address);
   const [isOpen, setisOpen] = useState(false);
+  const [imageUrl, setimageUrl] = useState('');
+  const [image, setimage] = useState('');
+  const [isLoading, setisLoading] = useState(false);
+
   const dispatch = useDispatch();
 
   const handleEdit = () => {
@@ -101,6 +107,102 @@ export default function EditProfile() {
     } else {
       setisEdit(!isEdit);
     }
+  };
+
+  launchCamera = (cond) => {
+    let options = {
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+    };
+    if (cond == 'camera') {
+      ImagePicker.launchCamera(options, (response) => imageSaver(response));
+    } else {
+      ImagePicker.launchImageLibrary(options, (response) =>
+        imageSaver(response),
+      );
+    }
+  };
+
+  imageSaver = (response) => {
+    if (response.didCancel) {
+    } else if (response.error) {
+      ToastError('ImagePicker Error: ' + response.error);
+    } else if (response.customButton) {
+      ToastError('User tapped custom button: ' + response.customButton);
+      alert(response.customButton);
+    } else {
+      // let source = response;
+      // You can also display the image using data:
+      let source = {uri: 'data:image/jpeg;base64,' + response.data};
+
+      let path = response.uri;
+      if (Platform.OS === 'ios') {
+        path = '~' + path.substring(path.indexOf('/Documents'));
+      }
+      if (!response.fileName) response.fileName = path.split('/').pop();
+
+      setimageUrl(source);
+      setimage(response);
+    }
+  };
+
+  handleUploadPhoto = () => {
+    // const {event} = this.props.navigation.state.params;
+    // const {addPaymentInfo, user, token, navigation} = props;
+    // const {value, image} = this.state;
+    // let {email, userId, userName, _id} = user;
+
+    // this.setState({isLoading: true});
+    fetch(`${API_URL}api/image/upload`, {
+      method: 'POST',
+      body: this.createFormData(image, {userId: '123'}),
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        // eventId: event._id,
+        // eventName: event.english_title,
+        // userName,
+        // email,
+        // userId,
+        // price,
+        // quentity: qty,
+        // _id,
+        // chineseName: chineseFirstName + ' ' + chineseLastName,
+        // firstPurchase: payments && payments.length > 0 ? false : true,
+        // eventNameTrd: event.trad_title,
+        // post(
+        //   'api/payment/info',
+        //   {
+        //     cardImg: response.file.filename,
+        //     extraInfo: value,
+        //     eventId: event._id,
+        //     eventName: event.english_title,
+        //     eventNameTrd: event?.trad_title,
+        //     userName,
+        //     email,
+        //     userId,
+        //     price: 0,
+        //     quentity: 1,
+        //     _id,
+        //     firstPurchase: true,
+        //   },
+        //   token,
+        // )
+        //   .then(({data}) => {
+        //     ToastError('You have purchase Ticket successfully');
+        //     this.props.navigation.navigate('Pocket');
+        //     this.setState({isLoading: false});
+        //   })
+        //   .catch((err) => {
+        //     this.setState({isLoading: false});
+        //   });
+      })
+      .catch((error) => {
+        // this.setState({isLoading: false});
+        setisLoading(false);
+      });
   };
 
   useEffect(() => {

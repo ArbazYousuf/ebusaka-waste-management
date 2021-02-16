@@ -2,8 +2,10 @@
 
 buildscript {
     ext {
+     
+//image picker causes issues to build project thats why we have to increase the sdk version from 16 to 21 the sdk version.
         buildToolsVersion = "29.0.2"
-        minSdkVersion = 16
+        minSdkVersion = 21
         compileSdkVersion = 29
         targetSdkVersion = 29
     }
