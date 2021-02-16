@@ -64,7 +64,7 @@ export default function Home({navigation}) {
                 fontFamily: 'Roboto-Regular',
                 color: '#2D2D2D',
               }}>
-              Hi, Riley Cooper
+              Hi, {Auth?.user?.fullname}
             </Text>
             <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
               <Text

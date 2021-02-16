@@ -6,13 +6,13 @@ import {Image, Platform, Text, View} from 'react-native';
 import {RFValue} from 'react-native-responsive-fontsize';
 import {AppContext} from '../Context/AppProvider';
 import Geolocation from '@react-native-community/geolocation';
-import CustomButton from './CustomButton';
+import CustumeMap from '../utils/custumeMap';
 
 const GOOGLE_MAPS_APIKEY = 'AIzaSyB1KoK7KQe0YzwScTNjC7lHRSi7my056bk';
 
 const MapBox = (props) => {
   const {location, setlocation} = useContext(AppContext);
-  const [isLocation, setisLocation] = useState(false);
+  console.log(location);
 
   const origin = {
     latitude: 28.450627,
@@ -96,6 +96,7 @@ const MapBox = (props) => {
         style={{width: '100%', height: '100%'}}
         provider={PROVIDER_GOOGLE}
         initialRegion={location}
+        customMapStyle={CustumeMap}
         //   initialCamera={location}
         //   camera={location}
       >
