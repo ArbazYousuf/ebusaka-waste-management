@@ -7,11 +7,13 @@ import {RFValue} from 'react-native-responsive-fontsize';
 import {AppContext} from '../Context/AppProvider';
 import Geolocation from '@react-native-community/geolocation';
 import CustumeMap from '../utils/custumeMap';
+import CustomButton from '../components/CustomButton';
 
 const GOOGLE_MAPS_APIKEY = 'AIzaSyB1KoK7KQe0YzwScTNjC7lHRSi7my056bk';
 
 const MapBox = (props) => {
   const {location, setlocation} = useContext(AppContext);
+  const [isLocation, setisLocation] = useState('');
   console.log(location);
 
   const origin = {
