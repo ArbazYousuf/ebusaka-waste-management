@@ -7,17 +7,17 @@ import {
   StatusBar,
   TextInput,
   Keyboard,
+  ActivityIndicator,
 } from 'react-native';
 import {View, Text, Icon, Row} from 'native-base';
 import {RFValue} from 'react-native-responsive-fontsize';
 import SafeAreaView from 'react-native-safe-area-view';
-import CustomButton from '../components/CustomButton';
 import {FONTS, icons, images, theme} from '../constants';
 import {useSelector} from 'react-redux';
 import {AsyncUserUpdate} from '../redux/actions/asyncAuth';
 import {useDispatch} from 'react-redux';
 import {unwrapResult} from '@reduxjs/toolkit';
-import ImagePicker from 'react-native-image-picker';
+import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import {API_URL} from '../services/api-call';
 
 const ShowDetails = ({title, value, onChangeText, isEdit}) => {
@@ -109,23 +109,7 @@ export default function EditProfile() {
     }
   };
 
-  launchCamera = (cond) => {
-    let options = {
-      storageOptions: {
-        skipBackup: true,
-        path: 'images',
-      },
-    };
-    if (cond == 'camera') {
-      ImagePicker.launchCamera(options, (response) => imageSaver(response));
-    } else {
-      ImagePicker.launchImageLibrary(options, (response) =>
-        imageSaver(response),
-      );
-    }
-  };
-
-  imageSaver = (response) => {
+  const imageSaver = (response) => {
     if (response.didCancel) {
     } else if (response.error) {
       ToastError('ImagePicker Error: ' + response.error);
@@ -145,63 +129,67 @@ export default function EditProfile() {
 
       setimageUrl(source);
       setimage(response);
+      handleUploadPhoto(response);
     }
   };
 
-  handleUploadPhoto = () => {
-    // const {event} = this.props.navigation.state.params;
-    // const {addPaymentInfo, user, token, navigation} = props;
-    // const {value, image} = this.state;
-    // let {email, userId, userName, _id} = user;
+  const launchCamera = (cond) => {
+    let options = {
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+    };
+    // if (cond == 'camera') {
+    //   ImagePicker.launchCamera(options, (response) => imageSaver(response));
+    // } else {
+    launchImageLibrary(options, (response) => imageSaver(response));
 
-    // this.setState({isLoading: true});
-    fetch(`${API_URL}api/image/upload`, {
+    // }
+  };
+
+  const createFormData = (photo, body) => {
+    const data = new FormData();
+    data.append('file', {
+      name: photo.fileName,
+      type: photo.type,
+      uri:
+        Platform.OS === 'android'
+          ? photo.uri
+          : photo.uri.replace('file://', ''),
+    });
+
+    Object.keys(body).forEach((key) => {
+      data.append(key, body[key]);
+    });
+    return data;
+  };
+
+  const handleUploadPhoto = (image) => {
+    setisLoading(true);
+    fetch(`${API_URL}/upload/file`, {
       method: 'POST',
-      body: this.createFormData(image, {userId: '123'}),
+      body: createFormData(image, {userId: '123'}),
     })
       .then((response) => response.json())
       .then((response) => {
-        // eventId: event._id,
-        // eventName: event.english_title,
-        // userName,
-        // email,
-        // userId,
-        // price,
-        // quentity: qty,
-        // _id,
-        // chineseName: chineseFirstName + ' ' + chineseLastName,
-        // firstPurchase: payments && payments.length > 0 ? false : true,
-        // eventNameTrd: event.trad_title,
-        // post(
-        //   'api/payment/info',
-        //   {
-        //     cardImg: response.file.filename,
-        //     extraInfo: value,
-        //     eventId: event._id,
-        //     eventName: event.english_title,
-        //     eventNameTrd: event?.trad_title,
-        //     userName,
-        //     email,
-        //     userId,
-        //     price: 0,
-        //     quentity: 1,
-        //     _id,
-        //     firstPurchase: true,
-        //   },
-        //   token,
-        // )
-        //   .then(({data}) => {
-        //     ToastError('You have purchase Ticket successfully');
-        //     this.props.navigation.navigate('Pocket');
-        //     this.setState({isLoading: false});
-        //   })
-        //   .catch((err) => {
-        //     this.setState({isLoading: false});
-        //   });
+        if (response.success) {
+          let obj = {
+            data: {
+              picture: `${API_URL}/upload/${response?.url}`,
+            },
+            token: Auth.token,
+          };
+          dispatch(AsyncUserUpdate(obj));
+          setisLoading(false);
+        } else {
+          setisLoading(false);
+          ToastError('Failed');
+        }
       })
       .catch((error) => {
-        // this.setState({isLoading: false});
         setisLoading(false);
+        ToastError(error);
       });
   };
 
@@ -223,36 +211,95 @@ export default function EditProfile() {
       <KeyboardAvoidingView style={{flex: 1}}>
         <View
           style={{
-            //   backgroundColor: 'red',
+            // backgroundColor: 'red',
             flex: 0.2,
             justifyContent: 'center',
             padding: RFValue(10),
+            // alignItems: 'center',
           }}>
-          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
             <View>
               <Text style={[FONTS.h3]}> {Auth?.user?.fullname}</Text>
               <Text>{Auth?.user?.email}</Text>
             </View>
-
-            <View
-              style={{
-                width: RFValue(50),
-                height: RFValue(50),
-                borderRadius: RFValue(25),
-              }}>
-              <Image
-                source={images.emptyImage}
-                style={{width: undefined, height: undefined, flex: 1}}
-                resizeMode="contain"
-              />
-            </View>
-            {/* <View
-            style={{
-              backgroundColor: 'yellow',
-              width: RFValue(50),
-              height: RFValue(50),
-              borderRadius: RFValue(25),
-            }}></View> */}
+            <TouchableOpacity
+              onPress={launchCamera}
+              style={{padding: RFValue(5)}}>
+              <View
+                style={{
+                  width: RFValue(80),
+                  height: RFValue(80),
+                  borderRadius: RFValue(50),
+                  // backgroundColor: 'red',
+                  borderColor: theme.COLORS.primary,
+                  borderWidth: 2,
+                }}>
+                {isLoading ? (
+                  <View
+                    style={{
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      // backgroundColor: 'red',
+                      flex: 1,
+                    }}>
+                    <ActivityIndicator color={theme.COLORS.primary} size={20} />
+                  </View>
+                ) : (
+                  <>
+                    <Image
+                      source={
+                        Auth.user.picture
+                          ? {uri: Auth.user.picture}
+                          : images.emptyImage
+                      }
+                      style={{
+                        width: undefined,
+                        height: undefined,
+                        flex: 1,
+                        borderRadius: RFValue(50),
+                      }}
+                      resizeMode="cover"
+                    />
+                    <Icon
+                      style={{
+                        fontSize: RFValue(14),
+                        marginRight: RFValue(4),
+                        position: 'absolute',
+                        bottom: RFValue(2),
+                        alignSelf: 'center',
+                      }}
+                      name="upload"
+                      type="AntDesign"
+                    />
+                  </>
+                )}
+              </View>
+              {/* <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  
+                  alignSelf: 'center',
+                  // position: 'absolute',
+                  marginTop: RFValue(5),
+                  // backgroundColor: 'yellow',
+                  // width: RFValue(55),
+                  // height: RFValue(20),
+                  borderRadius: RFValue(5),
+                  borderBottomRightRadius: RFValue(50),
+                  borderBottomLeftRadius: RFValue(50),
+                }}>
+             
+                <Text style={{fontSize: 14, fontFamily: 'Roboto-Bold'}}>
+                  Upload Image
+                </Text>
+              </View> */}
+            </TouchableOpacity>
           </View>
         </View>
         <View

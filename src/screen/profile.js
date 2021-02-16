@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {Icon, Input} from 'native-base';
-import {FONTS, icons, theme} from '../constants';
+import {FONTS, icons, images, theme} from '../constants';
 import Header from '../components/header';
 import {AppContext} from '../Context/AppProvider';
 import LinearGradient from 'react-native-linear-gradient';
@@ -90,7 +90,22 @@ export default function Profile({navigation}) {
                     width: 60,
                     height: 60,
                     borderRadius: 30,
-                  }}></View>
+                  }}>
+                  <Image
+                    source={
+                      Auth.user.picture
+                        ? {uri: Auth.user.picture}
+                        : images.emptyImage
+                    }
+                    style={{
+                      width: undefined,
+                      height: undefined,
+                      flex: 1,
+                      borderRadius: RFValue(50),
+                    }}
+                    resizeMode="cover"
+                  />
+                </View>
                 <View style={{padding: RFValue(10)}}>
                   <Text style={[FONTS.h4, {color: theme.COLORS.white}]}>
                     {Auth?.user?.fullname}
