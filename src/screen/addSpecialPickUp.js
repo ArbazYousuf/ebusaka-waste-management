@@ -72,7 +72,8 @@ function AddSpecialPickUp({navigation, route}) {
   console.log('address', address);
 
   const onSubmitSpecial = () => {
-    console.warn(address, location);
+    // console.warn(address, location);
+
     // "user": "5ffd9c7174ab7b3bc22c27e2",
     // "fullname": "Muhammad Arbaz",
     // "direction": {

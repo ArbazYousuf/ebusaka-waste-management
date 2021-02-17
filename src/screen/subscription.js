@@ -16,7 +16,7 @@ import DropDownPicker from 'react-native-custom-dropdown';
 import MapBox from '../components/MapBox';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppContext} from '../Context/AppProvider';
-import {AsyncPostSub} from '../redux/actions/asyncJob';
+import {AsyncPostSub, AsyncGetCompanies} from '../redux/actions/asyncJob';
 import CustomModal from '../components/modal';
 // import {AsyncGetCompanies} from '../redux/actions/asyncJob';
 import {unwrapResult} from '@reduxjs/toolkit';
@@ -181,9 +181,9 @@ function Subscription({navigation, route}) {
         }));
       setcompanies(companies);
     }
-  }, []);
+  }, [navigation]);
 
-  console.log('state---', companies);
+  console.log('state---', address);
   return (
     <View style={{backgroundColor: 'white', flex: 1}}>
       {/* <Header onChange={(val) => console.warn(val)} /> */}

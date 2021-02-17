@@ -39,6 +39,7 @@ const MapBox = (props) => {
 
   const getPermission = async () => {
     // this.CheckLocation();
+    // alert('hello');
 
     if (Platform.OS === 'android') {
       try {
@@ -50,7 +51,11 @@ const MapBox = (props) => {
             buttonPositive: 'ok',
           },
         );
+
+        alert('passed');
+
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          alert('passed');
           CheckLocation();
         } else {
           return;
@@ -140,7 +145,7 @@ const MapBox = (props) => {
       </Text> */}
       <CustomButton
         color={theme.COLORS.primary}
-        onPress={getPermission}
+        onPress={() => getPermission()}
         size="sm">
         Enable Location
       </CustomButton>

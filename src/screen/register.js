@@ -246,17 +246,29 @@ export default function Registration({navigation}) {
                     setFormattedValue(text);
                   }}
                   containerStyle={{
+                    borderColor: show
+                      ? theme.COLORS.primary
+                      : theme.COLORS.lightGray,
                     backgroundColor: '#FFFFFF',
                     borderRadius: RFValue(10),
                     borderWidth: 1,
-                    borderColor: onActive.phone
-                      ? theme.COLORS.primary
-                      : theme.COLORS.lightGray,
                     width: RFValue(320),
                     height: RFValue(50),
                     marginBottom: 20,
                     flexDirection: 'row',
                     alignItems: 'center',
+                    padding: RFValue(10),
+                    // backgroundColor: '#FFFFFF',
+                    // borderRadius: RFValue(10),
+                    // borderWidth: 1,
+                    // borderColor: onActive.phone
+                    //   ? theme.COLORS.primary
+                    //   : theme.COLORS.lightGray,
+                    // width: RFValue(320),
+                    // height: RFValue(50),
+                    // marginBottom: 20,
+                    // flexDirection: 'row',
+                    // alignItems: 'center',
                   }}
                   textContainerStyle={styles.textContainerStyle}
                 />
@@ -409,8 +421,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   textContainerStyle: {
-    height: 40,
-    backgroundColor: theme.COLORS.white,
+    // height: 40,
+    // backgroundColor: theme.COLORS.white,
   },
   containerStyle: {
     backgroundColor: '#FFFFFF',

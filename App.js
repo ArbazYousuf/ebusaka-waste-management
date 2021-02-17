@@ -6,7 +6,13 @@ import RootNavigation from './src/navigation/RootNavigation';
 import {AppProvider} from './src/Context/AppProvider';
 import {Provider} from 'react-redux';
 import Store from './src/redux/store';
-import {PermissionsAndroid, Platform, Dimensions, LogBox} from 'react-native';
+import {
+  PermissionsAndroid,
+  Platform,
+  Dimensions,
+  LogBox,
+  Text,
+} from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
 import {PersistGate} from 'redux-persist/integration/react';
 import {persistStore} from 'redux-persist';
@@ -26,6 +32,7 @@ function App() {
   const [location, setlocation] = useState('');
   const [isOnline, setisOnline] = useState(false);
   const [address, setaddress] = useState('');
+  const [loading, setloading] = useState(false);
 
   const getPermission = async () => {
     // this.CheckLocation();
@@ -52,6 +59,8 @@ function App() {
   };
 
   const CheckLocation = () => {
+    // setloading(true);
+    console.log('cehckkk location-------');
     Geolocation.getCurrentPosition(
       async (position) => {
         setlocation({
@@ -62,17 +71,22 @@ function App() {
         });
 
         let ret = await Geocoder.geocodePosition({
-          lat: location.latitude,
-          lng: location.longitude,
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
         });
+        console.log('ret', ret);
         let address = await ret[0].formattedAddress;
         setaddress(address);
-
+        // setloading(false);
         // console.log('check location', mapView.current);
         // mapView.current.animateToCoordinate(region, 1);
         // setanimating(!animating);
       },
-      (error) => console.warn(error.message),
+      (error) => {
+        // setloading(false);
+
+        console.warn(error.message);
+      },
       {
         // enableHighAccuracy: true, timeout: 1000, sdspeed: -1
       },
@@ -161,11 +175,11 @@ function App() {
 
     console.warn('state', deviceState);
   }, []);
-  console.log('location', location);
+  console.log('location', location, {address});
   return (
     <SafeAreaProvider>
       <Provider store={Store}>
-        <PersistGate loading={null} persistor={persistor}>
+        <PersistGate loading={false} persistor={persistor}>
           <AppProvider
             value={{
               isOnline,

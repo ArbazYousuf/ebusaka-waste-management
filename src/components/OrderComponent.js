@@ -11,6 +11,7 @@ import {images} from '../constants';
 import FastImage from 'react-native-fast-image';
 
 export default function OrderComponent({jobinfo}) {
+  console.log('jobinfo', jobinfo);
   return (
     <View style={{marginTop: RFValue(20)}}>
       <View
@@ -89,7 +90,7 @@ export default function OrderComponent({jobinfo}) {
                 color: '#707070',
                 marginRight: RFValue(12),
               }}>
-              {jobinfo?.company?.direction?.address ?? 'Location not available'}
+              {jobinfo?.direction?.address ?? 'Location not available'}
             </Text>
             <Icon
               style={{
