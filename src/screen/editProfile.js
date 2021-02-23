@@ -174,6 +174,7 @@ export default function EditProfile() {
       .then((response) => response.json())
       .then((response) => {
         if (response.success) {
+          console.warn('response', response);
           let obj = {
             data: {
               picture: `${API_URL}/upload/${response?.url}`,
@@ -253,8 +254,8 @@ export default function EditProfile() {
                   <>
                     <Image
                       source={
-                        Auth.user.picture
-                          ? {uri: Auth.user.picture}
+                        Auth?.user?.picture
+                          ? {uri: Auth?.user?.picture}
                           : images.emptyImage
                       }
                       style={{

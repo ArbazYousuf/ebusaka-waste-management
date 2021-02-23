@@ -421,8 +421,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   textContainerStyle: {
-    // height: 40,
-    // backgroundColor: theme.COLORS.white,
+    height: 40,
+    backgroundColor: theme.COLORS.white,
   },
   containerStyle: {
     backgroundColor: '#FFFFFF',

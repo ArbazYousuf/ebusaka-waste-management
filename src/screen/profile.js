@@ -93,8 +93,8 @@ export default function Profile({navigation}) {
                   }}>
                   <Image
                     source={
-                      Auth.user.picture
-                        ? {uri: Auth.user.picture}
+                      Auth?.user?.picture
+                        ? {uri: Auth?.user?.picture}
                         : images.emptyImage
                     }
                     style={{

@@ -90,10 +90,20 @@ export default function Home({navigation}) {
               style={{
                 height: RFValue(40),
                 width: RFValue(40),
-                backgroundColor: theme.COLORS.primary,
-                borderRadius: RFValue(10),
-              }}
-            />
+                // backgroundColor: theme.COLORS.primary,
+                borderRadius: RFValue(25),
+              }}>
+              <Image
+                source={{uri: Auth?.user?.picture}}
+                resizeMode="contain"
+                style={{
+                  flex: 1,
+                  height: undefined,
+                  width: undefined,
+                  borderRadius: 25,
+                }}
+              />
+            </View>
           </View>
         </View>
         <View

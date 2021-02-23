@@ -81,7 +81,7 @@ export const AsyncUserUpdate = createAsyncThunk(
     try {
       const res = await put('/user/', data, '', token);
       if (res.data?.success) {
-        // console.log('res', res.data);
+        console.warn('res', res.data);
         return await res.data;
       } else {
         ToastError(res.data?.message);

@@ -373,7 +373,7 @@ function Subscription({navigation, route}) {
             />
           </View>
 
-          <View style={{padding: RFValue(10)}}>
+          {/* <View style={{padding: RFValue(10)}}>
             <Text
               style={[
                 FONTS.h4,
@@ -409,7 +409,7 @@ function Subscription({navigation, route}) {
                 setactiveList((pre) => ({...pre, company: false}));
               }}
             />
-          </View>
+          </View> */}
 
           <View style={{padding: RFValue(5)}}>
             <Text
