@@ -3,7 +3,6 @@ import {
   Image,
   StyleSheet,
   TouchableOpacity,
-  KeyboardAvoidingView,
   StatusBar,
   FlatList,
 } from 'react-native';
@@ -140,7 +139,7 @@ export default function OrderHistory({navigation}) {
           </View>
         </View>
       </View>
-      <View style={{flex: 1, backgroundColor: theme.COLORS.backColor}}>
+      <View style={{flex: 1}}>
         <FlatList
           data={[1, 2, 3, 5]}
           renderItem={() => (

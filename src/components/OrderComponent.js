@@ -11,7 +11,7 @@ import {images} from '../constants';
 import FastImage from 'react-native-fast-image';
 
 export default function OrderComponent({jobinfo}) {
-  console.log('jobinfo', jobinfo);
+  // console.log('jobinfo', jobinfo);
   return (
     <View style={{marginTop: RFValue(20)}}>
       <View
@@ -21,15 +21,15 @@ export default function OrderComponent({jobinfo}) {
           borderRadius: RFValue(7),
           backgroundColor: 'white',
           flexDirection: 'row',
-          shadowColor: '#000',
-          shadowOffset: {
-            width: 0,
-            height: 3,
-          },
-          shadowOpacity: 0.29,
-          shadowRadius: 4.65,
+          // shadowColor: '#000',
+          // shadowOffset: {
+          //   width: 0,
+          //   height: 3,
+          // },
+          // shadowOpacity: 0.29,
+          // shadowRadius: 4.65,
 
-          elevation: 4,
+          elevation: 1,
         }}>
         <View
           style={{

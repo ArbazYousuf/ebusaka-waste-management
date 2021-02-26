@@ -23,6 +23,7 @@ import EditProfile from '../screen/editProfile';
 import GarbageServices from '../screen/garbageServices';
 import AddSpecialPickUp from '../screen/addSpecialPickUp';
 import OrderHistory from '../screen/orderHistory';
+import PaymentMethod from '../screen/payment';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -177,6 +178,11 @@ function Navigation(props) {
           options={{headerShown: false}}
         />
 
+        <Stack.Screen
+          name="Payment"
+          component={PaymentMethod}
+          options={{headerShown: false}}
+        />
         <Stack.Screen
           name="Test"
           component={TestComponent}

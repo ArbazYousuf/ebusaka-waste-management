@@ -209,6 +209,7 @@ export default function Home({navigation}) {
           <ActivityIndicator color={theme.COLORS.primary} size="large" />
         ) : (
           <FlatList
+            showsVerticalScrollIndicator={false}
             data={Jobs.mySubscriptions}
             renderItem={({item, index}) => (
               <View style={{justifyContent: 'center', alignItems: 'center'}}>

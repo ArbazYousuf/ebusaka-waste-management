@@ -20,6 +20,7 @@ import {AsyncPostSub, AsyncGetCompanies} from '../redux/actions/asyncJob';
 import CustomModal from '../components/modal';
 // import {AsyncGetCompanies} from '../redux/actions/asyncJob';
 import {unwrapResult} from '@reduxjs/toolkit';
+import {SwipeablePanel} from 'rn-swipeable-panel';
 
 const PaymentButton = ({color, text, isChecked, image, onChange}) => {
   return (
@@ -107,6 +108,23 @@ function Subscription({navigation, route}) {
   const dispatch = useDispatch();
   const Jobs = useSelector((state) => state.Jobs);
   const Auth = useSelector((state) => state.Auth);
+  const [panelProps, setPanelProps] = useState({
+    fullWidth: true,
+    openLarge: true,
+    showCloseButton: true,
+    onClose: () => closePanel(),
+    onPressCloseButton: () => closePanel(),
+    // ...or any prop you want
+  });
+  const [isPanelActive, setIsPanelActive] = useState(false);
+
+  const openPanel = () => {
+    setIsPanelActive(true);
+  };
+
+  const closePanel = () => {
+    setIsPanelActive(false);
+  };
 
   const onSubmitSubscribe = () => {
     console.warn(address, location);
@@ -123,37 +141,40 @@ function Subscription({navigation, route}) {
     // "subscription_id":"dfdfd",
     //     "no_of_bags": 10
 
-    let obj = {
-      data: {
-        user: Auth?.user?._id,
-        fullname: name,
-        direction: {
-          address,
-          coordinates: location,
-        },
-        weight,
-        note: 'hellow everyone',
-        waste_type: selectedWaste?.value,
-        company: selectedComapny?.value,
-        subscription_id: 'testing',
-        no_of_bags: noOfBags,
-      },
-      token: Auth?.token,
-      nav: navigation,
-    };
+    // setIsPanelActive(true);
+    navigation.navigate('Payment');
 
-    dispatch(AsyncPostSub(obj))
-      .then(unwrapResult)
-      .then((res) => {
-        console.log('res', res);
-        if (res.success) {
-          handleModal();
-          setname((prev) => '');
-          setselectedComapny((prev) => '');
-          setnoOfBags((prev) => 0);
-          setweight((prev) => 0);
-        }
-      });
+    // let obj = {
+    //   data: {
+    //     user: Auth?.user?._id,
+    //     fullname: name,
+    //     direction: {
+    //       address,
+    //       coordinates: location,
+    //     },
+    //     weight,
+    //     note: 'hellow everyone',
+    //     waste_type: selectedWaste?.value,
+    //     company: selectedComapny?.value,
+    //     subscription_id: 'testing',
+    //     no_of_bags: noOfBags,
+    //   },
+    //   token: Auth?.token,
+    //   nav: navigation,
+    // };
+
+    // dispatch(AsyncPostSub(obj))
+    //   .then(unwrapResult)
+    //   .then((res) => {
+    //     console.log('res', res);
+    //     if (res.success) {
+    //       handleModal();
+    //       setname((prev) => '');
+    //       // setselectedComapny((prev) => '');
+    //       setnoOfBags((prev) => 0);
+    //       setweight((prev) => 0);
+    //     }
+    //   });
   };
 
   const handleModal = () => {
@@ -344,7 +365,7 @@ function Subscription({navigation, route}) {
                   // icon: () => <Icon name="flag" size={18} color="#900" />,
                 },
               ]}
-              defaultValue={wasteType}
+              defaultValue={selectedWaste.value}
               containerStyle={{
                 height: RFValue(50),
                 width: RFValue(320),
@@ -373,7 +394,7 @@ function Subscription({navigation, route}) {
             />
           </View>
 
-          {/* <View style={{padding: RFValue(10)}}>
+          <View style={{padding: RFValue(10)}}>
             <Text
               style={[
                 FONTS.h4,
@@ -385,7 +406,7 @@ function Subscription({navigation, route}) {
             </Text>
             <DropDownPicker
               items={companies}
-              defaultValue={wasteType}
+              defaultValue={selectedComapny.value}
               containerStyle={{
                 height: RFValue(50),
                 width: RFValue(320),
@@ -409,7 +430,7 @@ function Subscription({navigation, route}) {
                 setactiveList((pre) => ({...pre, company: false}));
               }}
             />
-          </View> */}
+          </View>
 
           <View style={{padding: RFValue(5)}}>
             <Text
@@ -546,6 +567,7 @@ function Subscription({navigation, route}) {
             'Subscribe'
           )}
         </CustomButton>
+
         <CustomModal
           mainHeading="Subscription Activated Successfully"
           subHeading="subscription created !"
