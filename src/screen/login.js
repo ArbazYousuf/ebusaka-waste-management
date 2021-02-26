@@ -74,36 +74,36 @@ export default function Login({navigation}) {
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: theme.COLORS.backColor}}>
-      <StatusBar translucent={true} backgroundColor={'transparent'} />
-      {/* <StatusBar backgroundColor={theme.COLORS.primary} /> */}
-      <View
-        style={{
-          flex: 0.2,
-          borderColor: theme.COLORS.primary,
-          justifyContent: 'center',
-          alignItems: 'center',
-          // backgroundColor: 'yellow',
-          marginBottom: RFValue(20),
-        }}>
-        <Image
-          source={images.login_header}
-          resizeMode="contain"
+      <KeyboardAvoidingView
+        style={{flex: 1}}
+        behavior="height"
+        keyboardVerticalOffset={-100}>
+        <StatusBar translucent={true} backgroundColor={'transparent'} />
+        {/* <StatusBar backgroundColor={theme.COLORS.primary} /> */}
+        <View
           style={{
-            // flex: 1,
-            height: RFValue(340),
-            width: RFValue(340),
-            // marginTop: RFValue(-20),
-            // alignSelf: 'flex-start',
-            // marginRight: RFValue(60),
-          }}
-        />
-      </View>
+            flex: 0.2,
+            borderColor: theme.COLORS.primary,
+            justifyContent: 'center',
+            alignItems: 'center',
+            // backgroundColor: 'yellow',
+            marginBottom: RFValue(20),
+          }}>
+          <Image
+            source={images.login_header}
+            resizeMode="contain"
+            style={{
+              // flex: 1,
+              height: RFValue(340),
+              width: RFValue(340),
+              // marginTop: RFValue(-20),
+              // alignSelf: 'flex-start',
+              // marginRight: RFValue(60),
+            }}
+          />
+        </View>
 
-      <View style={{flex: 0.8}}>
-        <KeyboardAvoidingView
-          style={{flex: 1}}
-          behavior="padding"
-          keyboardVerticalOffset={10}>
+        <View style={{flex: 0.8}}>
           <View
             style={{justifyContent: 'center', alignItems: 'center', flex: 0.2}}>
             <Text style={[FONTS.h1, {}]}>Welcome Back</Text>
@@ -232,8 +232,8 @@ export default function Login({navigation}) {
                 </TouchableOpacity>
               </View>
             ) : null} */}
-        </KeyboardAvoidingView>
-      </View>
+        </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
