@@ -17,9 +17,10 @@ export default function OrderComponent({jobinfo}) {
       <View
         style={{
           width: '90%',
-          height: RFValue(90),
+          // height: RFValue(90),
           borderRadius: RFValue(7),
           backgroundColor: 'white',
+          paddingBottom: RFValue(20),
           flexDirection: 'row',
           // shadowColor: '#000',
           // shadowOffset: {
